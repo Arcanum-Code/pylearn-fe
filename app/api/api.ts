@@ -31,6 +31,7 @@ export const API_ENDPOINTS = {
   },
   MATERIALS: {
     LIST: `${API_URL}/materials`,
+    GET_BY_ID: (id: string) => `${API_URL}/materials/${id}`,
     CREATE: `${API_URL}/materials/me`,
     UPDATE: (id: string) => `${API_URL}/materials/${id}`,
     DELETE: (id: string) => `${API_URL}/materials/${id}`,

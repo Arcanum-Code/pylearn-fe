@@ -1,6 +1,6 @@
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import { fetchMaterials, createMaterial, updateMaterial, deleteMaterial } from "../services/materialsApi";
-import { MaterialFilters, MaterialsResponse, CreateMaterialRequest, UpdateMaterialRequest } from "../types";
+import { fetchMaterials, fetchMaterialById, createMaterial, updateMaterial, deleteMaterial } from "../services/materialsApi";
+import { MaterialFilters, MaterialsResponse, CreateMaterialRequest, UpdateMaterialRequest, Material } from "../types";
 import { toast } from "sonner";
 
 export const materialKeys = {
@@ -8,12 +8,22 @@ export const materialKeys = {
   lists: () => [...materialKeys.all, "list"] as const,
   list: (filters: Partial<MaterialFilters>) =>
     [...materialKeys.lists(), filters] as const,
+  details: () => [...materialKeys.all, "detail"] as const,
+  detail: (id: string) => [...materialKeys.details(), id] as const,
 };
 
 export function useFetchMaterials(filters: Partial<MaterialFilters>) {
   return useQuery<MaterialsResponse>({
     queryKey: materialKeys.list(filters),
     queryFn: () => fetchMaterials(filters),
+  });
+}
+
+export function useFetchMaterialById(id: string | null) {
+  return useQuery<Material>({
+    queryKey: materialKeys.detail(id || ""),
+    queryFn: () => fetchMaterialById(id!),
+    enabled: !!id,
   });
 }
 

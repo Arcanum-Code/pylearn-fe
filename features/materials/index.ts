@@ -15,3 +15,5 @@ export { CreateMaterialDialog } from "./components/CreateMaterialDialog";
 export { EditMaterialDialog } from "./components/EditMaterialDialog";
 export { DeleteMaterialDialog } from "./components/DeleteMaterialDialog";
 export { RichTextEditor } from "./components/RichTextEditor";
+export { HtmlRenderer } from "./components/HtmlRenderer";
+export { MaterialDetailView } from "./components/MaterialDetailView";

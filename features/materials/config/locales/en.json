@@ -66,7 +66,19 @@
     "type": "Type",
     "status": "Status",
     "published": "Published",
+    "draft": "Draft",
+    "view": "View",
+    "edit": "Edit",
+    "delete": "Delete"
+  },
+  "status": {
+    "published": "Published",
     "draft": "Draft"
+  },
+  "detail": {
+    "backToList": "Back to Materials",
+    "notFound": "Material not found",
+    "noContent": "No content available"
   },
   "noResults": "No materials found matching your filters."
 }

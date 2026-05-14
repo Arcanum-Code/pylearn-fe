@@ -66,7 +66,19 @@
     "type": "Tipo",
     "status": "Estado",
     "published": "Publicado",
+    "draft": "Borrador",
+    "view": "Ver",
+    "edit": "Editar",
+    "delete": "Eliminar"
+  },
+  "status": {
+    "published": "Publicado",
     "draft": "Borrador"
+  },
+  "detail": {
+    "backToList": "Volver a Materiales",
+    "notFound": "Material no encontrado",
+    "noContent": "Sin contenido disponible"
   },
   "noResults": "No se encontraron materiales que coincidan con tus filtros."
 }

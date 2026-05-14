@@ -27,6 +27,14 @@ export async function fetchMaterials(
   };
 }
 
+export async function fetchMaterialById(id: string): Promise<Material> {
+  const { data } = await ApiAxios.get<{
+    data: Material;
+    message: string;
+  }>(`/materials/${id}`);
+  return data.data;
+}
+
 export async function createMaterial(
   data: CreateMaterialRequest,
 ): Promise<{ material: Material; message: string }> {

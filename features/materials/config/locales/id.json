@@ -15,12 +15,6 @@
     "published": "Hanya Terbit",
     "draft": "Hanya Draf"
   },
-  "types": {
-    "text": "Teks",
-    "file": "Berkas",
-    "video": "Video",
-    "link": "Tautan"
-  },
   "form": {
     "title": {
       "label": "Judul",
@@ -66,7 +60,19 @@
     "type": "Tipe",
     "status": "Status",
     "published": "Terbit",
+    "draft": "Draf",
+    "view": "Lihat",
+    "edit": "Edit",
+    "delete": "Hapus"
+  },
+  "status": {
+    "published": "Terbit",
     "draft": "Draf"
+  },
+  "detail": {
+    "backToList": "Kembali ke Materi",
+    "notFound": "Materi tidak ditemukan",
+    "noContent": "Tidak ada konten tersedia"
   },
   "noResults": "Tidak ada materi yang ditemukan sesuai dengan filter Anda."
 }
