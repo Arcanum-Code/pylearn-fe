@@ -6,7 +6,15 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Material } from "../types";
 import { materialTypeIcons } from "../config/materials";
-import { Calendar, User, icons, Pencil, Trash2, Eye } from "lucide-react";
+import {
+  Calendar,
+  User,
+  icons,
+  Pencil,
+  Trash2,
+  Eye,
+  ClipboardCheck,
+} from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { EditMaterialDialog } from "./EditMaterialDialog";
 import { DeleteMaterialDialog } from "./DeleteMaterialDialog";
@@ -98,6 +106,20 @@ export function MaterialCard({ material }: MaterialCardProps) {
             >
               <Link href={`/materials/${material.id}`}>
                 <Eye className="h-4 w-4 text-branding-dark" />
+              </Link>
+            </Button>
+            <Button
+              variant="secondary"
+              size="icon"
+              className="h-8 w-8 rounded-full shadow-sm bg-background/80 backdrop-blur border hover:bg-background"
+              asChild
+            >
+              <Link
+                href={`/materials/${material.id}/quiz?title=${encodeURIComponent(
+                  material.title
+                )}`}
+              >
+                <ClipboardCheck className="h-4 w-4 text-branding-dark" />
               </Link>
             </Button>
             <Button
