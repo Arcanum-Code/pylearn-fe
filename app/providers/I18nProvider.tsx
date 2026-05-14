@@ -33,6 +33,10 @@ import navigationEn from "@/features/layout/config/locales/en.json";
 import navigationEs from "@/features/layout/config/locales/es.json";
 import navigationId from "@/features/layout/config/locales/id.json";
 
+import materialsEn from "@/features/materials/config/locales/en.json";
+import materialsEs from "@/features/materials/config/locales/es.json";
+import materialsId from "@/features/materials/config/locales/id.json";
+
 const messages = {
   en: {
     common: commonEn.common,
@@ -41,6 +45,7 @@ const messages = {
     auth: authEn,
     dashboard: dashboardEn,
     navigation: navigationEn,
+    materials: materialsEn,
   },
   es: {
     common: commonEs.common,
@@ -49,6 +54,7 @@ const messages = {
     auth: authEs,
     dashboard: dashboardEs,
     navigation: navigationEs,
+    materials: materialsEs,
   },
   id: {
     common: commonId.common,
@@ -57,6 +63,7 @@ const messages = {
     auth: authId,
     dashboard: dashboardId,
     navigation: navigationId,
+    materials: materialsId,
   },
 };
 

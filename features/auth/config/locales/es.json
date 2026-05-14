@@ -6,14 +6,14 @@
     "email": "Correo Electrónico",
     "role": "Rol"
   },
-  "systemName": "Next Auth Starter",
-  "systemDescription": "Autenticación segura con control de acceso basado en roles para tu aplicación.",
+  "systemName": "PyLearn",
+  "systemDescription": "Una plataforma para aprender Python básico.",
   "form": {
     "welcomeTitle": "Bienvenido",
-    "welcomeDescription": "Ingresa tu correo electrónico a continuación para iniciar sesión en tu cuenta.",
-    "email": {
-      "label": "Correo Electrónico",
-      "placeholder": "m@ejemplo.com"
+    "welcomeDescription": "Ingresa tu NIK a continuación para iniciar sesión en tu cuenta.",
+    "userId": {
+      "label": "NIK",
+      "placeholder": "Ingresa tu NIK"
     },
     "password": {
       "label": "Contraseña",

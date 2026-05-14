@@ -1,0 +1,64 @@
+{
+  "pageTitle": "Learning Materials",
+  "description": "Access and manage learning materials for Python",
+  "header": {
+    "create": "Create Material"
+  },
+  "filters": {
+    "title": "Filters",
+    "description": "Filter materials by type, lecturer, or status",
+    "lecturer": "Lecturer",
+    "type": "Material Type",
+    "status": "Publication Status",
+    "allTypes": "All Types",
+    "allStatus": "All Status",
+    "published": "Published Only",
+    "draft": "Draft Only"
+  },
+  "types": {
+    "text": "Text",
+    "file": "File",
+    "video": "Video",
+    "link": "Link"
+  },
+  "form": {
+    "title": {
+      "label": "Title",
+      "placeholder": "Enter material title"
+    },
+    "description": {
+      "label": "Description",
+      "placeholder": "Enter short description"
+    },
+    "type": {
+      "label": "Material Type"
+    },
+    "icon": {
+      "label": "Icon"
+    },
+    "content": {
+      "label": "Content",
+      "placeholder": "Enter material content"
+    },
+    "sourceUrl": {
+      "label": "Source URL"
+    },
+    "isPublished": {
+      "label": "Publish immediately"
+    }
+  },
+  "dialog": {
+    "create": {
+      "title": "New Learning Material",
+      "description": "Fill in the details to create a new material."
+    }
+  },
+  "card": {
+    "lecturer": "Lecturer",
+    "type": "Type",
+    "status": "Status",
+    "published": "Published",
+    "draft": "Draft"
+  },
+  "noResults": "No materials found matching your filters."
+}

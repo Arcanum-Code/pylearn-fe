@@ -8,9 +8,9 @@ export const authConfig = {
   form: {
     welcomeTitleKey: "auth.form.welcomeTitle",
     welcomeDescriptionKey: "auth.form.welcomeDescription",
-    email: {
-      labelKey: "auth.form.email.label",
-      placeholderKey: "auth.form.email.placeholder",
+    userId: {
+      labelKey: "auth.form.userId.label",
+      placeholderKey: "auth.form.userId.placeholder",
     },
     password: {
       labelKey: "auth.form.password.label",

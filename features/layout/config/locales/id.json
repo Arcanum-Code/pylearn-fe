@@ -1,10 +1,11 @@
 {
   "dashboard": "Dashboard",
+  "materials": "Materi",
   "management": "Manajemen",
   "users": "Pengguna",
   "roles": "Peran & Izin",
   "settings": "Pengaturan",
-  "systemName": "RBAC Admin",
+  "systemName": "PyLearn",
   "systemVersion": "v1.0",
   "profile": "Profil",
   "logout": "Keluar"

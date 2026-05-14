@@ -3,7 +3,7 @@ import { LoginFormData } from "../schemas/loginFormSchema";
 import { AuthResponse, User } from "../types";
 
 export async function loginUser(payload: LoginFormData): Promise<AuthResponse> {
-  const { data } = await Axios.post<AuthResponse>("login", payload);
+  const { data } = await Axios.post<AuthResponse>("login-id", payload);
   return data;
 }
 

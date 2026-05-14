@@ -1,0 +1,64 @@
+{
+  "pageTitle": "Materi Pembelajaran",
+  "description": "Akses dan kelola materi pembelajaran untuk Python",
+  "header": {
+    "create": "Tambah Materi"
+  },
+  "filters": {
+    "title": "Filter",
+    "description": "Filter materi berdasarkan tipe, dosen, atau status",
+    "lecturer": "Dosen",
+    "type": "Tipe Materi",
+    "status": "Status Publikasi",
+    "allTypes": "Semua Tipe",
+    "allStatus": "Semua Status",
+    "published": "Hanya Terbit",
+    "draft": "Hanya Draf"
+  },
+  "types": {
+    "text": "Teks",
+    "file": "Berkas",
+    "video": "Video",
+    "link": "Tautan"
+  },
+  "form": {
+    "title": {
+      "label": "Judul",
+      "placeholder": "Masukkan judul materi"
+    },
+    "description": {
+      "label": "Deskripsi",
+      "placeholder": "Masukkan deskripsi singkat"
+    },
+    "type": {
+      "label": "Tipe Materi"
+    },
+    "icon": {
+      "label": "Ikon"
+    },
+    "content": {
+      "label": "Konten",
+      "placeholder": "Masukkan konten materi"
+    },
+    "sourceUrl": {
+      "label": "URL Sumber"
+    },
+    "isPublished": {
+      "label": "Terbitkan segera"
+    }
+  },
+  "dialog": {
+    "create": {
+      "title": "Materi Pembelajaran Baru",
+      "description": "Isi detail untuk membuat materi baru."
+    }
+  },
+  "card": {
+    "lecturer": "Dosen",
+    "type": "Tipe",
+    "status": "Status",
+    "published": "Terbit",
+    "draft": "Draf"
+  },
+  "noResults": "Tidak ada materi yang ditemukan sesuai dengan filter Anda."
+}

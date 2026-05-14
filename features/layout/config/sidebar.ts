@@ -1,4 +1,4 @@
-import { LucideIcon, LayoutDashboard, Users, Shield } from "lucide-react";
+import { LucideIcon, LayoutDashboard, Users, Shield, BookOpen } from "lucide-react";
 
 /**
  * Sidebar navigation item configuration.
@@ -58,6 +58,11 @@ export const sidebarConfig: SidebarNavItem[] = [
     labelKey: "navigation.dashboard",
     icon: LayoutDashboard,
     href: "/dashboard",
+  },
+  {
+    labelKey: "navigation.materials",
+    icon: BookOpen,
+    href: "/materials",
   },
   {
     labelKey: "navigation.management",

@@ -1,6 +1,6 @@
 "use client";
 
-import { Mail, Lock, LogIn, User, Eye, EyeOff } from "lucide-react";
+import { Lock, LogIn, User, Eye, EyeOff } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
@@ -41,20 +41,20 @@ export function LoginForm() {
         </div>
         <form onSubmit={onSubmit} className="space-y-4">
           <div className="space-y-2">
-            <Label htmlFor="email">{t(authConfig.form.email.labelKey)}</Label>
+            <Label htmlFor="user_id">{t(authConfig.form.userId.labelKey)}</Label>
             <div className="relative">
-              <Mail className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+              <User className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
               <Input
-                id="email"
-                type="email"
-                placeholder={t(authConfig.form.email.placeholderKey)}
-                {...register("email", { onChange: clearRootError })}
+                id="user_id"
+                type="text"
+                placeholder={t(authConfig.form.userId.placeholderKey)}
+                {...register("user_id", { onChange: clearRootError })}
                 className="pl-10"
                 disabled={isLoading}
               />
             </div>
-            {errors.email && (
-              <p className="text-sm text-destructive">{errors.email.message}</p>
+            {errors.user_id && (
+              <p className="text-sm text-destructive">{errors.user_id.message}</p>
             )}
           </div>
           <div className="space-y-2">

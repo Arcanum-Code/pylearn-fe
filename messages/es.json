@@ -14,6 +14,8 @@
     "active": "Activo",
     "inactive": "Inactivo",
     "all": "Todos",
-    "noResults": "No se encontraron resultados"
+    "noResults": "No se encontraron resultados",
+    "showing": "Mostrando {start} a {end} de {total} entradas",
+    "rows": "Filas"
   }
 }

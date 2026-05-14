@@ -75,8 +75,8 @@ const NavItem = ({
           onClick={handleClick}
           className={cn(
             "flex w-full items-center justify-between rounded-md px-3 py-2 text-sm font-medium transition-colors",
-            "text-white/80 hover:bg-white/10 hover:text-white",
-            (isActive || hasActiveChild) && "bg-white/15 text-white",
+            "text-branding-foreground/80 hover:bg-branding-foreground/10 hover:text-branding-foreground",
+            (isActive || hasActiveChild) && "bg-branding-foreground/15 text-branding-foreground",
           )}
           style={{ paddingLeft: `${12 + depth * 12}px` }}
         >
@@ -118,8 +118,8 @@ const NavItem = ({
       onClick={onNavigate}
       className={cn(
         "flex items-center gap-3 rounded-md px-3 py-2 text-sm font-medium transition-colors",
-        "text-white/80 hover:bg-white/10 hover:text-white",
-        isActive && "bg-white/15 text-white",
+        "text-branding-foreground/80 hover:bg-branding-foreground/10 hover:text-branding-foreground",
+        isActive && "bg-branding-foreground/15 text-branding-foreground",
       )}
       style={{ paddingLeft: `${12 + depth * 12}px` }}
     >
@@ -167,12 +167,12 @@ export function SidebarNav({
       {/* Sidebar */}
       <aside
         className={cn(
-          "fixed left-0 top-0 z-50 flex h-screen w-64 flex-col bg-branding-dark text-white transition-transform duration-300 lg:translate-x-0",
+          "fixed left-0 top-0 z-50 flex h-screen w-64 flex-col bg-branding-dark text-branding-foreground transition-transform duration-300 lg:translate-x-0",
           isOpen ? "translate-x-0" : "-translate-x-full",
         )}
       >
         {/* Logo / Brand */}
-        <div className="flex h-16 items-center border-b border-white/10 px-6">
+        <div className="flex h-16 items-center border-b border-branding-foreground/10 px-6">
           <h1 className="text-xl font-bold">
             {t(sidebarFooterConfig.nameKey)}
           </h1>
@@ -190,12 +190,12 @@ export function SidebarNav({
         </nav>
 
         {/* System Info Footer */}
-        <div className="border-t border-white/10 px-6 py-4 pb-8 md:pb-4">
-          <p className="text-sm font-medium text-white/80">
+        <div className="border-t border-branding-foreground/10 px-6 py-4 pb-8 md:pb-4">
+          <p className="text-sm font-medium text-branding-foreground/80">
             {t(sidebarFooterConfig.nameKey)}
           </p>
           {sidebarFooterConfig.versionKey && (
-            <p className="text-xs text-white/50">
+            <p className="text-xs text-branding-foreground/50">
               {t(sidebarFooterConfig.versionKey)}
             </p>
           )}

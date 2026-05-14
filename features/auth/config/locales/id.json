@@ -6,14 +6,14 @@
     "email": "Email",
     "role": "Peran"
   },
-  "systemName": "Next Auth Starter",
-  "systemDescription": "Autentikasi aman dengan kontrol akses berbasis peran untuk aplikasi Anda.",
+  "systemName": "PyLearn",
+  "systemDescription": "Platform untuk belajar dasar-dasar Python.",
   "form": {
     "welcomeTitle": "Selamat Datang",
-    "welcomeDescription": "Masukkan email Anda di bawah untuk masuk ke akun Anda.",
-    "email": {
-      "label": "Email",
-      "placeholder": "m@contoh.com"
+    "welcomeDescription": "Masukkan NIK Anda di bawah untuk masuk ke akun Anda.",
+    "userId": {
+      "label": "NIK",
+      "placeholder": "Masukkan NIK Anda"
     },
     "password": {
       "label": "Kata Sandi",

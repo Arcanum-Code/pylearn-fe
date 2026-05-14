@@ -1,0 +1,64 @@
+{
+  "pageTitle": "Materiales de Aprendizaje",
+  "description": "Accede y gestiona los materiales de aprendizaje para Python",
+  "header": {
+    "create": "Crear Material"
+  },
+  "filters": {
+    "title": "Filtros",
+    "description": "Filtrar materiales por tipo, profesor o estado",
+    "lecturer": "Profesor",
+    "type": "Tipo de Material",
+    "status": "Estado de Publicación",
+    "allTypes": "Todos los tipos",
+    "allStatus": "Todos los estados",
+    "published": "Solo publicados",
+    "draft": "Solo borradores"
+  },
+  "types": {
+    "text": "Texto",
+    "file": "Archivo",
+    "video": "Video",
+    "link": "Enlace"
+  },
+  "form": {
+    "title": {
+      "label": "Título",
+      "placeholder": "Ingrese el título del material"
+    },
+    "description": {
+      "label": "Descripción",
+      "placeholder": "Ingrese una breve descripción"
+    },
+    "type": {
+      "label": "Tipo de Material"
+    },
+    "icon": {
+      "label": "Icono"
+    },
+    "content": {
+      "label": "Contenido",
+      "placeholder": "Ingrese el contenido del material"
+    },
+    "sourceUrl": {
+      "label": "URL de origen"
+    },
+    "isPublished": {
+      "label": "Publicar inmediatamente"
+    }
+  },
+  "dialog": {
+    "create": {
+      "title": "Nuevo Material de Aprendizaje",
+      "description": "Complete los detalles para crear un nuevo material."
+    }
+  },
+  "card": {
+    "lecturer": "Profesor",
+    "type": "Tipo",
+    "status": "Estado",
+    "published": "Publicado",
+    "draft": "Borrador"
+  },
+  "noResults": "No se encontraron materiales que coincidan con tus filtros."
+}

@@ -1,10 +1,11 @@
 {
   "dashboard": "Dashboard",
+  "materials": "Materials",
   "management": "Management",
   "users": "Users",
   "roles": "Roles & Permissions",
   "settings": "Settings",
-  "systemName": "RBAC Admin",
+  "systemName": "PyLearn",
   "systemVersion": "v1.0",
   "profile": "Profile",
   "logout": "Logout"
