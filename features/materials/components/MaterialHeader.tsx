@@ -1,13 +1,9 @@
 "use client";
 
-import { useTranslations } from "@/lib/i18n/useTranslation";
 import { BookOpen } from "lucide-react";
-import { materialsConfig } from "../config/materials";
 import { CreateMaterialDialog } from "./CreateMaterialDialog";
 
 export function MaterialHeader() {
-  const t = useTranslations();
-
   return (
     <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
       <div className="flex items-center gap-3 sm:gap-4">
@@ -16,10 +12,11 @@ export function MaterialHeader() {
         </div>
         <div>
           <h1 className="text-xl sm:text-2xl font-bold uppercase tracking-tight">
-            {t(materialsConfig.pageTitleKey)}
+            Materi Pembelajaran
           </h1>
           <p className="text-xs sm:text-sm text-muted-foreground">
-            {t(materialsConfig.descriptionKey)}
+            Kelola materi pembelajaran, modul kelas, beserta pengaturan kuis
+            evaluasi berjenjang Anda di sini.
           </p>
         </div>
       </div>

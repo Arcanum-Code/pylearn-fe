@@ -27,19 +27,16 @@ export default function MaterialsPage() {
   return (
     <div className="flex flex-col gap-6 p-6">
       <MaterialHeader />
-      
-      <MaterialFilters
-        materialType={filters.materialType}
-        isPublished={filters.isPublished}
-        onTypeChange={filters.setMaterialType}
-        onStatusChange={filters.setIsPublished}
-      />
+
+      {/* <MaterialFilters */}
+      {/*   materialType={filters.materialType} */}
+      {/*   isPublished={filters.isPublished} */}
+      {/*   onTypeChange={filters.setMaterialType} */}
+      {/*   onStatusChange={filters.setIsPublished} */}
+      {/* /> */}
 
       <div ref={listRef}>
-        <MaterialsList 
-          data={data?.data || []} 
-          isLoading={isLoading} 
-        />
+        <MaterialsList data={data?.data || []} isLoading={isLoading} />
       </div>
 
       {data && data.pagination.total > 0 && (

@@ -28,15 +28,9 @@ export function MaterialFilters({
 }: MaterialFiltersProps) {
   const t = useTranslations();
 
-  const typeLabel = materialType 
-    ? t(`materials.types.${materialType}`) 
+  const typeLabel = materialType
+    ? t(`materials.types.${materialType}`)
     : t("materials.filters.allTypes");
-
-  const statusLabel = isPublished === true 
-    ? t("materials.filters.published") 
-    : isPublished === false 
-      ? t("materials.filters.draft") 
-      : t("materials.filters.allStatus");
 
   return (
     <Card>
@@ -81,15 +75,7 @@ export function MaterialFilters({
 
           {/* Status Filter */}
           <DropdownMenu>
-            <DropdownMenuTrigger asChild>
-              <Button variant="outline" size="sm" className="h-9 px-3">
-                <span className="text-muted-foreground mr-1">
-                  {t(materialsConfig.filters.statusKey)}:
-                </span>
-                {statusLabel}
-                <ChevronDown className="ml-1 h-3.5 w-3.5" />
-              </Button>
-            </DropdownMenuTrigger>
+            <DropdownMenuTrigger asChild></DropdownMenuTrigger>
             <DropdownMenuContent align="end">
               <DropdownMenuItem onClick={() => onStatusChange(undefined)}>
                 {t("materials.filters.allStatus")}

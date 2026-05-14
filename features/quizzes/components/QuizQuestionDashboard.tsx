@@ -29,7 +29,6 @@ export default function QuizQuestionDashboard({
 
   return (
     <div className="space-y-8">
-      {/* SEKAT-SEKAT LEVEL YANG DIURUTKAN SECARA VERTIKAL */}
       <div className="space-y-10">
         {activeQuiz.levels && activeQuiz.levels.length > 0 ? (
           activeQuiz.levels.map((level, index) => (

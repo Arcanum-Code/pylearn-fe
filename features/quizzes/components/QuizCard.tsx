@@ -72,12 +72,6 @@ export default function QuizCard({ quiz, materialId }: QuizCardProps) {
                 "Tidak ada deskripsi tambahan untuk kuis ini."}
             </CardDescription>
           </div>
-          <Badge
-            variant={quiz.isPublished ? "default" : "secondary"}
-            className="w-fit h-6 px-3 text-xs font-semibold uppercase tracking-wider"
-          >
-            {quiz.isPublished ? "Diterbitkan" : "Draf"}
-          </Badge>
         </div>
 
         {/* Metadata Jadwal Waktu */}
