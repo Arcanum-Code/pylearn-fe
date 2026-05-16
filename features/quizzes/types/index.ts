@@ -78,3 +78,4 @@ export type ApiQuestionsResponse = ApiResponse<QuizQuestion[]>;
 export type ApiAttemptResponse = ApiResponse<QuizAttempt[]>;
 export type ApiAnswerResponse = ApiResponse<QuizAnswer[]>;
 export type ApiQuestionAttemptsResponse = ApiResponse<QuizQuestionAttempt[]>;
+export type ApiBulkAnswersResponse = ApiResponse<QuizAnswer[]>;

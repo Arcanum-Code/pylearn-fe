@@ -9,6 +9,7 @@ import {
   createQuizAttemptByMaterial,
   submitQuizAttempt,
   submitStudentAnswer,
+  submitBulkStudentAnswers,
 } from "../services/quizApi";
 import { QuizAttempt } from "../types";
 
@@ -139,6 +140,31 @@ export function useSubmitStudentAnswer(attemptId: string) {
         error?.response?.data?.message ||
           error.message ||
           "Gagal menyimpan jawaban pertanyaan ini.",
+      );
+    },
+  });
+}
+
+export function useSubmitBulkStudentAnswers(attemptId: string) {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: submitBulkStudentAnswers,
+    onSuccess: (response) => {
+      queryClient.invalidateQueries({
+        queryKey: attemptKeys.detail(attemptId),
+      });
+
+      // 2. Berikan umpan balik visual yang nyaman bagi siswa
+      toast.success(
+        response.message || "Progres jawaban Anda berhasil disimpan.",
+      );
+    },
+    onError: (error: any) => {
+      toast.error(
+        error?.response?.data?.message ||
+          error.message ||
+          "Gagal menyimpan kumpulan jawaban Anda.",
       );
     },
   });

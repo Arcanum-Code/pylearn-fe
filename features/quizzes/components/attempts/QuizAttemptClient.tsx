@@ -2,15 +2,17 @@
 
 import { useState } from "react";
 import { useFetchQuizAttemptDetail } from "../../hooks/useQuizAttempts";
-import { useSubmitQuizAttempt } from "../../hooks/useQuizAttempts";
-import { useSubmitStudentAnswer } from "../../hooks/useQuizAttempts";
+import {
+  useSubmitQuizAttempt,
+  useSubmitBulkStudentAnswers,
+} from "../../hooks/useQuizAttempts";
 import { useFetchQuizLevels } from "../../hooks/useQuizLevels";
 import { useFetchQuizQuestionsForAttempt } from "../../hooks/useQuizQuestions";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Textarea } from "@/components/ui/textarea";
-import { ArrowLeft, Loader2, CheckCircle, Clock } from "lucide-react";
+import { ArrowLeft, Loader2, CheckCircle, Clock, Save } from "lucide-react";
 import { useRouter } from "next/navigation";
 
 interface QuizAttemptClientProps {
@@ -32,7 +34,7 @@ export function QuizAttemptClient({ attemptId }: QuizAttemptClientProps) {
   const [answers, setAnswers] = useState<Record<string, string>>({});
 
   const submitAttempt = useSubmitQuizAttempt(attemptId);
-  const submitAnswer = useSubmitStudentAnswer(attemptId);
+  const submitBulkAnswers = useSubmitBulkStudentAnswers(attemptId);
 
   const handleAnswerChange = (questionId: string, answer: string) => {
     setAnswers((prev) => ({
@@ -41,23 +43,36 @@ export function QuizAttemptClient({ attemptId }: QuizAttemptClientProps) {
     }));
   };
 
-  const handleSaveAnswer = async (questionId: string) => {
-    const answerText = answers[questionId];
-    if (!answerText?.trim()) return;
+  const handleSaveProgress = async () => {
+    if (!quizId || !quizLevelId) return;
 
-    try {
-      await submitAnswer.mutateAsync({
-        quizAttemptId: attemptId,
+    // Convert Record<string, string> to array format
+    const formattedAnswers = Object.entries(answers).map(
+      ([questionId, answerText]) => ({
         quizQuestionId: questionId,
         answerText,
+      }),
+    );
+
+    if (formattedAnswers.length === 0) return;
+
+    try {
+      await submitBulkAnswers.mutateAsync({
+        quizAttemptId: attemptId,
+        quizId,
+        quizLevelId,
+        answers: formattedAnswers,
       });
     } catch (error) {
-      console.error("Failed to save answer:", error);
+      console.error("Failed to save answers in bulk:", error);
     }
   };
 
   const handleSubmitQuiz = async () => {
     try {
+      // First save all progress
+      await handleSaveProgress();
+      // Then submit the attempt
       await submitAttempt.mutateAsync();
       router.push("/materials");
     } catch (error) {
@@ -157,21 +172,6 @@ export function QuizAttemptClient({ attemptId }: QuizAttemptClientProps) {
                   <span className="text-sm text-muted-foreground">
                     Max Score: {question.maxScore}
                   </span>
-                  {!isSubmitted && (
-                    <Button
-                      size="sm"
-                      variant="outline"
-                      onClick={() => handleSaveAnswer(question.id)}
-                      disabled={
-                        !answers[question.id]?.trim() || submitAnswer.isPending
-                      }
-                    >
-                      {submitAnswer.isPending && (
-                        <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                      )}
-                      Simpan Jawaban
-                    </Button>
-                  )}
                 </div>
               </div>
             </CardContent>
@@ -180,11 +180,25 @@ export function QuizAttemptClient({ attemptId }: QuizAttemptClientProps) {
       </div>
 
       {!isSubmitted && questions && questions.length > 0 && (
-        <div className="flex justify-end">
+        <div className="flex justify-end gap-3">
+          <Button
+            variant="outline"
+            size="lg"
+            onClick={handleSaveProgress}
+            disabled={submitBulkAnswers.isPending || submitAttempt.isPending}
+          >
+            {submitBulkAnswers.isPending ? (
+              <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+            ) : (
+              <Save className="mr-2 h-4 w-4" />
+            )}
+            Simpan Progres
+          </Button>
+
           <Button
             size="lg"
             onClick={handleSubmitQuiz}
-            disabled={submitAttempt.isPending}
+            disabled={submitAttempt.isPending || submitBulkAnswers.isPending}
           >
             {submitAttempt.isPending && (
               <Loader2 className="mr-2 h-4 w-4 animate-spin" />

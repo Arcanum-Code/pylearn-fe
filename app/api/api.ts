@@ -62,6 +62,7 @@ export const API_ENDPOINTS = {
 
     ATTEMPTS: () => `${API_URL}/quizzes/attempts/`,
     CREATE_ATTEMPT: () => `${API_URL}/quizzes/attempts`,
+    SUBMIT_BULK_ANSWERS: () => `${API_URL}/quizzes/answers/bulk`,
     GET_ATTEMPT: (id: string) => `${API_URL}/quizzes/attempts/${id}`,
     SUBMIT_ATTEMPT: (id: string) => `${API_URL}/quizzes/attempts/${id}/submit`,
   },

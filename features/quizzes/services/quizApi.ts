@@ -8,8 +8,10 @@ import {
   QuizAnswer,
   QuizQuestionAttempt,
   ApiQuestionAttemptsResponse,
+  ApiBulkAnswersResponse,
 } from "../types";
 import { ApiResponse } from "@/lib/types";
+import { QuizBulkAnswersFormData } from "../schemas/quizSchema";
 
 // # ========================================================
 // # = Quiz Levels by Material
@@ -329,6 +331,20 @@ export async function submitStudentAnswer(data: {
 
   return {
     answer: result.data,
+    message: result.message,
+  };
+}
+
+export async function submitBulkStudentAnswers(
+  data: QuizBulkAnswersFormData,
+): Promise<{ answers: QuizAnswer[]; message: string }> {
+  const { data: result } = await ApiAxios.post<ApiBulkAnswersResponse>(
+    "/quizzes/answers/bulk",
+    data,
+  );
+
+  return {
+    answers: result.data,
     message: result.message,
   };
 }
