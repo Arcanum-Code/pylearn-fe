@@ -47,6 +47,9 @@ const TableSkeleton = () => (
           <Skeleton className="h-4 w-[30px]" />
         </TableCell>
         <TableCell className="px-4 py-3">
+          <Skeleton className="h-4 w-[80px]" />
+        </TableCell>
+        <TableCell className="px-4 py-3">
           <Skeleton className="h-4 w-[120px]" />
         </TableCell>
         <TableCell className="px-4 py-3">
@@ -118,6 +121,9 @@ export function UsersTable({
                 <TableHead className="w-[50px] px-4 py-3">
                   {t(tableConfig.no)}
                 </TableHead>
+                <TableHead className="min-w-[100px] px-4 py-3">
+                  {t(tableConfig.userId)}
+                </TableHead>
                 <TableHead className="min-w-[120px] px-4 py-3">
                   {t(tableConfig.name)}
                 </TableHead>
@@ -159,6 +165,9 @@ export function UsersTable({
                       <span className="flex h-7 w-7 items-center justify-center rounded-full bg-branding-dark text-white text-xs">
                         {(page - 1) * limit + index + 1}
                       </span>
+                    </TableCell>
+                    <TableCell className="px-4 py-3 font-medium">
+                      {user.userId || "-"}
                     </TableCell>
                     <TableCell className="font-medium px-4 py-3">
                       {user.name}

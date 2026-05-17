@@ -44,6 +44,7 @@ export function UserForm({
   const form = useForm<UserFormData>({
     resolver: zodResolver(userFormSchema),
     defaultValues: defaultValues || {
+      userId: "",
       name: "",
       email: "",
       password: "",
@@ -71,6 +72,24 @@ export function UserForm({
       onSubmit={form.handleSubmit(handleSubmit)}
       className="-mx-6 space-y-5 px-6"
     >
+      <div className="space-y-2">
+        <Label htmlFor="userId" className="text-sm font-medium">
+          {t(formConfig.userId.labelKey)}
+        </Label>
+        <Input
+          id="userId"
+          placeholder={t(formConfig.userId.placeholderKey)}
+          className="h-10"
+          {...form.register("userId")}
+          disabled={isLoading}
+        />
+        {form.formState.errors.userId && (
+          <p className="text-sm text-destructive">
+            {form.formState.errors.userId.message}
+          </p>
+        )}
+      </div>
+
       <div className="space-y-2">
         <Label htmlFor="name" className="text-sm font-medium">
           {t(formConfig.name.labelKey)}

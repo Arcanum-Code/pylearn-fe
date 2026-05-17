@@ -29,6 +29,9 @@ export function UserView({ user, roles, isLoading }: UserViewProps) {
     let value: string | React.ReactNode = "";
 
     switch (field.value) {
+      case "userId":
+        value = user.userId || "-";
+        break;
       case "name":
         value = user.name;
         break;

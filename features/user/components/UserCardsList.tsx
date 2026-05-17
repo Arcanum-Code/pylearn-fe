@@ -1,7 +1,7 @@
 "use client";
 
 import { useTranslations } from "@/lib/i18n/useTranslation";
-import { Eye, Pencil, Trash2, Circle, Mail, Shield, Calendar } from "lucide-react";
+import { Eye, Pencil, Trash2, Circle, Shield, Calendar } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardFooter, CardHeader } from "@/components/ui/card";
@@ -48,6 +48,7 @@ export function UserCard({
             </span>
             <div>
               <p className="font-semibold text-base">{user.name}</p>
+              <p className="text-xs text-muted-foreground">ID: {user.userId || "-"}</p>
               <p className="text-sm text-muted-foreground">{user.email}</p>
             </div>
           </div>

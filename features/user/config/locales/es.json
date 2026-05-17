@@ -27,6 +27,7 @@
     "confirmButton": "Eliminar Usuario"
   },
   "fields": {
+    "userId": "ID de Usuario",
     "name": "Nombre",
     "email": "Correo electrónico",
     "role": "Rol",
@@ -37,6 +38,10 @@
     "rows": "Filas"
   },
   "form": {
+    "userId": {
+      "label": "ID de Usuario",
+      "placeholder": "Ingresa el ID de usuario (opcional)"
+    },
     "name": {
       "label": "Nombre Completo",
       "placeholder": "Ingresa el nombre completo"
@@ -65,6 +70,7 @@
   },
   "table": {
     "no": "No",
+    "userId": "ID de Usuario",
     "name": "Nombre",
     "email": "Correo Electrónico",
     "role": "Rol",

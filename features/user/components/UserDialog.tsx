@@ -48,6 +48,7 @@ export function UserDialog({
 
   const defaultValues: UserFormData | undefined = userData
     ? {
+        userId: userData.userId,
         name: userData.name,
         email: userData.email,
         roleId: userData.roleId as UserFormData["roleId"],
@@ -57,6 +58,7 @@ export function UserDialog({
     ? undefined
     : selectedUser
     ? {
+        userId: selectedUser.userId,
         name: selectedUser.name,
         email: selectedUser.email,
         roleId: selectedUser.roleId as UserFormData["roleId"],

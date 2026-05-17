@@ -1,4 +1,13 @@
-import { User, UsersResponse, DeleteResponse, UserFilters, ApiUsersResponse, ApiUserResponse, ApiDeleteResponse, ApiRolesResponse } from "../types";
+import {
+  User,
+  UsersResponse,
+  DeleteResponse,
+  UserFilters,
+  ApiUsersResponse,
+  ApiUserResponse,
+  ApiDeleteResponse,
+  ApiRolesResponse,
+} from "../types";
 import { UserFormData } from "../schema/userFormSchema";
 import { ApiAxios } from "@utils/axios";
 
@@ -48,6 +57,7 @@ export async function createUser(
     email: data.email,
     password: data.password,
     roleId: data.roleId,
+    userId: data.userId,
     isActive: data.status === "active",
   });
 
@@ -70,6 +80,11 @@ export async function updateUser(
 
   if (data.password) {
     payload.password = data.password;
+  }
+
+  // Jika data form membawa userId, sertakan ke dalam payload PATCH ke server
+  if (data.userId) {
+    payload.userId = data.userId;
   }
 
   const { data: result } = await ApiAxios.patch<ApiUserResponse>(

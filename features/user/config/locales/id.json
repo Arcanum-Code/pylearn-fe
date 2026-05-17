@@ -27,6 +27,7 @@
     "confirmButton": "Hapus Pengguna"
   },
   "fields": {
+    "userId": "ID Pengguna",
     "name": "Nama",
     "email": "Email",
     "role": "Peran",
@@ -37,6 +38,10 @@
     "rows": "Baris"
   },
   "form": {
+    "userId": {
+      "label": "ID Pengguna",
+      "placeholder": "Masukkan ID pengguna (opsional)"
+    },
     "name": {
       "label": "Nama Lengkap",
       "placeholder": "Masukkan nama lengkap"
@@ -65,6 +70,7 @@
   },
   "table": {
     "no": "No",
+    "userId": "ID Pengguna",
     "name": "Nama",
     "email": "Email",
     "role": "Peran",

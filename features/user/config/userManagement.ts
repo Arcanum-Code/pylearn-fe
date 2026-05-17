@@ -20,6 +20,11 @@ export const userManagementConfig = {
   avatarIcon: User,
   viewFields: [
     {
+      labelKey: "user.fields.userId",
+      value: "userId",
+      icon: User,
+    },
+    {
       labelKey: "user.fields.name",
       value: "name",
       icon: User,
@@ -68,6 +73,10 @@ export const userManagementConfig = {
     rowsKey: "user.pagination.rows",
   },
   form: {
+    userId: {
+      labelKey: "user.form.userId.label",
+      placeholderKey: "user.form.userId.placeholder",
+    },
     name: {
       labelKey: "user.form.name.label",
       placeholderKey: "user.form.name.placeholder",
@@ -96,6 +105,7 @@ export const userManagementConfig = {
   },
   table: {
     no: "user.table.no",
+    userId: "user.table.userId",
     name: "user.table.name",
     email: "user.table.email",
     role: "user.table.role",

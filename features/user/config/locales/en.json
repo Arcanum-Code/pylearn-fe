@@ -27,6 +27,7 @@
     "confirmButton": "Delete User"
   },
   "fields": {
+    "userId": "User ID",
     "name": "Name",
     "email": "Email",
     "role": "Role",
@@ -37,6 +38,10 @@
     "rows": "Rows"
   },
   "form": {
+    "userId": {
+      "label": "User ID",
+      "placeholder": "Enter user ID (optional)"
+    },
     "name": {
       "label": "Full Name",
       "placeholder": "Enter full name"
@@ -65,6 +70,7 @@
   },
   "table": {
     "no": "No",
+    "userId": "User ID",
     "name": "Name",
     "email": "Email",
     "role": "Role",

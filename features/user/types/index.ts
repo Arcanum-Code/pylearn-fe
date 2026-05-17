@@ -5,6 +5,7 @@ export type { ApiErrorResponse };
 export interface ApiUser {
   id: string;
   email: string;
+  userId: string;
   name: string;
   isActive: boolean;
   roleId: string;
