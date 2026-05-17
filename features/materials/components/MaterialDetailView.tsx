@@ -25,7 +25,7 @@ import {
   ExternalLink,
   CheckCircle,
 } from "lucide-react";
-import dynamic from "next/dynamic";
+import { API_ENDPOINTS } from "@/app/api/api";
 
 const PdfViewer = dynamic(
   () => import("./PdfViewer").then((mod) => mod.PdfViewer),
@@ -74,11 +74,11 @@ export function MaterialDetailView({ id }: MaterialDetailViewProps) {
       ? material.sourceUrl || material.content
       : null;
 
-  // We use relative URLs here because we've added a rewrite in next.config.ts
-  // that proxies /storage/* requests to the backend.
+  // We use the Next.js API route (/api/storage/...) to proxy storage requests.
+  // This ensures the browser always fetches through the frontend domain.
   const absolutePdfUrl =
     pdfUrl && !pdfUrl.startsWith("http")
-      ? `${pdfUrl.startsWith("/") ? "" : "/"}${pdfUrl}`
+      ? API_ENDPOINTS.STORAGE(pdfUrl)
       : pdfUrl;
 
   // Handler dinamis untuk tombol kuis

@@ -76,4 +76,5 @@ export const API_ENDPOINTS = {
     SUBMIT_BULK_ANSWERS: () => `${API_URL}/quizzes/answers/bulk`,
     GET_MY_QUIZ_STATUS: () => `${API_URL}/quizzes/attempts/status/me`,
   },
+  STORAGE: (path: string) => `/api${path.startsWith("/") ? "" : "/"}${path}`,
 };
