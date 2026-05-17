@@ -74,12 +74,11 @@ export function MaterialDetailView({ id }: MaterialDetailViewProps) {
       ? material.sourceUrl || material.content
       : null;
 
-  // Use NEXT_PUBLIC_API_URL to ensure the browser fetches the file from the public domain 
-  // (e.g., api.titanic.my.id) instead of the internal docker network (e.g., http://backend:4000)
-  const publicApiUrl = process.env.NEXT_PUBLIC_API_URL;
+  // We use relative URLs here because we've added a rewrite in next.config.ts
+  // that proxies /storage/* requests to the backend.
   const absolutePdfUrl =
     pdfUrl && !pdfUrl.startsWith("http")
-      ? `${publicApiUrl}${pdfUrl.startsWith("/") ? "" : "/"}${pdfUrl}`
+      ? `${pdfUrl.startsWith("/") ? "" : "/"}${pdfUrl}`
       : pdfUrl;
 
   // Handler dinamis untuk tombol kuis
