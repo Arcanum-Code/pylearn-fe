@@ -1,6 +1,12 @@
 const isServer = typeof window === "undefined";
+
+/**
+ * On the server, we prefer an internal API URL if provided (e.g., http://backend:4000 in Docker).
+ * On the client, we must use the public API URL.
+ * Locally, if API_URL is not set, it falls back to NEXT_PUBLIC_API_URL.
+ */
 export const API_URL = isServer
-  ? "http://backend:4000"
+  ? (process.env.API_URL || process.env.NEXT_PUBLIC_API_URL)
   : process.env.NEXT_PUBLIC_API_URL;
 
 export const API_ENDPOINTS = {
