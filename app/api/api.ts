@@ -6,7 +6,7 @@ const isServer = typeof window === "undefined";
  * Locally, if API_URL is not set, it falls back to NEXT_PUBLIC_API_URL.
  */
 export const API_URL = isServer
-  ? (process.env.API_URL || process.env.NEXT_PUBLIC_API_URL)
+  ? process.env.API_URL || process.env.NEXT_PUBLIC_API_URL
   : process.env.NEXT_PUBLIC_API_URL;
 
 export const API_ENDPOINTS = {
@@ -75,6 +75,8 @@ export const API_ENDPOINTS = {
     SUBMIT_ATTEMPT: (id: string) => `${API_URL}/quizzes/attempts/${id}/submit`,
     SUBMIT_BULK_ANSWERS: () => `${API_URL}/quizzes/answers/bulk`,
     GET_MY_QUIZ_STATUS: () => `${API_URL}/quizzes/attempts/status/me`,
+    GET_ATTEMPT_RESULTS: (id: string) =>
+      `${API_URL}/quizzes/attempts/${id}/results`,
   },
   STORAGE: (path: string) => `/api${path.startsWith("/") ? "" : "/"}${path}`,
 };

@@ -11,6 +11,8 @@ import {
   ApiBulkAnswersResponse,
   ApiMyQuizStatusResponse,
   MyQuizStatusData,
+  QuizAttemptResultData,
+  ApiQuizAttemptResultResponse,
 } from "../types";
 import { ApiResponse } from "@/lib/types";
 import { QuizBulkAnswersFormData } from "../schemas/quizSchema";
@@ -314,6 +316,16 @@ export async function submitQuizAttempt(
     attempt: result.data,
     message: result.message,
   };
+}
+
+export async function getQuizAttemptResults(
+  id: string,
+): Promise<QuizAttemptResultData> {
+  const { data: result } = await ApiAxios.get<ApiQuizAttemptResultResponse>(
+    `/quizzes/attempts/${id}/results`,
+  );
+
+  return result.data;
 }
 
 // # ========================================================

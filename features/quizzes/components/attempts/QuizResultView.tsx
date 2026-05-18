@@ -11,6 +11,11 @@ interface QuizResultViewProps {
   isLoading: boolean;
 }
 
+const stripHtmlTags = (htmlString: string) => {
+  if (!htmlString) return "";
+  return htmlString.replace(/<[^>]*>/g, "");
+};
+
 export function QuizResultView({ results, isLoading }: QuizResultViewProps) {
   if (isLoading) {
     return (
@@ -48,13 +53,17 @@ export function QuizResultView({ results, isLoading }: QuizResultViewProps) {
           <div className="flex flex-col md:flex-row gap-6 justify-between items-center">
             <div className="flex-1 space-y-2 w-full">
               <div className="flex justify-between items-center border-b pb-2">
-                <span className="text-muted-foreground text-sm">Waktu Mulai:</span>
+                <span className="text-muted-foreground text-sm">
+                  Waktu Mulai:
+                </span>
                 <span className="font-medium text-sm">
                   {new Date(results.startedAt).toLocaleString()}
                 </span>
               </div>
               <div className="flex justify-between items-center pt-1">
-                <span className="text-muted-foreground text-sm">Waktu Selesai:</span>
+                <span className="text-muted-foreground text-sm">
+                  Waktu Selesai:
+                </span>
                 <span className="font-medium text-sm">
                   {new Date(results.submittedAt).toLocaleString()}
                 </span>
@@ -62,7 +71,9 @@ export function QuizResultView({ results, isLoading }: QuizResultViewProps) {
             </div>
 
             <div className="flex flex-col items-center justify-center bg-background rounded-full h-32 w-32 shadow-sm border-4 border-primary/20">
-              <span className="text-sm text-muted-foreground mb-1">Skor Akhir</span>
+              <span className="text-sm text-muted-foreground mb-1">
+                Skor Akhir
+              </span>
               <span className="text-4xl font-bold text-primary">
                 {results.score}
               </span>
@@ -115,7 +126,11 @@ export function QuizResultView({ results, isLoading }: QuizResultViewProps) {
                       Jawaban Anda:
                     </div>
                     <div className="text-sm min-h-[40px] whitespace-pre-wrap">
-                      {detail.userAnswer || <span className="italic text-muted-foreground">Tidak dijawab</span>}
+                      {detail.userAnswer || (
+                        <span className="italic text-muted-foreground">
+                          Tidak dijawab
+                        </span>
+                      )}
                     </div>
                     <div className="flex justify-end pt-1">
                       {detail.isCorrect ? (
@@ -123,7 +138,10 @@ export function QuizResultView({ results, isLoading }: QuizResultViewProps) {
                           <CheckCircle2 className="h-3 w-3 mr-1" /> Benar
                         </Badge>
                       ) : (
-                        <Badge variant="destructive" className="bg-red-100 text-red-800 hover:bg-red-100 border-red-200">
+                        <Badge
+                          variant="destructive"
+                          className="bg-red-100 text-red-800 hover:bg-red-100 border-red-200"
+                        >
                           <XCircle className="h-3 w-3 mr-1" /> Salah
                         </Badge>
                       )}
@@ -136,7 +154,7 @@ export function QuizResultView({ results, isLoading }: QuizResultViewProps) {
                       Jawaban yang Benar:
                     </div>
                     <div className="text-sm min-h-[40px] whitespace-pre-wrap">
-                      {detail.correctAnswer}
+                      {stripHtmlTags(detail.correctAnswer)}
                     </div>
                   </div>
                 </div>

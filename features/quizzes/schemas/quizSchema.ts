@@ -62,6 +62,10 @@ export const myQuizStatusQuerySchema = z.object({
     .min(1, "Quiz ID wajib disertakan dalam parameter pencarian"),
 });
 
+export const quizResultParamSchema = z.object({
+  attemptId: z.string().min(1, "Attempt ID parameter is required"),
+});
+
 export type QuizLevelFormData = z.infer<typeof quizLevelSchema>;
 export type QuizFormData = z.infer<typeof quizSchema>;
 export type QuizQuestionFormData = z.infer<typeof quizQuestionSchema>;
@@ -70,3 +74,4 @@ export type QuizAnswerFormData = z.infer<typeof quizAnswerSchema>;
 export type QuizSingleAnswerFormData = z.infer<typeof quizSingleAnswerSchema>;
 export type QuizBulkAnswersFormData = z.infer<typeof quizBulkAnswersSchema>;
 export type MyQuizStatusQueryFormData = z.infer<typeof myQuizStatusQuerySchema>;
+export type QuizResultParamData = z.infer<typeof quizResultParamSchema>;

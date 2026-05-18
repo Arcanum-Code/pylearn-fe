@@ -95,6 +95,26 @@ export interface MyQuizStatusData {
   attemptHistory: MyQuizAttemptHistory[];
 }
 
+export interface QuizAttemptResultDetail {
+  questionId: string;
+  questionText: string;
+  maxScore: number;
+  userAnswer: string;
+  correctAnswer: string;
+  isCorrect: boolean;
+}
+
+export interface QuizAttemptResultData {
+  attemptId: string;
+  quizLevelId: string;
+  quizTitle: string;
+  levelTitle: string;
+  score: number;
+  startedAt: string;
+  submittedAt: string;
+  details: QuizAttemptResultDetail[];
+}
+
 export type ApiQuizzesResponse = ApiResponse<Quiz[]>;
 export type ApiQuestionsResponse = ApiResponse<QuizQuestion[]>;
 export type ApiAttemptResponse = ApiResponse<QuizAttempt[]>;
@@ -102,3 +122,4 @@ export type ApiAnswerResponse = ApiResponse<QuizAnswer[]>;
 export type ApiQuestionAttemptsResponse = ApiResponse<QuizQuestionAttempt[]>;
 export type ApiBulkAnswersResponse = ApiResponse<QuizAnswer[]>;
 export type ApiMyQuizStatusResponse = ApiResponse<MyQuizStatusData>;
+export type ApiQuizAttemptResultResponse = ApiResponse<QuizAttemptResultData>;

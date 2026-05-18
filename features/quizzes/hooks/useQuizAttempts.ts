@@ -11,6 +11,7 @@ import {
   submitStudentAnswer,
   submitBulkStudentAnswers,
   getMyQuizStatus,
+  getQuizAttemptResults,
 } from "../services/quizApi";
 import { QuizAttempt } from "../types";
 import { QuizAttemptFormData } from "../schemas/quizSchema";
@@ -177,5 +178,13 @@ export function useFetchMyQuizStatus(quizId: string) {
     queryKey: [...attemptKeys.all, "status-me", quizId] as const,
     queryFn: () => getMyQuizStatus(quizId),
     enabled: !!quizId,
+  });
+}
+
+export function useFetchQuizAttemptResults(attemptId: string) {
+  return useQuery({
+    queryKey: [...attemptKeys.all, "results", attemptId] as const,
+    queryFn: () => getQuizAttemptResults(attemptId),
+    enabled: !!attemptId,
   });
 }
