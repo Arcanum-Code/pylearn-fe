@@ -9,11 +9,13 @@ import {
   useCreateQuizAttempt,
   useFetchMyQuizStatus,
 } from "@/features/quizzes/hooks/useQuizAttempts"; // Impor useFetchMyQuizStatus & useCreateQuizAttempt standar
+import { MyQuizLevelStatus, QuizLevel } from "@/features/quizzes/types";
 
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Skeleton } from "@/components/ui/skeleton";
+import { useAuth } from "@/features/auth";
 import {
   ArrowLeft,
   Loader2,
@@ -24,6 +26,7 @@ import {
   ArrowRight,
   ExternalLink,
   CheckCircle,
+  ClipboardList,
 } from "lucide-react";
 import dynamic from "next/dynamic";
 import { API_ENDPOINTS } from "@/app/api/api";
@@ -50,6 +53,8 @@ interface MaterialDetailViewProps {
 
 export function MaterialDetailView({ id }: MaterialDetailViewProps) {
   const router = useRouter();
+  const { user } = useAuth();
+  const isMahasiswa = user?.roleName?.toLowerCase() === "mahasiswa";
 
   // 1. Fetch data materi dan tingkatan level kuis
   const { data: material, isLoading } = useFetchMaterialById(id);
@@ -88,6 +93,12 @@ export function MaterialDetailView({ id }: MaterialDetailViewProps) {
     levelId: string,
     existingAttemptId?: string | null,
   ) => {
+    // Jika bukan mahasiswa, arahkan ke halaman hasil semua mahasiswa
+    if (!isMahasiswa) {
+      router.push(`/materials/${id}/results?levelId=${levelId}`);
+      return;
+    }
+
     // A. Jika sudah ada attempt aktif (IN_PROGRESS atau COMPLETED), langsung arahkan ke halaman pengerjaan/hasil
     if (existingAttemptId) {
       router.push(`/quizzes/attempts/${existingAttemptId}`);
@@ -103,7 +114,7 @@ export function MaterialDetailView({ id }: MaterialDetailViewProps) {
     }
   };
 
-  if (isLoading || isLevelsLoading || isStatusLoading) {
+  if (isLoading || isLevelsLoading || (isMahasiswa && isStatusLoading)) {
     return (
       <div className="flex flex-col gap-6 p-6 max-w-4xl mx-auto">
         <Skeleton className="h-8 w-32" />
@@ -210,7 +221,7 @@ export function MaterialDetailView({ id }: MaterialDetailViewProps) {
       </Card>
 
       {/* SEGMEN TINGKATAN KUIS ADAPTIF */}
-      {quizStatus?.levels && quizStatus.levels.length > 0 && (
+      {(isMahasiswa ? quizStatus?.levels : quizLevels) && (isMahasiswa ? (quizStatus?.levels?.length ?? 0) > 0 : (quizLevels?.length ?? 0) > 0) && (
         <Card className="border-t-4 border-t-primary">
           <CardContent className="p-6">
             <div className="flex items-center gap-2 mb-4">
@@ -219,35 +230,54 @@ export function MaterialDetailView({ id }: MaterialDetailViewProps) {
             </div>
 
             <div className="space-y-3">
-              {quizStatus.levels.map((level) => {
-                const isCompleted = level.status === "COMPLETED";
-                const isInProgress = level.status === "IN_PROGRESS";
+              {(isMahasiswa ? quizStatus!.levels : quizLevels!).map((item) => {
+                const levelTitle = item.title;
+                let levelId = "";
+                let isCompleted = false;
+                let isInProgress = false;
+                let currentAttemptId: string | null = null;
+                let quizId = "";
+
+                if (isMahasiswa) {
+                  const statusItem = item as MyQuizLevelStatus;
+                  levelId = statusItem.levelId;
+                  isCompleted = statusItem.status === "COMPLETED";
+                  isInProgress = statusItem.status === "IN_PROGRESS";
+                  currentAttemptId = statusItem.currentAttemptId;
+                  quizId = quizStatus!.quizId;
+                } else {
+                  const levelItem = item as QuizLevel;
+                  levelId = levelItem.id;
+                  quizId = levelItem.quizId;
+                }
 
                 return (
                   <div
-                    key={level.levelId}
+                    key={levelId}
                     className="flex items-center justify-between p-4 rounded-lg border bg-card hover:bg-muted/50 transition-colors"
                   >
                     <div className="flex flex-col">
                       <span className="font-bold text-sm text-foreground">
-                        {level.title}
+                        {levelTitle}
                       </span>
-                      <span className="text-xs text-muted-foreground mt-0.5">
-                        Status Kuis:{" "}
-                        {isCompleted
-                          ? "✅ Selesai"
-                          : isInProgress
-                            ? "🟡 Sedang Dikerjakan"
-                            : "🟢 Siap Dimulai"}
-                      </span>
+                      {isMahasiswa && (
+                        <span className="text-xs text-muted-foreground mt-0.5">
+                          Status Kuis:{" "}
+                          {isCompleted
+                            ? "✅ Selesai"
+                            : isInProgress
+                              ? "🟡 Sedang Dikerjakan"
+                              : "🟢 Siap Dimulai"}
+                        </span>
+                      )}
                     </div>
 
                     <Button
                       onClick={() =>
                         handleQuizAction(
-                          quizStatus.quizId,
-                          level.levelId,
-                          level.currentAttemptId,
+                          quizId,
+                          levelId,
+                          currentAttemptId,
                         )
                       }
                       disabled={isCreatingAttempt}
@@ -255,20 +285,29 @@ export function MaterialDetailView({ id }: MaterialDetailViewProps) {
                       variant={isInProgress ? "secondary" : "default"}
                       className="font-medium shadow-sm"
                     >
-                      {isCreatingAttempt ? (
-                        <Loader2 className="mr-1.5 h-4 w-4 animate-spin" />
-                      ) : isInProgress ? (
-                        <ArrowRight className="mr-1.5 h-4 w-4 text-primary animate-pulse" />
-                      ) : isCompleted ? (
-                        <CheckCircle className="mr-1.5 h-3.5 w-3.5" />
+                      {isMahasiswa ? (
+                        <>
+                          {isCreatingAttempt ? (
+                            <Loader2 className="mr-1.5 h-4 w-4 animate-spin" />
+                          ) : isInProgress ? (
+                            <ArrowRight className="mr-1.5 h-4 w-4 text-primary animate-pulse" />
+                          ) : isCompleted ? (
+                            <CheckCircle className="mr-1.5 h-3.5 w-3.5" />
+                          ) : (
+                            <Play className="mr-1.5 h-3.5 w-3.5 fill-current" />
+                          )}
+                          {isInProgress
+                            ? "Lanjutkan"
+                            : isCompleted
+                              ? "Lihat Hasil"
+                              : "Mulai Kuis"}
+                        </>
                       ) : (
-                        <Play className="mr-1.5 h-3.5 w-3.5 fill-current" />
+                        <>
+                          <ClipboardList className="mr-1.5 h-4 w-4" />
+                          Lihat Hasil Mahasiswa
+                        </>
                       )}
-                      {isInProgress
-                        ? "Lanjutkan"
-                        : isCompleted
-                          ? "Lihat Hasil"
-                          : "Mulai Kuis"}
                     </Button>
                   </div>
                 );
@@ -280,3 +319,4 @@ export function MaterialDetailView({ id }: MaterialDetailViewProps) {
     </div>
   );
 }
+

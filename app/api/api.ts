@@ -77,6 +77,7 @@ export const API_ENDPOINTS = {
     GET_MY_QUIZ_STATUS: () => `${API_URL}/quizzes/attempts/status/me`,
     GET_ATTEMPT_RESULTS: (id: string) =>
       `${API_URL}/quizzes/attempts/${id}/results`,
+    GET_ALL_ATTEMPT_RESULTS: () => `${API_URL}/quizzes/attempts/results`,
   },
   STORAGE: (path: string) => `/api${path.startsWith("/") ? "" : "/"}${path}`,
 };

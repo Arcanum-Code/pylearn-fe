@@ -12,8 +12,9 @@ import {
   submitBulkStudentAnswers,
   getMyQuizStatus,
   getQuizAttemptResults,
+  getAllQuizAttemptResults,
 } from "../services/quizApi";
-import { QuizAttempt } from "../types";
+import { QuizAttempt, QuizResultsFilters } from "../types";
 import { QuizAttemptFormData } from "../schemas/quizSchema";
 
 export const attemptKeys = {
@@ -186,5 +187,13 @@ export function useFetchQuizAttemptResults(attemptId: string) {
     queryKey: [...attemptKeys.all, "results", attemptId] as const,
     queryFn: () => getQuizAttemptResults(attemptId),
     enabled: !!attemptId,
+  });
+}
+
+export function useFetchAllQuizResults(filters: QuizResultsFilters) {
+  return useQuery({
+    queryKey: [...attemptKeys.lists(), "all-results", filters] as const,
+    queryFn: () => getAllQuizAttemptResults(filters),
+    // Hook akan otomatis menembak ulang API setiap kali objek filters.quizLevelId atau filters.studentId berubah
   });
 }

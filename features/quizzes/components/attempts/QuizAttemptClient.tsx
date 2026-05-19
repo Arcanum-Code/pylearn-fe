@@ -1,7 +1,10 @@
 "use client";
 
 import { useState } from "react";
-import { useFetchQuizAttemptDetail, useFetchQuizAttemptResults } from "../../hooks/useQuizAttempts";
+import {
+  useFetchQuizAttemptDetail,
+  useFetchQuizAttemptResults,
+} from "../../hooks/useQuizAttempts";
 import {
   useSubmitQuizAttempt,
   useSubmitBulkStudentAnswers,
@@ -38,7 +41,7 @@ export function QuizAttemptClient({ attemptId }: QuizAttemptClientProps) {
     useFetchQuizQuestionsForAttempt(quizLevelId || "");
 
   // Only fetch results if submitted
-  const { data: results, isLoading: isResultsLoading } = 
+  const { data: results, isLoading: isResultsLoading } =
     useFetchQuizAttemptResults(isSubmitted ? attemptId : "");
 
   const [answers, setAnswers] = useState<Record<string, string>>({});
@@ -119,10 +122,10 @@ export function QuizAttemptClient({ attemptId }: QuizAttemptClientProps) {
         variant="ghost"
         size="sm"
         className="w-fit pl-0"
-        onClick={() => router.push(`/materials`)}
+        onClick={() => router.back()}
       >
         <ArrowLeft className="h-4 w-4 mr-2" />
-        Kembali ke Materi
+        Kembali ke Hasil Kuis
       </Button>
 
       <Card>
@@ -222,4 +225,3 @@ export function QuizAttemptClient({ attemptId }: QuizAttemptClientProps) {
     </div>
   );
 }
-

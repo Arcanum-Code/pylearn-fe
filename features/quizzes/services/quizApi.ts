@@ -13,6 +13,9 @@ import {
   MyQuizStatusData,
   QuizAttemptResultData,
   ApiQuizAttemptResultResponse,
+  QuizResultsFilters,
+  StudentQuizOverviewResult,
+  ApiAllQuizResultsResponse,
 } from "../types";
 import { ApiResponse } from "@/lib/types";
 import { QuizBulkAnswersFormData } from "../schemas/quizSchema";
@@ -323,6 +326,23 @@ export async function getQuizAttemptResults(
 ): Promise<QuizAttemptResultData> {
   const { data: result } = await ApiAxios.get<ApiQuizAttemptResultResponse>(
     `/quizzes/attempts/${id}/results`,
+  );
+
+  return result.data;
+}
+
+export async function getAllQuizAttemptResults(
+  filters: QuizResultsFilters,
+): Promise<StudentQuizOverviewResult[]> {
+  const params: Record<string, string> = {};
+
+  // Masukkan param hanya jika nilainya terdefinisi (bukan string kosong atau undefined)
+  if (filters.quizLevelId) params.quizLevelId = filters.quizLevelId;
+  if (filters.studentId) params.studentId = filters.studentId;
+
+  const { data: result } = await ApiAxios.get<ApiAllQuizResultsResponse>(
+    "/quizzes/attempts/results",
+    { params }, // Mengubah otomatis menjadi /quizzes/attempts/results?quizLevelId=xxx&studentId=yyy
   );
 
   return result.data;

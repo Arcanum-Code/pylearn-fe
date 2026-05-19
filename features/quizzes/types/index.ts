@@ -115,6 +115,26 @@ export interface QuizAttemptResultData {
   details: QuizAttemptResultDetail[];
 }
 
+export interface StudentQuizOverviewResult {
+  attemptId: string;
+  quizLevelId: string;
+  quizTitle: string;
+  levelTitle: string;
+  studentId: string;
+  studentName: string;
+  studentEmail: string;
+  score: number;
+  totalQuestions: number;
+  startedAt: string;
+  submittedAt: string;
+}
+
+// Parameter penayangan filter di UI / React Query Keys
+export interface QuizResultsFilters {
+  quizLevelId?: string;
+  studentId?: string;
+}
+
 export type ApiQuizzesResponse = ApiResponse<Quiz[]>;
 export type ApiQuestionsResponse = ApiResponse<QuizQuestion[]>;
 export type ApiAttemptResponse = ApiResponse<QuizAttempt[]>;
@@ -123,3 +143,6 @@ export type ApiQuestionAttemptsResponse = ApiResponse<QuizQuestionAttempt[]>;
 export type ApiBulkAnswersResponse = ApiResponse<QuizAnswer[]>;
 export type ApiMyQuizStatusResponse = ApiResponse<MyQuizStatusData>;
 export type ApiQuizAttemptResultResponse = ApiResponse<QuizAttemptResultData>;
+export type ApiAllQuizResultsResponse = ApiResponse<
+  StudentQuizOverviewResult[]
+>;
