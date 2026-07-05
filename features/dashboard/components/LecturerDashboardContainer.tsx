@@ -16,6 +16,12 @@ import { Spinner } from "@/components/ui/spinner";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { Users } from "lucide-react";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
 
 export function LecturerDashboardContainer() {
   const [selectedGroupId, setSelectedGroupId] = React.useState<string>("all");
@@ -49,14 +55,35 @@ export function LecturerDashboardContainer() {
         </div>
 
         <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3">
-          {selectedGroupId !== "all" && (
+          {selectedGroupId === "all" ? (
+            <TooltipProvider delayDuration={100}>
+              <Tooltip>
+                <TooltipTrigger asChild>
+                  {/* Wrapper div catches hover events since disabled button swallows them */}
+                  <div className="w-full sm:w-auto" tabIndex={0}>
+                    <Button
+                      variant="outline"
+                      disabled
+                      className="w-full sm:w-auto rounded-xl border-[#6366F1] text-[#6366F1] font-mono text-sm disabled:opacity-50"
+                    >
+                      <Users className="w-4 h-4 mr-2" />
+                      Kelola Kelas
+                    </Button>
+                  </div>
+                </TooltipTrigger>
+                <TooltipContent side="bottom" className="max-w-[250px] text-center">
+                  <p>Pilih kelas spesifik pada dropdown untuk mengelola data kelas tersebut.</p>
+                </TooltipContent>
+              </Tooltip>
+            </TooltipProvider>
+          ) : (
             <Link href={`/groups/${selectedGroupId}`} className="w-full sm:w-auto">
               <Button
                 variant="outline"
                 className="w-full sm:w-auto rounded-xl border-[#6366F1] text-[#6366F1] hover:bg-[#6366F1]/10 font-mono text-sm"
               >
                 <Users className="w-4 h-4 mr-2" />
-                Kelola Kelas (Groups)
+                Kelola Kelas
               </Button>
             </Link>
           )}

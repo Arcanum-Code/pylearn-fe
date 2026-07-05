@@ -147,11 +147,11 @@ export function LecturerDashboardView({ data }: LecturerDashboardViewProps) {
         </CardContent>
       </Card>
 
-      {/* Daftar Kelas (Groups) */}
+      {/* Daftar Kelas */}
       <Card className="md:col-span-3 bg-white border-border rounded-xl shadow-sm">
         <CardHeader className="border-b border-border/50 py-4 px-6 flex flex-row items-center justify-between">
           <CardTitle className="text-lg font-bold text-neutral-900">
-            Daftar Kelas (Groups)
+            Daftar Kelas
           </CardTitle>
           <Link href="/groups">
             <Button variant="outline" size="sm" className="font-mono text-xs border-[#6366F1] text-[#6366F1] hover:bg-[#6366F1]/10">
