@@ -47,6 +47,13 @@ export const API_ENDPOINTS = {
     GROUP_CONTENT_HEALTH: (groupId: string) =>
       `${API_URL}/lecturer/groups/${groupId}/dashboard/content-health`,
   },
+  GROUPS: {
+    LIST: `${API_URL}/groups/`,
+    CREATE: `${API_URL}/groups/`,
+    DETAIL: (id: string) => `${API_URL}/groups/${id}`,
+    UPDATE: (id: string) => `${API_URL}/groups/${id}`,
+    DELETE: (id: string) => `${API_URL}/groups/${id}`,
+  },
   MATERIALS: {
     LIST: `${API_URL}/materials`,
     GET_BY_ID: (id: string) => `${API_URL}/materials/${id}`,

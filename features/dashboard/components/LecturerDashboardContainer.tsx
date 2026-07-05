@@ -13,6 +13,9 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Spinner } from "@/components/ui/spinner";
+import Link from "next/link";
+import { Button } from "@/components/ui/button";
+import { Users } from "lucide-react";
 
 export function LecturerDashboardContainer() {
   const [selectedGroupId, setSelectedGroupId] = React.useState<string>("all");
@@ -45,21 +48,32 @@ export function LecturerDashboardContainer() {
           </p>
         </div>
 
-        <div className="flex items-center gap-3">
-          <span className="text-sm font-medium text-muted-foreground">Kelas:</span>
-          <Select value={selectedGroupId} onValueChange={setSelectedGroupId}>
-            <SelectTrigger className="w-[200px] bg-background">
-              <SelectValue placeholder="Pilih Kelas" />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="all">Ringkasan Umum</SelectItem>
-              {groups?.map((group) => (
-                <SelectItem key={group.id} value={group.id}>
-                  {group.name}
-                </SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
+        <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3">
+          <Link href="/groups" className="w-full sm:w-auto">
+            <Button
+              variant="outline"
+              className="w-full sm:w-auto rounded-xl border-[#6366F1] text-[#6366F1] hover:bg-[#6366F1]/10 font-mono text-sm"
+            >
+              <Users className="w-4 h-4 mr-2" />
+              Kelola Kelas (Groups)
+            </Button>
+          </Link>
+          <div className="flex items-center gap-3">
+            <span className="text-sm font-medium text-muted-foreground">Kelas:</span>
+            <Select value={selectedGroupId} onValueChange={setSelectedGroupId}>
+              <SelectTrigger className="w-[200px] bg-background">
+                <SelectValue placeholder="Pilih Kelas" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="all">Ringkasan Umum</SelectItem>
+                {groups?.map((group) => (
+                  <SelectItem key={group.id} value={group.id}>
+                    {group.name}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+          </div>
         </div>
       </div>
 
