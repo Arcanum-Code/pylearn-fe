@@ -41,7 +41,7 @@ export const API_ENDPOINTS = {
     MAHASISWA: () => `${API_URL}/dashboard/mahasiswa`,
   },
   LECTURER: {
-    GROUPS: `${API_URL}/lecturer/groups`,
+    GROUPS: `${API_URL}/groups/`,
     GROUP_SUMMARY: (groupId: string) =>
       `${API_URL}/lecturer/groups/${groupId}/dashboard/summary`,
     GROUP_CONTENT_HEALTH: (groupId: string) =>
