@@ -27,8 +27,8 @@ export function LoginForm() {
 
   return (
     <Card className="w-full max-w-sm">
-      <CardContent className="pt-6">
-        <div className="mb-6 flex flex-col items-center">
+      <CardContent className="pt-8">
+        <div className="mb-6 flex flex-col items-center text-center">
           <div className="mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-branding-dark">
             <User className="h-8 w-8 text-branding-foreground" />
           </div>
