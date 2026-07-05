@@ -63,3 +63,48 @@ export interface StudentDashboardData {
 export type UserDistributionData = DashboardUserDistribution;
 export type ApiLecturerDashboardResponse = ApiResponse<LecturerDashboardData>;
 export type ApiStudentDashboardResponse = ApiResponse<StudentDashboardData>;
+
+export interface GroupData {
+  id: string;
+  name: string;
+  description?: string;
+}
+
+export interface GroupSummaryData {
+  group_id: string;
+  total_students: number;
+  avg_materials_read: number;
+  total_materials: number;
+  avg_pass_rate: number;
+  pass_rate_trend: {
+    current_week: number;
+    previous_week: number;
+    delta: number;
+  };
+  generated_at: string;
+}
+
+export interface QuizHealthData {
+  quiz_id: string;
+  level: number;
+  title: string;
+  first_attempt_pass_rate: number;
+  avg_attempts_to_pass: number;
+  flag: string | null;
+}
+
+export interface MaterialHealthData {
+  material_id: string;
+  title: string;
+  read_rate: number;
+  flag: string | null;
+}
+
+export interface ContentHealthData {
+  quizzes: QuizHealthData[];
+  materials: MaterialHealthData[];
+}
+
+export type ApiGroupsResponse = ApiResponse<GroupData[]>;
+export type ApiGroupSummaryResponse = ApiResponse<GroupSummaryData>;
+export type ApiContentHealthResponse = ApiResponse<ContentHealthData>;

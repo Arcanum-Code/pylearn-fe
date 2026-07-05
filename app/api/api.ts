@@ -40,6 +40,13 @@ export const API_ENDPOINTS = {
     DOSEN: () => `${API_URL}/dashboard/dosen`,
     MAHASISWA: () => `${API_URL}/dashboard/mahasiswa`,
   },
+  LECTURER: {
+    GROUPS: `${API_URL}/lecturer/groups`,
+    GROUP_SUMMARY: (groupId: string) =>
+      `${API_URL}/lecturer/groups/${groupId}/dashboard/summary`,
+    GROUP_CONTENT_HEALTH: (groupId: string) =>
+      `${API_URL}/lecturer/groups/${groupId}/dashboard/content-health`,
+  },
   MATERIALS: {
     LIST: `${API_URL}/materials`,
     GET_BY_ID: (id: string) => `${API_URL}/materials/${id}`,
