@@ -24,6 +24,7 @@ export interface MaterialFilters {
   page: number;
   limit: number;
   lecturerId?: string;
+  groupId?: string;
   materialType?: MaterialType;
   isPublished?: boolean;
 }

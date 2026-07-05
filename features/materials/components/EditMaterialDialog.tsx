@@ -10,24 +10,27 @@ import {
 } from "@/components/ui/dialog";
 import { BookOpen } from "lucide-react";
 import { MaterialForm } from "./MaterialForm";
-import { useUpdateMaterial } from "../hooks/useMaterials";
-import { Material, UpdateMaterialRequest } from "../types";
+import { useUpdateMaterial, useFetchMaterialById } from "../hooks/useMaterials";
+import { UpdateMaterialRequest } from "../types";
+import { Spinner } from "@/components/ui/spinner";
 
 interface EditMaterialDialogProps {
-  material: Material;
+  materialId: string;
   isOpen: boolean;
   onOpenChange: (open: boolean) => void;
 }
 
 export function EditMaterialDialog({
-  material,
+  materialId,
   isOpen,
   onOpenChange,
 }: EditMaterialDialogProps) {
   const t = useTranslations();
+  const { data: material, isLoading } = useFetchMaterialById(isOpen ? materialId : null);
   const { mutate: updateMaterial, isPending } = useUpdateMaterial();
 
   const onSubmit = (values: any) => {
+    if (!material) return;
     const formData = new FormData();
 
     // 1. Amankan nilai materialType (Pastikan mengekstrak string murni)
@@ -66,13 +69,15 @@ export function EditMaterialDialog({
     );
   };
 
-  const initialValues: UpdateMaterialRequest = {
-    title: material.title,
-    description: material.description,
-    content: material.content,
-    iconName: material.iconName,
-    isPublished: material.isPublished,
-  };
+  const initialValues: UpdateMaterialRequest | undefined = material
+    ? {
+        title: material.title,
+        description: material.description,
+        content: material.content,
+        iconName: material.iconName,
+        isPublished: material.isPublished,
+      }
+    : undefined;
 
   return (
     <Dialog open={isOpen} onOpenChange={onOpenChange}>
@@ -94,11 +99,17 @@ export function EditMaterialDialog({
           </div>
         </DialogHeader>
 
-        <MaterialForm
-          initialValues={initialValues}
-          onSubmit={onSubmit}
-          isLoading={isPending}
-        />
+        {isLoading || !material ? (
+          <div className="flex justify-center items-center py-12">
+            <Spinner className="w-8 h-8 text-primary" />
+          </div>
+        ) : (
+          <MaterialForm
+            initialValues={initialValues}
+            onSubmit={onSubmit}
+            isLoading={isPending}
+          />
+        )}
       </DialogContent>
     </Dialog>
   );

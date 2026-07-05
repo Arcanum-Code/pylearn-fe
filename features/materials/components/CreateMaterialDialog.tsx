@@ -14,7 +14,7 @@ import { Plus, BookOpen } from "lucide-react";
 import { MaterialForm } from "./MaterialForm";
 import { useCreateMaterial } from "../hooks/useMaterials";
 
-export function CreateMaterialDialog() {
+export function CreateMaterialDialog({ groupId }: { groupId: string }) {
   const [open, setOpen] = useState(false);
   const { mutate: createMaterial, isPending } = useCreateMaterial();
 
@@ -23,6 +23,7 @@ export function CreateMaterialDialog() {
     const formData = new FormData();
 
     // 2. Append standard text fields
+    formData.append("groupId", groupId);
     formData.append("title", values.title);
     formData.append("description", values.description || "");
     formData.append("materialType", values.materialType);

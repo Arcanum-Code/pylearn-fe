@@ -3,10 +3,19 @@
 import { useGroup } from "../hooks/useGroups";
 import { Spinner } from "@/components/ui/spinner";
 import Link from "next/link";
-import { ArrowLeft, BookOpen, CheckCircle, GraduationCap } from "lucide-react";
+import { ArrowLeft, BookOpen, CheckCircle, GraduationCap, Edit, Trash2 } from "lucide-react";
+import { useState } from "react";
+import { Button } from "@/components/ui/button";
+import {
+  CreateMaterialDialog,
+  EditMaterialDialog,
+  DeleteMaterialDialog,
+} from "@/features/materials";
 
 export function GroupDetail({ id }: { id: string }) {
   const { data: group, isLoading } = useGroup(id);
+  const [editMaterialId, setEditMaterialId] = useState<string | null>(null);
+  const [deleteMaterial, setDeleteMaterial] = useState<{ id: string; title: string } | null>(null);
 
   if (isLoading) {
     return (
@@ -56,14 +65,17 @@ export function GroupDetail({ id }: { id: string }) {
         {/* Materials Bento Tile */}
         <div className="bg-white p-6 rounded-2xl shadow-xs border border-gray-150/60 flex flex-col justify-between">
           <div>
-            <div className="flex items-center gap-3 mb-6">
-              <div className="p-3 bg-[#6366F1]/10 text-[#6366F1] rounded-xl">
-                <BookOpen className="w-6 h-6" />
+            <div className="flex items-center justify-between mb-6">
+              <div className="flex items-center gap-3">
+                <div className="p-3 bg-[#6366F1]/10 text-[#6366F1] rounded-xl">
+                  <BookOpen className="w-6 h-6" />
+                </div>
+                <div>
+                  <h2 className="text-xl font-bold text-[#1A1C1E]">Materi Pembelajaran</h2>
+                  <p className="text-xs text-gray-500 mt-0.5">Daftar materi yang ditugaskan ke kelas ini.</p>
+                </div>
               </div>
-              <div>
-                <h2 className="text-xl font-bold text-[#1A1C1E]">Materi Pembelajaran</h2>
-                <p className="text-xs text-gray-500 mt-0.5">Daftar materi yang ditugaskan ke kelas ini.</p>
-              </div>
+              <CreateMaterialDialog groupId={group.id} />
             </div>
             <div className="space-y-3">
               {group.materials?.length === 0 && (
@@ -77,19 +89,53 @@ export function GroupDetail({ id }: { id: string }) {
                   className="flex justify-between items-center p-4 rounded-xl bg-[#F7F8FA] border border-gray-150/40"
                 >
                   <span className="font-semibold text-sm text-[#1A1C1E]">{m.title}</span>
-                  <span
-                    className={`font-mono text-[10px] px-2 py-0.5 rounded-md font-semibold tracking-wider ${
-                      m.isPublished
-                        ? "bg-[#10B981]/10 text-[#10B981]"
-                        : "bg-[#F59E0B]/10 text-[#F59E0B]"
-                    }`}
-                  >
-                    {m.isPublished ? "PUBLISHED" : "DRAFT"}
-                  </span>
+                  <div className="flex items-center gap-2">
+                    <span
+                      className={`font-mono text-[10px] px-2 py-0.5 rounded-md font-semibold tracking-wider ${
+                        m.isPublished
+                          ? "bg-[#10B981]/10 text-[#10B981]"
+                          : "bg-[#F59E0B]/10 text-[#F59E0B]"
+                      }`}
+                    >
+                      {m.isPublished ? "PUBLISHED" : "DRAFT"}
+                    </span>
+                    <Button
+                      variant="ghost"
+                      size="icon"
+                      className="h-8 w-8 text-[#6366F1] hover:text-[#6366F1]/80"
+                      onClick={() => setEditMaterialId(m.id)}
+                    >
+                      <Edit className="w-4 h-4" />
+                    </Button>
+                    <Button
+                      variant="ghost"
+                      size="icon"
+                      className="h-8 w-8 text-[#EF4444] hover:text-[#EF4444]/80"
+                      onClick={() => setDeleteMaterial({ id: m.id, title: m.title })}
+                    >
+                      <Trash2 className="w-4 h-4" />
+                    </Button>
+                  </div>
                 </div>
               ))}
             </div>
           </div>
+
+          {editMaterialId && (
+            <EditMaterialDialog
+              materialId={editMaterialId}
+              isOpen={!!editMaterialId}
+              onOpenChange={(open) => !open && setEditMaterialId(null)}
+            />
+          )}
+
+          {deleteMaterial && (
+            <DeleteMaterialDialog
+              material={deleteMaterial}
+              isOpen={!!deleteMaterial}
+              onOpenChange={(open) => !open && setDeleteMaterial(null)}
+            />
+          )}
         </div>
 
         {/* Quizzes Bento Tile */}

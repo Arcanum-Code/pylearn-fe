@@ -4,6 +4,7 @@ export const materialFiltersSchema = z.object({
   page: z.number().min(1).default(1),
   limit: z.number().min(1).default(10),
   lecturerId: z.string().optional(),
+  groupId: z.string().optional(),
   materialType: z.enum(["text", "file", "video", "link"]).optional(),
   isPublished: z.boolean().optional(),
 });

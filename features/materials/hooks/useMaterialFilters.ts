@@ -14,6 +14,7 @@ export function useMaterialFilters() {
   const page = Number(searchParams.get("page")) || DEFAULT_PAGE;
   const limit = Number(searchParams.get("limit")) || DEFAULT_LIMIT;
   const lecturerId = searchParams.get("lecturerId") || "";
+  const groupId = searchParams.get("groupId") || "";
   const materialType = searchParams.get("materialType") as MaterialType | "";
   const isPublished = searchParams.get("isPublished") === "true" ? true : searchParams.get("isPublished") === "false" ? false : undefined;
 
@@ -61,6 +62,16 @@ export function useMaterialFilters() {
     [router, createQueryString],
   );
 
+  const setGroupId = useCallback(
+    (value: string) => {
+      router.push(
+        `?${createQueryString({ groupId: value, page: DEFAULT_PAGE })}`,
+        { scroll: false },
+      );
+    },
+    [router, createQueryString],
+  );
+
   const setMaterialType = useCallback(
     (value: MaterialType | "") => {
       router.push(
@@ -89,11 +100,13 @@ export function useMaterialFilters() {
     page,
     limit,
     lecturerId,
+    groupId,
     materialType,
     isPublished,
     setPage,
     setLimit,
     setLecturerId,
+    setGroupId,
     setMaterialType,
     setIsPublished,
     resetFilters,

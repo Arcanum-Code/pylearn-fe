@@ -17,7 +17,7 @@ import { Spinner } from "@/components/ui/spinner";
 import { AlertTriangle } from "lucide-react";
 
 interface DeleteMaterialDialogProps {
-  material: Material;
+  material: { id: string; title: string };
   isOpen: boolean;
   onOpenChange: (open: boolean) => void;
 }

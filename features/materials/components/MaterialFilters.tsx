@@ -13,24 +13,34 @@ import {
 import { materialsConfig } from "../config/materials";
 import { MaterialType } from "../types";
 
+import { useGroups } from "@/features/groups/hooks/useGroups";
+
 interface MaterialFiltersProps {
   materialType: MaterialType | "";
   isPublished: boolean | undefined;
+  groupId: string;
   onTypeChange: (value: MaterialType | "") => void;
   onStatusChange: (value: boolean | undefined) => void;
+  onGroupChange: (value: string) => void;
 }
 
 export function MaterialFilters({
   materialType,
   isPublished,
+  groupId,
   onTypeChange,
   onStatusChange,
+  onGroupChange,
 }: MaterialFiltersProps) {
   const t = useTranslations();
+  const { data: groups } = useGroups();
 
   const typeLabel = materialType
     ? t(`materials.types.${materialType}`)
     : t("materials.filters.allTypes");
+
+  const selectedGroup = groups?.find((g) => g.id === groupId);
+  const groupLabel = selectedGroup ? selectedGroup.name : "Semua Kelas";
 
   return (
     <Card>
@@ -68,6 +78,29 @@ export function MaterialFilters({
               {(["text", "file", "video", "link"] as const).map((type) => (
                 <DropdownMenuItem key={type} onClick={() => onTypeChange(type)}>
                   {t(`materials.types.${type}`)}
+                </DropdownMenuItem>
+              ))}
+            </DropdownMenuContent>
+          </DropdownMenu>
+
+          {/* Group Filter */}
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <Button variant="outline" size="sm" className="h-9 px-3">
+                <span className="text-muted-foreground mr-1">
+                  Kelas:
+                </span>
+                {groupLabel}
+                <ChevronDown className="ml-1 h-3.5 w-3.5" />
+              </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="end">
+              <DropdownMenuItem onClick={() => onGroupChange("")}>
+                Semua Kelas
+              </DropdownMenuItem>
+              {groups?.map((group) => (
+                <DropdownMenuItem key={group.id} onClick={() => onGroupChange(group.id)}>
+                  {group.name}
                 </DropdownMenuItem>
               ))}
             </DropdownMenuContent>

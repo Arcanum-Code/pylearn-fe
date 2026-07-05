@@ -4,6 +4,7 @@ import { useTranslations } from "@/lib/i18n/useTranslation";
 import { Suspense, useRef } from "react"; // Tambahkan Suspense
 import {
   MaterialHeader,
+  MaterialFilters,
   MaterialsList,
   useFetchMaterials,
   useMaterialFilters,
@@ -20,13 +21,22 @@ function MaterialsCollection() {
     page: filters.page,
     limit: filters.limit,
     lecturerId: filters.lecturerId,
+    groupId: filters.groupId || undefined,
     materialType: filters.materialType || undefined,
     isPublished: filters.isPublished,
   });
 
   return (
     <>
-      <div ref={listRef}>
+      <MaterialFilters
+        materialType={filters.materialType}
+        isPublished={filters.isPublished}
+        groupId={filters.groupId}
+        onTypeChange={filters.setMaterialType}
+        onStatusChange={filters.setIsPublished}
+        onGroupChange={filters.setGroupId}
+      />
+      <div ref={listRef} className="mt-4">
         <MaterialsList data={data?.data || []} isLoading={isLoading} />
       </div>
 

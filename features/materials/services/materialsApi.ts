@@ -17,6 +17,7 @@ export async function fetchMaterials(
   if (filters.page) params.page = filters.page;
   if (filters.limit) params.limit = filters.limit;
   if (filters.lecturerId) params.lecturerId = filters.lecturerId;
+  if (filters.groupId) params.groupId = filters.groupId;
   if (filters.materialType) params.materialType = filters.materialType;
   if (filters.isPublished !== undefined)
     params.isPublished = filters.isPublished;

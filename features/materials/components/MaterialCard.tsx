@@ -23,9 +23,10 @@ import { useAuth } from "@/features/auth";
 
 interface MaterialCardProps {
   material: Material;
+  readOnly?: boolean;
 }
 
-export function MaterialCard({ material }: MaterialCardProps) {
+export function MaterialCard({ material, readOnly = false }: MaterialCardProps) {
   const t = useTranslations();
   const { user } = useAuth();
   const isMahasiswa = user?.roleName?.toLowerCase() === "mahasiswa";
@@ -112,7 +113,7 @@ export function MaterialCard({ material }: MaterialCardProps) {
               </Link>
             </Button>
 
-            {!isMahasiswa && (
+            {!isMahasiswa && !readOnly && (
               <>
                 <Button
                   variant="secondary"
@@ -151,7 +152,7 @@ export function MaterialCard({ material }: MaterialCardProps) {
       </Card>
 
       <EditMaterialDialog
-        material={material}
+        materialId={material.id}
         isOpen={isEditDialogOpen}
         onOpenChange={setIsEditDialogOpen}
       />
