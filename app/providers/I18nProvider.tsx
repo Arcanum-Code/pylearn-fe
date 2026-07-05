@@ -72,7 +72,7 @@ type Locale = "en" | "es" | "id";
 const supportedLocales: Locale[] = ["en", "es", "id"];
 
 const getInitialLocale = (): Locale => {
-  if (typeof window === "undefined") return "en";
+  if (typeof window === "undefined") return "id";
 
   const cookieLocale = document.cookie
     .split("; ")
@@ -83,10 +83,7 @@ const getInitialLocale = (): Locale => {
     return cookieLocale;
   }
 
-  const browserLang = navigator.language.split("-")[0];
-  return supportedLocales.includes(browserLang as Locale)
-    ? (browserLang as Locale)
-    : "en";
+  return "id";
 };
 
 interface I18nContextType {
