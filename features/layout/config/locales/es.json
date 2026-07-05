@@ -1,6 +1,7 @@
 {
   "dashboard": "Panel",
   "materials": "Materiales",
+  "groups": "Clases",
   "management": "Gestión",
   "users": "Usuarios",
   "roles": "Roles y Permisos",

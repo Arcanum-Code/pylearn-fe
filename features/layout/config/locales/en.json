@@ -1,6 +1,7 @@
 {
   "dashboard": "Dashboard",
   "materials": "Materials",
+  "groups": "Classes",
   "management": "Management",
   "users": "Users",
   "roles": "Roles & Permissions",
