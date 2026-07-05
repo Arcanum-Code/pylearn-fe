@@ -31,9 +31,18 @@ const NavItem = ({
   const { canRead, isLoading: isLoadingPermissions } = usePermissions();
   const [isExpanded, setIsExpanded] = React.useState(false);
 
-  const isActive = item.href ? pathname === item.href : false;
+  const isActive = item.href
+    ? item.href === "/"
+      ? pathname === "/"
+      : pathname === item.href || pathname.startsWith(item.href + "/")
+    : false;
   const hasActiveChild = item.children?.some(
-    (child) => child.href === pathname,
+    (child) =>
+      child.href
+        ? child.href === "/"
+          ? pathname === "/"
+          : pathname === child.href || pathname.startsWith(child.href + "/")
+        : false,
   );
 
   const Icon = item.icon;

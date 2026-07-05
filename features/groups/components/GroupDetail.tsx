@@ -3,7 +3,7 @@
 import { useGroup } from "../hooks/useGroups";
 import { Spinner } from "@/components/ui/spinner";
 import Link from "next/link";
-import { ArrowLeft, BookOpen, CheckCircle, GraduationCap, Edit, Trash2 } from "lucide-react";
+import { ArrowLeft, BookOpen, CheckCircle, GraduationCap, Edit, Trash2, Eye } from "lucide-react";
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import {
@@ -11,9 +11,12 @@ import {
   EditMaterialDialog,
   DeleteMaterialDialog,
 } from "@/features/materials";
+import { useAuth } from "@/features/auth";
 
 export function GroupDetail({ id }: { id: string }) {
   const { data: group, isLoading } = useGroup(id);
+  const { user } = useAuth();
+  const isMahasiswa = user?.roleName?.toLowerCase() === "mahasiswa";
   const [editMaterialId, setEditMaterialId] = useState<string | null>(null);
   const [deleteMaterial, setDeleteMaterial] = useState<{ id: string; title: string } | null>(null);
 
@@ -75,7 +78,7 @@ export function GroupDetail({ id }: { id: string }) {
                   <p className="text-xs text-gray-500 mt-0.5">Daftar materi yang ditugaskan ke kelas ini.</p>
                 </div>
               </div>
-              <CreateMaterialDialog groupId={group.id} />
+              {!isMahasiswa && <CreateMaterialDialog groupId={group.id} />}
             </div>
             <div className="space-y-3">
               {group.materials?.length === 0 && (
@@ -102,19 +105,33 @@ export function GroupDetail({ id }: { id: string }) {
                     <Button
                       variant="ghost"
                       size="icon"
-                      className="h-8 w-8 text-[#6366F1] hover:text-[#6366F1]/80"
-                      onClick={() => setEditMaterialId(m.id)}
+                      className="h-8 w-8 text-gray-500 hover:text-gray-700"
+                      asChild
                     >
-                      <Edit className="w-4 h-4" />
+                      <Link href={`/materials/${m.id}`}>
+                        <Eye className="w-4 h-4" />
+                      </Link>
                     </Button>
-                    <Button
-                      variant="ghost"
-                      size="icon"
-                      className="h-8 w-8 text-[#EF4444] hover:text-[#EF4444]/80"
-                      onClick={() => setDeleteMaterial({ id: m.id, title: m.title })}
-                    >
-                      <Trash2 className="w-4 h-4" />
-                    </Button>
+                    {!isMahasiswa && (
+                      <>
+                        <Button
+                          variant="ghost"
+                          size="icon"
+                          className="h-8 w-8 text-[#6366F1] hover:text-[#6366F1]/80"
+                          onClick={() => setEditMaterialId(m.id)}
+                        >
+                          <Edit className="w-4 h-4" />
+                        </Button>
+                        <Button
+                          variant="ghost"
+                          size="icon"
+                          className="h-8 w-8 text-[#EF4444] hover:text-[#EF4444]/80"
+                          onClick={() => setDeleteMaterial({ id: m.id, title: m.title })}
+                        >
+                          <Trash2 className="w-4 h-4" />
+                        </Button>
+                      </>
+                    )}
                   </div>
                 </div>
               ))}
