@@ -31,6 +31,13 @@ export interface LecturerDashboardData {
     totalQuizzes: number;
     totalStudentAttempts: number;
   };
+  groupsOverview?: {
+    groupId: string;
+    groupName: string;
+    totalStudents: number;
+    avgPassRate: number;
+    totalStudentAttempts: number;
+  }[];
   materialBreakdown: {
     materialId: string;
     title: string;

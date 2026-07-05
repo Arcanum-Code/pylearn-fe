@@ -49,15 +49,17 @@ export function LecturerDashboardContainer() {
         </div>
 
         <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3">
-          <Link href="/groups" className="w-full sm:w-auto">
-            <Button
-              variant="outline"
-              className="w-full sm:w-auto rounded-xl border-[#6366F1] text-[#6366F1] hover:bg-[#6366F1]/10 font-mono text-sm"
-            >
-              <Users className="w-4 h-4 mr-2" />
-              Kelola Kelas (Groups)
-            </Button>
-          </Link>
+          {selectedGroupId !== "all" && (
+            <Link href={`/groups/${selectedGroupId}`} className="w-full sm:w-auto">
+              <Button
+                variant="outline"
+                className="w-full sm:w-auto rounded-xl border-[#6366F1] text-[#6366F1] hover:bg-[#6366F1]/10 font-mono text-sm"
+              >
+                <Users className="w-4 h-4 mr-2" />
+                Kelola Kelas (Groups)
+              </Button>
+            </Link>
+          )}
           <div className="flex items-center gap-3">
             <span className="text-sm font-medium text-muted-foreground">Kelas:</span>
             <Select value={selectedGroupId} onValueChange={setSelectedGroupId}>
