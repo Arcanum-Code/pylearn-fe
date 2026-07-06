@@ -2,6 +2,7 @@
   "dashboard": "Dashboard",
   "materials": "Materials",
   "groups": "Classes",
+  "activeGroups": "Active Classes",
   "management": "Management",
   "users": "Users",
   "roles": "Roles & Permissions",

@@ -1,9 +1,9 @@
 "use client";
 
-import React from "react";
+import React, { Suspense } from "react";
 import Link from "next/link";
-import { usePathname } from "next/navigation";
-import { ChevronDown } from "lucide-react";
+import { usePathname, useSearchParams } from "next/navigation";
+import { ChevronDown, GraduationCap } from "lucide-react";
 import { cn } from "@/lib/utils";
 import {
   SidebarNavItem,
@@ -12,6 +12,8 @@ import {
 } from "@features/layout/config/sidebar";
 import { useTranslations } from "@/lib/i18n/useTranslation";
 import { usePermissions } from "@/features/rbac/context/PermissionsProvider";
+import { useAuth } from "@features/auth/context/AuthProvider";
+import { useFetchLecturerGroups } from "@features/dashboard/hooks/useLecturerDashboard";
 
 /**
  * Collapsible nav item with smooth animation.
@@ -28,24 +30,32 @@ const NavItem = ({
 }) => {
   const t = useTranslations();
   const pathname = usePathname();
-  const { canRead, isLoading: isLoadingPermissions } = usePermissions();
+  const searchParams = useSearchParams();
+  const currentGroupId = searchParams.get("groupId") || "all";
   const [isExpanded, setIsExpanded] = React.useState(false);
+  const { canRead, isLoading: isLoadingPermissions } = usePermissions();
 
-  const isActive = item.href
-    ? item.href === "/"
+  // Custom check for query parameters to handle class/group highlighting
+  const isActive = React.useMemo(() => {
+    if (!item.href) return false;
+    
+    const isDashboardPath = item.href.startsWith("/dashboard");
+    const currentPathIsDashboard = pathname === "/dashboard";
+    
+    if (isDashboardPath && currentPathIsDashboard) {
+      const hasGroupIdQuery = item.href.includes("groupId=");
+      const targetGroupId = hasGroupIdQuery 
+        ? item.href.split("groupId=")[1]?.split("&")[0] 
+        : "all";
+      
+      return currentGroupId === targetGroupId;
+    }
+    
+    // Standard path matching
+    return item.href === "/"
       ? pathname === "/"
-      : pathname === item.href || pathname.startsWith(item.href + "/")
-    : false;
-  const hasActiveChild = item.children?.some(
-    (child) =>
-      child.href
-        ? child.href === "/"
-          ? pathname === "/"
-          : pathname === child.href || pathname.startsWith(child.href + "/")
-        : false,
-  );
-
-  const Icon = item.icon;
+      : pathname === item.href || pathname.startsWith(item.href + "/");
+  }, [item.href, pathname, currentGroupId]);
 
   // Filter children based on permissions
   const visibleChildren = React.useMemo(() => {
@@ -57,6 +67,34 @@ const NavItem = ({
       return canRead(child.feature);
     });
   }, [item.children, canRead]);
+
+  const hasActiveChild = React.useMemo(() => {
+    return visibleChildren.some((child) => {
+      if (!child.href) return false;
+      
+      const isDashboardPath = child.href.startsWith("/dashboard");
+      const currentPathIsDashboard = pathname === "/dashboard";
+      
+      if (isDashboardPath && currentPathIsDashboard) {
+        const hasGroupIdQuery = child.href.includes("groupId=");
+        const targetGroupId = hasGroupIdQuery 
+          ? child.href.split("groupId=")[1]?.split("&")[0] 
+          : "all";
+        return currentGroupId === targetGroupId;
+      }
+      
+      return child.href === "/"
+        ? pathname === "/"
+        : pathname === child.href || pathname.startsWith(child.href + "/");
+    });
+  }, [visibleChildren, pathname, currentGroupId]);
+
+  // Expand automatically if a child is active
+  React.useEffect(() => {
+    if (hasActiveChild) {
+      setIsExpanded(true);
+    }
+  }, [hasActiveChild]);
 
   // Don't render if this item requires a permission the user doesn't have
   if (item.feature && !isLoadingPermissions) {
@@ -77,6 +115,8 @@ const NavItem = ({
     }
   };
 
+  const Icon = item.icon;
+
   if (item.children) {
     return (
       <div className="space-y-1">
@@ -91,7 +131,7 @@ const NavItem = ({
         >
           <div className="flex items-center gap-3">
             <Icon className="h-4 w-4" />
-            <span className="font-mono">{t(item.labelKey)}</span>
+            <span className="font-mono">{item.label ?? t(item.labelKey)}</span>
           </div>
           <ChevronDown
             className={cn(
@@ -109,7 +149,7 @@ const NavItem = ({
           <div className="space-y-1 pt-1">
             {visibleChildren.map((child) => (
               <NavItem
-                key={child.href}
+                key={child.href || child.labelKey || child.label}
                 item={child}
                 depth={depth + 1}
                 onNavigate={onNavigate}
@@ -133,10 +173,65 @@ const NavItem = ({
       style={{ paddingLeft: `${12 + depth * 12}px` }}
     >
       <Icon className="h-4 w-4" />
-      <span className="font-mono">{t(item.labelKey)}</span>
+      <span className="font-mono">{item.label ?? t(item.labelKey)}</span>
     </Link>
   );
 };
+
+/**
+ * Internal component to read searchParams safely inside Suspense.
+ */
+function SidebarNavItems({
+  isOpen,
+  handleNavigate,
+}: {
+  isOpen?: boolean;
+  handleNavigate: () => void;
+}) {
+  const { user } = useAuth();
+  const { data: groups } = useFetchLecturerGroups();
+  const roleName = user?.roleName?.toLowerCase();
+
+  const activeGroupsItem = React.useMemo(() => {
+    if (roleName !== "dosen" || !groups || groups.length === 0) return null;
+
+    return {
+      labelKey: "navigation.activeGroups",
+      icon: GraduationCap,
+      children: groups.map((g) => ({
+        labelKey: "",
+        label: g.name,
+        href: `/dashboard?groupId=${g.id}`,
+        icon: GraduationCap,
+      })),
+    };
+  }, [roleName, groups]);
+
+  const menuItems = React.useMemo(() => {
+    const items = [...sidebarConfig];
+    if (activeGroupsItem) {
+      const dashboardIdx = items.findIndex((item) => item.href === "/dashboard");
+      if (dashboardIdx !== -1) {
+        items.splice(dashboardIdx + 1, 0, activeGroupsItem);
+      } else {
+        items.unshift(activeGroupsItem);
+      }
+    }
+    return items;
+  }, [activeGroupsItem]);
+
+  return (
+    <>
+      {menuItems.map((item) => (
+        <NavItem
+          key={item.href || item.labelKey || item.label}
+          item={item}
+          onNavigate={handleNavigate}
+        />
+      ))}
+    </>
+  );
+}
 
 /**
  * Sidebar navigation component.
@@ -189,13 +284,9 @@ export function SidebarNav({
 
         {/* Navigation Items */}
         <nav className="flex-1 space-y-1 overflow-y-auto p-4">
-          {sidebarConfig.map((item) => (
-            <NavItem
-              key={item.labelKey}
-              item={item}
-              onNavigate={handleNavigate}
-            />
-          ))}
+          <Suspense fallback={<div className="h-8 w-full bg-slate-800 animate-pulse rounded-md" />}>
+            <SidebarNavItems isOpen={isOpen} handleNavigate={handleNavigate} />
+          </Suspense>
         </nav>
 
         {/* System Info Footer */}

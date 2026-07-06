@@ -8,6 +8,8 @@ export { LecturerDashboardContainer } from "./components/LecturerDashboardContai
 export { LecturerRightPanel } from "./components/LecturerRightPanel";
 export { StudentDashboardView } from "./components/StudentDashboardView";
 export { CodeSnippetWidget } from "./components/CodeSnippetWidget";
+export { ActionAlertsBanner } from "./components/ActionAlertsBanner";
+
 
 export * from "./config/dashboardStats";
 export * from "./config/quickActions";

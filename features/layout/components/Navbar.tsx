@@ -1,5 +1,6 @@
 "use client";
 
+import React from "react";
 import Link from "next/link";
 import { Menu, LogOut, User } from "lucide-react";
 import { useAuth } from "@features/auth/context/AuthProvider";
@@ -13,7 +14,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { LanguageSwitcher } from "./LanguageSwitcher";
-import { useTranslations } from "@/lib/i18n/useTranslation";
+import { useTranslations, useLocale } from "@/lib/i18n/useTranslation";
 
 /**
  * Navbar component for authenticated pages.
@@ -38,6 +39,18 @@ export function Navbar({
 }) {
   const { user, logout } = useAuth();
   const t = useTranslations();
+  const locale = useLocale();
+
+  const [time, setTime] = React.useState<Date | null>(null);
+
+  React.useEffect(() => {
+    setTime(new Date());
+    const timer = setInterval(() => {
+      setTime(new Date());
+    }, 1000);
+
+    return () => clearInterval(timer);
+  }, []);
 
   return (
     <header className="sticky top-0 z-30 flex h-16 w-full items-center justify-between border-b bg-background px-6">
@@ -58,8 +71,31 @@ export function Navbar({
       </div>
 
       {/* User Profile Dropdown */}
-      <div className="flex items-center gap-2">
+      <div className="flex items-center gap-4">
+        {/* Clock & Date Section */}
+        {time && (
+          <div className="hidden md:flex flex-col items-end text-right border-r pr-4 border-border">
+            <span className="text-sm font-semibold tabular-nums text-foreground leading-none">
+              {time.toLocaleTimeString(locale, {
+                hour: "2-digit",
+                minute: "2-digit",
+                second: "2-digit",
+                hour12: true,
+              })}
+            </span>
+            <span className="text-[10px] text-muted-foreground mt-1 leading-none">
+              {time.toLocaleDateString(locale, {
+                weekday: "short",
+                year: "numeric",
+                month: "short",
+                day: "numeric",
+              })}
+            </span>
+          </div>
+        )}
+
         <LanguageSwitcher />
+        
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
             <Button variant="ghost" className="flex items-center gap-3 px-2">

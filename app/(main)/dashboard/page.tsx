@@ -1,7 +1,6 @@
 "use client";
 
 import {
-  DashboardHeader,
   AdminDashboardView,
   LecturerDashboardContainer,
   StudentDashboardView,
@@ -32,10 +31,10 @@ export default function DashboardPage() {
 
   return (
     <div className="p-8">
-      <DashboardHeader />
-      <div className="mt-6">
+      <div>
         {renderDashboard()}
       </div>
     </div>
   );
 }
+

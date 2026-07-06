@@ -30,6 +30,7 @@ import { LucideIcon, LayoutDashboard, Users, Shield, BookOpen, GraduationCap } f
  */
 export interface SidebarNavItem {
   labelKey: string;
+  label?: string;
   icon: LucideIcon;
   href?: string;
   children?: SidebarNavItem[];

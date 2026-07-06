@@ -2,6 +2,7 @@
   "dashboard": "Dashboard",
   "materials": "Materi",
   "groups": "Kelas",
+  "activeGroups": "Kelas Aktif",
   "management": "Manajemen",
   "users": "Pengguna",
   "roles": "Peran & Izin",

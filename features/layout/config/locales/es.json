@@ -2,6 +2,7 @@
   "dashboard": "Panel",
   "materials": "Materiales",
   "groups": "Clases",
+  "activeGroups": "Clases Activas",
   "management": "Gestión",
   "users": "Usuarios",
   "roles": "Roles y Permisos",
