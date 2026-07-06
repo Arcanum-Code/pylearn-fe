@@ -13,6 +13,7 @@
 ### Task 1: API Configuration & Types
 
 **Files:**
+
 - Modify: `app/api/api.ts`
 - Create: `features/quizzes/types/lecturer-quiz.ts`
 
@@ -84,6 +85,7 @@ export interface LecturerQuizListItem {
 ### Task 2: Validation Schemas
 
 **Files:**
+
 - Create: `features/quizzes/schemas/lecturerQuizSchema.ts`
 
 - [ ] **Step 1: Write Zod schemas for the forms**
@@ -99,10 +101,14 @@ export const createLecturerQuizSchema = z.object({
   pass_threshold: z.number().int().min(0).max(100).default(70),
 });
 
-export type CreateLecturerQuizFormData = z.infer<typeof createLecturerQuizSchema>;
+export type CreateLecturerQuizFormData = z.infer<
+  typeof createLecturerQuizSchema
+>;
 
 export const updateLecturerQuizSchema = createLecturerQuizSchema.partial();
-export type UpdateLecturerQuizFormData = z.infer<typeof updateLecturerQuizSchema>;
+export type UpdateLecturerQuizFormData = z.infer<
+  typeof updateLecturerQuizSchema
+>;
 
 export const lecturerQuestionSchema = z.object({
   question_text: z.string().min(1, "Pertanyaan wajib diisi"),
@@ -128,6 +134,7 @@ export type ReplaceBlanksFormData = z.infer<typeof replaceBlanksSchema>;
 ### Task 3: Services & Hooks for Quiz Management
 
 **Files:**
+
 - Create: `features/quizzes/services/lecturerQuizApi.ts`
 - Create: `features/quizzes/hooks/useLecturerQuizzes.ts`
 
@@ -138,59 +145,97 @@ Create `features/quizzes/services/lecturerQuizApi.ts`:
 ```typescript
 import { ApiAxios } from "@utils/axios";
 import { API_ENDPOINTS } from "@/app/api/api";
-import { LecturerQuizDetail, LecturerQuizListItem } from "../types/lecturer-quiz";
-import { CreateLecturerQuizFormData, UpdateLecturerQuizFormData, LecturerQuestionFormData, ReplaceBlanksFormData } from "../schemas/lecturerQuizSchema";
+import {
+  LecturerQuizDetail,
+  LecturerQuizListItem,
+} from "../types/lecturer-quiz";
+import {
+  CreateLecturerQuizFormData,
+  UpdateLecturerQuizFormData,
+  LecturerQuestionFormData,
+  ReplaceBlanksFormData,
+} from "../schemas/lecturerQuizSchema";
 
 export const LecturerQuizService = {
   getQuizzesByGroup: async (groupId: string) => {
-    const { data } = await ApiAxios.get<{ success: boolean; data: { quizzes: LecturerQuizListItem[] } }>(API_ENDPOINTS.LECTURER_QUIZZES.LIST_BY_GROUP(groupId));
+    const { data } = await ApiAxios.get<{
+      success: boolean;
+      data: { quizzes: LecturerQuizListItem[] };
+    }>(API_ENDPOINTS.LECTURER_QUIZZES.LIST_BY_GROUP(groupId));
     return data.data.quizzes;
   },
-  
+
   getQuizDetail: async (quizId: string) => {
-    const { data } = await ApiAxios.get<{ success: boolean; data: LecturerQuizDetail }>(API_ENDPOINTS.LECTURER_QUIZZES.DETAIL(quizId));
+    const { data } = await ApiAxios.get<{
+      success: boolean;
+      data: LecturerQuizDetail;
+    }>(API_ENDPOINTS.LECTURER_QUIZZES.DETAIL(quizId));
     return data.data;
   },
 
   createQuiz: async (groupId: string, payload: CreateLecturerQuizFormData) => {
-    const { data } = await ApiAxios.post(API_ENDPOINTS.LECTURER_QUIZZES.CREATE(groupId), payload);
+    const { data } = await ApiAxios.post(
+      API_ENDPOINTS.LECTURER_QUIZZES.CREATE(groupId),
+      payload,
+    );
     return data;
   },
 
   updateQuiz: async (quizId: string, payload: UpdateLecturerQuizFormData) => {
-    const { data } = await ApiAxios.patch(API_ENDPOINTS.LECTURER_QUIZZES.UPDATE(quizId), payload);
+    const { data } = await ApiAxios.patch(
+      API_ENDPOINTS.LECTURER_QUIZZES.UPDATE(quizId),
+      payload,
+    );
     return data;
   },
 
   deleteQuiz: async (quizId: string) => {
-    const { data } = await ApiAxios.delete(API_ENDPOINTS.LECTURER_QUIZZES.DELETE(quizId));
+    const { data } = await ApiAxios.delete(
+      API_ENDPOINTS.LECTURER_QUIZZES.DELETE(quizId),
+    );
     return data;
   },
 
   publishQuiz: async (quizId: string) => {
-    const { data } = await ApiAxios.post(API_ENDPOINTS.LECTURER_QUIZZES.PUBLISH(quizId));
+    const { data } = await ApiAxios.post(
+      API_ENDPOINTS.LECTURER_QUIZZES.PUBLISH(quizId),
+    );
     return data;
   },
 
   createQuestion: async (quizId: string, payload: LecturerQuestionFormData) => {
-    const { data } = await ApiAxios.post(API_ENDPOINTS.LECTURER_QUIZZES.CREATE_QUESTION(quizId), payload);
+    const { data } = await ApiAxios.post(
+      API_ENDPOINTS.LECTURER_QUIZZES.CREATE_QUESTION(quizId),
+      payload,
+    );
     return data;
   },
 
-  updateQuestion: async (questionId: string, payload: Partial<LecturerQuestionFormData>) => {
-    const { data } = await ApiAxios.patch(API_ENDPOINTS.LECTURER_QUIZZES.UPDATE_QUESTION(questionId), payload);
+  updateQuestion: async (
+    questionId: string,
+    payload: Partial<LecturerQuestionFormData>,
+  ) => {
+    const { data } = await ApiAxios.patch(
+      API_ENDPOINTS.LECTURER_QUIZZES.UPDATE_QUESTION(questionId),
+      payload,
+    );
     return data;
   },
 
   deleteQuestion: async (questionId: string) => {
-    const { data } = await ApiAxios.delete(API_ENDPOINTS.LECTURER_QUIZZES.DELETE_QUESTION(questionId));
+    const { data } = await ApiAxios.delete(
+      API_ENDPOINTS.LECTURER_QUIZZES.DELETE_QUESTION(questionId),
+    );
     return data;
   },
 
   replaceBlanks: async (questionId: string, payload: ReplaceBlanksFormData) => {
-    const { data } = await ApiAxios.put(API_ENDPOINTS.LECTURER_QUIZZES.REPLACE_BLANKS(questionId), payload);
+    const { data } = await ApiAxios.put(
+      API_ENDPOINTS.LECTURER_QUIZZES.REPLACE_BLANKS(questionId),
+      payload,
+    );
     return data;
-  }
+  },
 };
 ```
 
@@ -206,8 +251,10 @@ import { groupKeys } from "@/features/groups/hooks/useGroups";
 
 export const lecturerQuizKeys = {
   all: ["lecturerQuizzes"] as const,
-  lists: (groupId: string) => [...lecturerQuizKeys.all, "list", groupId] as const,
-  detail: (quizId: string) => [...lecturerQuizKeys.all, "detail", quizId] as const,
+  lists: (groupId: string) =>
+    [...lecturerQuizKeys.all, "list", groupId] as const,
+  detail: (quizId: string) =>
+    [...lecturerQuizKeys.all, "detail", quizId] as const,
 };
 
 export const useLecturerQuizzes = (groupId: string) => {
@@ -229,13 +276,16 @@ export const useLecturerQuizDetail = (quizId: string) => {
 export const useCreateLecturerQuiz = (groupId: string) => {
   const queryClient = useQueryClient();
   return useMutation({
-    mutationFn: (data: Parameters<typeof LecturerQuizService.createQuiz>[1]) => LecturerQuizService.createQuiz(groupId, data),
+    mutationFn: (data: Parameters<typeof LecturerQuizService.createQuiz>[1]) =>
+      LecturerQuizService.createQuiz(groupId, data),
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: lecturerQuizKeys.lists(groupId) });
+      queryClient.invalidateQueries({
+        queryKey: lecturerQuizKeys.lists(groupId),
+      });
       queryClient.invalidateQueries({ queryKey: groupKeys.detail(groupId) });
       toast.success("Berhasil membuat kuis");
     },
-    onError: () => toast.error("Gagal membuat kuis")
+    onError: () => toast.error("Gagal membuat kuis"),
   });
 };
 
@@ -245,6 +295,7 @@ export const useCreateLecturerQuiz = (groupId: string) => {
 ### Task 4: UI - Create Quiz Dialog
 
 **Files:**
+
 - Create: `features/quizzes/components/CreateLecturerQuizDialog.tsx`
 - Modify: `features/quizzes/index.ts`
 
@@ -259,19 +310,28 @@ import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useCreateLecturerQuiz } from "../hooks/useLecturerQuizzes";
-import { CreateLecturerQuizFormData, createLecturerQuizSchema } from "../schemas/lecturerQuizSchema";
+import {
+  CreateLecturerQuizFormData,
+  createLecturerQuizSchema,
+} from "../schemas/lecturerQuizSchema";
 import { Button } from "@/components/ui/button";
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Plus } from "lucide-react";
 
 export function CreateLecturerQuizDialog({ groupId }: { groupId: string }) {
   const [open, setOpen] = useState(false);
   const { mutate, isPending } = useCreateLecturerQuiz(groupId);
-  
+
   // Implementation of form using react-hook-form (Form, FormControl, FormField, FormItem, FormLabel, FormMessage)
   // ...
-  
+
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
@@ -280,7 +340,9 @@ export function CreateLecturerQuizDialog({ groupId }: { groupId: string }) {
         </Button>
       </DialogTrigger>
       <DialogContent>
-        <DialogHeader><DialogTitle>Buat Kuis Baru</DialogTitle></DialogHeader>
+        <DialogHeader>
+          <DialogTitle>Buat Kuis Baru</DialogTitle>
+        </DialogHeader>
         {/* Form implementation here */}
       </DialogContent>
     </Dialog>
@@ -295,11 +357,13 @@ Modify `features/quizzes/index.ts` to export `CreateLecturerQuizDialog`.
 ### Task 5: Integration - Group Detail Page
 
 **Files:**
+
 - Modify: `features/groups/components/GroupDetail.tsx`
 
 - [ ] **Step 1: Add Dialog to Quizzes Tile**
 
 In `GroupDetail.tsx`, find the `Quizzes Bento Tile`. Update it to use `CreateLecturerQuizDialog`:
+
 ```tsx
 import { CreateLecturerQuizDialog } from "@/features/quizzes";
 
@@ -311,11 +375,13 @@ import { CreateLecturerQuizDialog } from "@/features/quizzes";
     </div>
     <div>
       <h2 className="text-xl font-bold text-[#1A1C1E]">Kuis Kelas</h2>
-      <p className="text-xs text-gray-500 mt-0.5">Daftar latihan kuis yang ditugaskan ke kelas ini.</p>
+      <p className="text-xs text-gray-500 mt-0.5">
+        Daftar latihan kuis yang ditugaskan ke kelas ini.
+      </p>
     </div>
   </div>
   {!isMahasiswa && <CreateLecturerQuizDialog groupId={group.id} />}
-</div>
+</div>;
 ```
 
 - [ ] **Step 2: Add Links to Quiz Management**
@@ -325,16 +391,22 @@ Wrap the quiz title in a `<Link>` tag directing to `/groups/${group.id}/quizzes/
 ### Task 6: UI - Quiz Management Page
 
 **Files:**
+
 - Create: `app/(main)/groups/[id]/quizzes/[quizId]/page.tsx`
 - Create: `features/quizzes/components/LecturerQuizDetail.tsx`
 
 - [ ] **Step 1: Create Route**
 
 Create `app/(main)/groups/[id]/quizzes/[quizId]/page.tsx`:
+
 ```tsx
 import { LecturerQuizDetail } from "@/features/quizzes/components/LecturerQuizDetail";
 
-export default async function QuizManagementPage({ params }: { params: Promise<{ id: string, quizId: string }> }) {
+export default async function QuizManagementPage({
+  params,
+}: {
+  params: Promise<{ id: string; quizId: string }>;
+}) {
   const { id, quizId } = await params;
   return <LecturerQuizDetail groupId={id} quizId={quizId} />;
 }
@@ -347,6 +419,7 @@ Create `features/quizzes/components/LecturerQuizDetail.tsx`. This component fetc
 ### Task 7: UI - Question Management (The Fill-in-the-Blanks UX)
 
 **Files:**
+
 - Create: `features/quizzes/components/LecturerQuestionForm.tsx`
 
 - [ ] **Step 1: Implement the text selection logic**
