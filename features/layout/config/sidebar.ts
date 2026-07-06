@@ -61,12 +61,6 @@ export const sidebarConfig: SidebarNavItem[] = [
     href: "/dashboard",
   },
   {
-    labelKey: "navigation.groups",
-    icon: GraduationCap,
-    href: "/groups",
-    feature: "group_management",
-  },
-  {
     labelKey: "navigation.materials",
     icon: BookOpen,
     href: "/materials",

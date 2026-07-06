@@ -29,6 +29,7 @@ export const useCreateGroup = () => {
     mutationFn: GroupService.createGroup,
     onSuccess: (data) => {
       queryClient.invalidateQueries({ queryKey: groupKeys.lists() });
+      queryClient.invalidateQueries({ queryKey: ["lecturer-dashboard"] });
       toast.success(data.message || "Berhasil membuat kelas");
     },
     onError: (error: any) => {
@@ -50,6 +51,7 @@ export const useUpdateGroup = () => {
     onSuccess: (data, variables) => {
       queryClient.invalidateQueries({ queryKey: groupKeys.lists() });
       queryClient.invalidateQueries({ queryKey: groupKeys.detail(variables.id) });
+      queryClient.invalidateQueries({ queryKey: ["lecturer-dashboard"] });
       toast.success(data.message || "Berhasil memperbarui kelas");
     },
     onError: (error: any) => {
@@ -64,6 +66,7 @@ export const useDeleteGroup = () => {
     mutationFn: GroupService.deleteGroup,
     onSuccess: (data) => {
       queryClient.invalidateQueries({ queryKey: groupKeys.lists() });
+      queryClient.invalidateQueries({ queryKey: ["lecturer-dashboard"] });
       toast.success(data.message || "Berhasil menghapus kelas");
     },
     onError: (error: any) => {

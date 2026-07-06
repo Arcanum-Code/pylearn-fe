@@ -201,7 +201,7 @@ function SidebarNavItems({
       children: groups.map((g) => ({
         labelKey: "",
         label: g.name,
-        href: `/dashboard?groupId=${g.id}`,
+        href: `/groups/${g.id}`,
         icon: GraduationCap,
       })),
     };

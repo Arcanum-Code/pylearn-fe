@@ -9,6 +9,7 @@ export { LecturerRightPanel } from "./components/LecturerRightPanel";
 export { StudentDashboardView } from "./components/StudentDashboardView";
 export { CodeSnippetWidget } from "./components/CodeSnippetWidget";
 export { ActionAlertsBanner } from "./components/ActionAlertsBanner";
+export { GroupDashboardView } from "./components/GroupDashboardView";
 
 
 export * from "./config/dashboardStats";
