@@ -26,6 +26,7 @@ export interface LecturerQuizDetail {
   title: string;
   status: "draft" | "published";
   pass_threshold: number;
+  can_publish?: boolean;
   questions: LecturerQuizQuestion[];
   gating_materials: LecturerGatingMaterial[];
 }

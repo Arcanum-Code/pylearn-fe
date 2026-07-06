@@ -95,13 +95,21 @@ export function LecturerQuizDetail({ groupId, quizId }: LecturerQuizDetailProps)
 
         <div className="flex gap-3">
           {quiz.status === "draft" && (
-            <Button
-              onClick={() => publishQuiz()}
-              disabled={isPublishing}
-              className="bg-[#10B981] hover:bg-[#10B981]/90 text-white font-semibold"
+            <div
+              title={
+                quiz.can_publish === false
+                  ? "Grup ini belum memiliki materi yang dipublikasikan, sehingga kuis ini tidak dapat dikunci."
+                  : ""
+              }
             >
-              {isPublishing ? "Publishing..." : "Publish Kuis"}
-            </Button>
+              <Button
+                onClick={() => publishQuiz()}
+                disabled={isPublishing || quiz.can_publish === false}
+                className="bg-[#10B981] hover:bg-[#10B981]/90 text-white font-semibold"
+              >
+                {isPublishing ? "Publishing..." : "Publish Kuis"}
+              </Button>
+            </div>
           )}
           <Button
             variant="destructive"
