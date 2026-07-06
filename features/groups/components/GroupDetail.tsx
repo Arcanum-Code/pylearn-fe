@@ -11,6 +11,7 @@ import {
   EditMaterialDialog,
   DeleteMaterialDialog,
 } from "@/features/materials";
+import { CreateLecturerQuizDialog } from "@/features/quizzes";
 import { useAuth } from "@/features/auth";
 
 export function GroupDetail({ id }: { id: string }) {
@@ -158,14 +159,17 @@ export function GroupDetail({ id }: { id: string }) {
         {/* Quizzes Bento Tile */}
         <div className="bg-white p-6 rounded-2xl shadow-xs border border-gray-150/60 flex flex-col justify-between">
           <div>
-            <div className="flex items-center gap-3 mb-6">
-              <div className="p-3 bg-[#10B981]/10 text-[#10B981] rounded-xl">
-                <CheckCircle className="w-6 h-6" />
+            <div className="flex items-center justify-between mb-6">
+              <div className="flex items-center gap-3">
+                <div className="p-3 bg-[#10B981]/10 text-[#10B981] rounded-xl">
+                  <CheckCircle className="w-6 h-6" />
+                </div>
+                <div>
+                  <h2 className="text-xl font-bold text-[#1A1C1E]">Kuis Kelas</h2>
+                  <p className="text-xs text-gray-500 mt-0.5">Daftar latihan kuis yang ditugaskan ke kelas ini.</p>
+                </div>
               </div>
-              <div>
-                <h2 className="text-xl font-bold text-[#1A1C1E]">Kuis Kelas</h2>
-                <p className="text-xs text-gray-500 mt-0.5">Daftar latihan kuis yang ditugaskan ke kelas ini.</p>
-              </div>
+              {!isMahasiswa && <CreateLecturerQuizDialog groupId={group.id} />}
             </div>
             <div className="space-y-3">
               {group.quizzes?.length === 0 && (
@@ -179,7 +183,16 @@ export function GroupDetail({ id }: { id: string }) {
                   className="flex justify-between items-center p-4 rounded-xl bg-[#F7F8FA] border border-gray-150/40"
                 >
                   <div>
-                    <span className="font-semibold text-sm text-[#1A1C1E] block">{q.title}</span>
+                    {!isMahasiswa ? (
+                      <Link
+                        href={`/groups/${group.id}/quizzes/${q.id}`}
+                        className="font-semibold text-sm text-[#6366F1] hover:underline block"
+                      >
+                        {q.title}
+                      </Link>
+                    ) : (
+                      <span className="font-semibold text-sm text-[#1A1C1E] block">{q.title}</span>
+                    )}
                     <span className="text-[10px] text-gray-500 font-mono">
                       Level: {q.levelNumber}
                     </span>

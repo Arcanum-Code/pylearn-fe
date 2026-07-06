@@ -50,7 +50,7 @@ export function LoginBranding() {
           <p className="pl-4">
             <span className="text-[#82AAFF]">print</span>(
             <span className="text-[#C3E88D]">
-              f"Welcome back, {`{session.user.name}`}!"
+              f&quot;Welcome back, {`{session.user.name}`}!&quot;
             </span>
             )
           </p>

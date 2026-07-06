@@ -146,3 +146,6 @@ export type ApiQuizAttemptResultResponse = ApiResponse<QuizAttemptResultData>;
 export type ApiAllQuizResultsResponse = ApiResponse<
   StudentQuizOverviewResult[]
 >;
+
+export * from "./lecturer-quiz";
+

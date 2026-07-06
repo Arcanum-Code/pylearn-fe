@@ -93,5 +93,17 @@ export const API_ENDPOINTS = {
       `${API_URL}/quizzes/attempts/${id}/results`,
     GET_ALL_ATTEMPT_RESULTS: () => `${API_URL}/quizzes/attempts/results`,
   },
+  LECTURER_QUIZZES: {
+    LIST_BY_GROUP: (groupId: string) => `${API_URL}/groups/${groupId}/quizzes`,
+    DETAIL: (quizId: string) => `${API_URL}/quizzes/${quizId}`,
+    CREATE: (groupId: string) => `${API_URL}/groups/${groupId}/quizzes`,
+    UPDATE: (quizId: string) => `${API_URL}/quizzes/${quizId}`,
+    DELETE: (quizId: string) => `${API_URL}/quizzes/${quizId}`,
+    PUBLISH: (quizId: string) => `${API_URL}/quizzes/${quizId}/publish`,
+    CREATE_QUESTION: (quizId: string) => `${API_URL}/quizzes/${quizId}/questions`,
+    UPDATE_QUESTION: (questionId: string) => `${API_URL}/questions/${questionId}`,
+    DELETE_QUESTION: (questionId: string) => `${API_URL}/questions/${questionId}`,
+    REPLACE_BLANKS: (questionId: string) => `${API_URL}/questions/${questionId}/blanks`,
+  },
   STORAGE: (path: string) => `/api${path.startsWith("/") ? "" : "/"}${path}`,
 };
