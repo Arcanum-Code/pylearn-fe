@@ -60,6 +60,7 @@ export const API_ENDPOINTS = {
     CREATE: `${API_URL}/materials/me`,
     UPDATE: (id: string) => `${API_URL}/materials/${id}`,
     DELETE: (id: string) => `${API_URL}/materials/${id}`,
+    PUBLISH: (id: string) => `${API_URL}/materials/${id}/publish`,
     LEVELS: (id: string) => `${API_URL}/materials/${id}/levels`,
   },
   QUIZZES: {

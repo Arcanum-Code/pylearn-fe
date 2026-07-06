@@ -10,6 +10,7 @@ import {
   CreateMaterialDialog,
   EditMaterialDialog,
   DeleteMaterialDialog,
+  usePublishMaterial,
 } from "@/features/materials";
 import { CreateLecturerQuizDialog } from "@/features/quizzes";
 import { useAuth } from "@/features/auth";
@@ -20,6 +21,7 @@ export function GroupDetail({ id }: { id: string }) {
   const isMahasiswa = user?.roleName?.toLowerCase() === "mahasiswa";
   const [editMaterialId, setEditMaterialId] = useState<string | null>(null);
   const [deleteMaterial, setDeleteMaterial] = useState<{ id: string; title: string } | null>(null);
+  const { mutate: publishMaterial, isPending: isPublishingMaterial } = usePublishMaterial(id);
 
   if (isLoading) {
     return (
@@ -115,6 +117,18 @@ export function GroupDetail({ id }: { id: string }) {
                     </Button>
                     {!isMahasiswa && (
                       <>
+                        {!m.isPublished && (
+                          <Button
+                            variant="ghost"
+                            size="icon"
+                            className="h-8 w-8 text-[#10B981] hover:text-[#10B981]/80"
+                            onClick={() => publishMaterial(m.id)}
+                            disabled={isPublishingMaterial}
+                            title="Publish Materi"
+                          >
+                            <CheckCircle className="w-4 h-4" />
+                          </Button>
+                        )}
                         <Button
                           variant="ghost"
                           size="icon"

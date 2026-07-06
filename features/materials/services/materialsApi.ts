@@ -121,3 +121,18 @@ export async function deleteMaterial(
     message: data.message,
   };
 }
+
+export async function publishMaterial(
+  id: string,
+): Promise<{ success: boolean; message: string }> {
+  const { data } = await ApiAxios.post<{
+    success: boolean;
+    message: string;
+  }>(`/materials/${id}/publish`);
+
+  return {
+    success: data.success,
+    message: data.message,
+  };
+}
+

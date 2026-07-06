@@ -5,6 +5,7 @@ import {
   createMaterial,
   updateMaterial,
   deleteMaterial,
+  publishMaterial,
 } from "../services/materialsApi";
 import {
   MaterialFilters,
@@ -90,3 +91,24 @@ export function useDeleteMaterial() {
     },
   });
 }
+
+export function usePublishMaterial(groupId?: string) {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: (id: string) => publishMaterial(id),
+    onSuccess: (data) => {
+      queryClient.invalidateQueries({ queryKey: materialKeys.all });
+      // If we are in a group, we might want to invalidate the group's query too
+      // The group's query key is typically ["groups", "detail", groupId]
+      if (groupId) {
+        queryClient.invalidateQueries({ queryKey: ["groups", "detail", groupId] });
+      }
+      toast.success(data.message || "Material published successfully");
+    },
+    onError: (error: any) => {
+      toast.error(error.response?.data?.message || "Failed to publish material");
+    },
+  });
+}
+
