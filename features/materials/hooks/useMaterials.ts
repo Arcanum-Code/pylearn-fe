@@ -48,6 +48,7 @@ export function useCreateMaterial() {
       createMaterial(data),
     onSuccess: (data) => {
       queryClient.invalidateQueries({ queryKey: materialKeys.all });
+      queryClient.invalidateQueries({ queryKey: ["groups"] });
       toast.success("Materi berhasil dibuat");
     },
     onError: (error: any) => {
@@ -69,6 +70,7 @@ export function useUpdateMaterial() {
     }) => updateMaterial(id, data),
     onSuccess: (data, variables) => {
       queryClient.invalidateQueries({ queryKey: materialKeys.all });
+      queryClient.invalidateQueries({ queryKey: ["groups"] });
       toast.success(data.message || "Material updated successfully");
     },
     onError: (error: any) => {
@@ -84,6 +86,7 @@ export function useDeleteMaterial() {
     mutationFn: (id: string) => deleteMaterial(id),
     onSuccess: (data) => {
       queryClient.invalidateQueries({ queryKey: materialKeys.all });
+      queryClient.invalidateQueries({ queryKey: ["groups"] });
       toast.success(data.message || "Material deleted successfully");
     },
     onError: (error: any) => {

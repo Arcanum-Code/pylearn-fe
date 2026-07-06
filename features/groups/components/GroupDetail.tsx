@@ -86,9 +86,9 @@ export function GroupDetail({ id }: { id: string }) {
                 className="flex justify-between items-center p-4 rounded-xl bg-[#F7F8FA] border border-gray-150/40"
               >
                 <span className="font-semibold text-sm text-[#1A1C1E]">{m.title}</span>
-                <div className="flex items-center gap-2">
+                <div className="flex items-center gap-1">
                   <span
-                    className={`font-mono text-[10px] px-2 py-0.5 rounded-md font-semibold tracking-wider ${
+                    className={`font-mono text-[10px] px-2 py-0.5 rounded-md font-semibold tracking-wider mr-1 ${
                       m.isPublished
                         ? "bg-[#10B981]/10 text-[#10B981]"
                         : "bg-[#F59E0B]/10 text-[#F59E0B]"
@@ -99,11 +99,11 @@ export function GroupDetail({ id }: { id: string }) {
                   <Button
                     variant="ghost"
                     size="icon"
-                    className="h-8 w-8 text-gray-500 hover:text-gray-700"
+                    className="h-8 w-8 bg-branding-dark hover:bg-branding-dark/90"
                     asChild
                   >
                     <Link href={`/materials/${m.id}`}>
-                      <Eye className="w-4 h-4" />
+                      <Eye className="w-4 h-4 text-white" />
                     </Link>
                   </Button>
                   {!isMahasiswa && (
@@ -112,29 +112,29 @@ export function GroupDetail({ id }: { id: string }) {
                         <Button
                           variant="ghost"
                           size="icon"
-                          className="h-8 w-8 text-[#10B981] hover:text-[#10B981]/80"
+                          className="h-8 w-8 bg-emerald-500 hover:bg-emerald-600"
                           onClick={() => publishMaterial(m.id)}
                           disabled={isPublishingMaterial}
                           title="Publish Materi"
                         >
-                          <CheckCircle className="w-4 h-4" />
+                          <CheckCircle className="w-4 h-4 text-white" />
                         </Button>
                       )}
                       <Button
                         variant="ghost"
                         size="icon"
-                        className="h-8 w-8 text-[#6366F1] hover:text-[#6366F1]/80"
+                        className="h-8 w-8 bg-orange-500 hover:bg-orange-600"
                         onClick={() => setEditMaterialId(m.id)}
                       >
-                        <Edit className="w-4 h-4" />
+                        <Edit className="w-4 h-4 text-white" />
                       </Button>
                       <Button
                         variant="ghost"
                         size="icon"
-                        className="h-8 w-8 text-[#EF4444] hover:text-[#EF4444]/80"
+                        className="h-8 w-8 bg-destructive hover:bg-destructive/90"
                         onClick={() => setDeleteMaterial({ id: m.id, title: m.title })}
                       >
-                        <Trash2 className="w-4 h-4" />
+                        <Trash2 className="w-4 h-4 text-white" />
                       </Button>
                     </>
                   )}

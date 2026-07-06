@@ -33,32 +33,15 @@ export function EditMaterialDialog({
     if (!material) return;
     const formData = new FormData();
 
-    // 1. Amankan nilai materialType (Pastikan mengekstrak string murni)
-    const rawMaterialType =
-      typeof values.materialType === "object"
-        ? values.materialType?.value // Jika berbentuk objek select option
-        : values.materialType; // Jika sudah berbentuk string murni
-
-    // Saring agar jika kosong, gunakan tipe bawaan materi asli sebagai fallback
-    const finalMaterialType = rawMaterialType || material.materialType;
-
-    // 2. Append ke FormData
     formData.append("title", values.title);
     formData.append("description", values.description || "");
-    formData.append("materialType", finalMaterialType); // Menggunakan nilai yang sudah aman
-    formData.append("iconName", values.iconName);
+    formData.append("materialType", "file");
     formData.append("isPublished", String(values.isPublished));
 
-    // 3. Kondisional Penanganan Isi Materi
-    if (finalMaterialType === "text") {
-      formData.append("content", values.content || "");
-    } else if (finalMaterialType === "file") {
-      if (values.file instanceof File) {
-        formData.append("file", values.file);
-      }
+    if (values.file instanceof File) {
+      formData.append("file", values.file);
     }
 
-    // 4. Jalankan Mutasi
     updateMaterial(
       { id: material.id, data: formData },
       {
@@ -73,8 +56,6 @@ export function EditMaterialDialog({
     ? {
         title: material.title,
         description: material.description,
-        content: material.content,
-        iconName: material.iconName,
         isPublished: material.isPublished,
       }
     : undefined;
@@ -108,6 +89,7 @@ export function EditMaterialDialog({
             initialValues={initialValues}
             onSubmit={onSubmit}
             isLoading={isPending}
+            existingFileUrl={material.sourceUrl || material.content}
           />
         )}
       </DialogContent>

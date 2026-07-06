@@ -19,26 +19,18 @@ export function CreateMaterialDialog({ groupId }: { groupId: string }) {
   const { mutate: createMaterial, isPending } = useCreateMaterial();
 
   const onSubmit = (values: any) => {
-    // 1. Create a new FormData instance
     const formData = new FormData();
 
-    // 2. Append standard text fields
     formData.append("groupId", groupId);
     formData.append("title", values.title);
     formData.append("description", values.description || "");
-    formData.append("materialType", values.materialType);
-    formData.append("iconName", values.iconName);
+    formData.append("materialType", "file");
     formData.append("isPublished", String(values.isPublished));
 
-    // 3. Logic to handle Text vs PDF file
-    if (values.materialType === "text") {
-      formData.append("content", values.content || "");
-    } else if (values.materialType === "file" && values.file) {
-      // This specifically triggers the multipart/form-data encoding
+    if (values.file) {
       formData.append("file", values.file);
     }
 
-    // 4. Pass the FormData object to the mutation
     createMaterial(formData, {
       onSuccess: () => {
         setOpen(false);
@@ -65,8 +57,7 @@ export function CreateMaterialDialog({ groupId }: { groupId: string }) {
                 Tambah Materi Pembelajaran
               </DialogTitle>
               <DialogDescription>
-                Isi formulir di bawah untuk membuat materi teks atau mengunggah
-                file PDF.
+                Isi formulir di bawah untuk mengunggah file PDF materi pembelajaran.
               </DialogDescription>
             </div>
           </div>

@@ -18,13 +18,13 @@ Retrieve a paginated list of materials. You can filter by lecturer, material typ
 
 ### Query Parameters
 
-| Parameter      | Type    | Default | Description                                      |
-| -------------- | ------- | ------- | ------------------------------------------------ |
-| `page`         | number  | `1`     | The page number to fetch                         |
-| `limit`        | number  | `10`    | Number of items per page                         |
-| `lecturerId`   | string  | -       | Optional filter by lecturer ID                   |
-| `materialType` | string  | -       | Filter by type (`text`, `file`, `video`, `link`) |
-| `isPublished`  | boolean | -       | Filter by publish status (`true` or `false`)     |
+| Parameter      | Type    | Default | Description                                               |
+| -------------- | ------- | ------- | --------------------------------------------------------- |
+| `page`         | number  | `1`     | The page number to fetch                                  |
+| `limit`        | number  | `10`    | Number of items per page                                  |
+| `lecturerId`   | string  | -       | Optional filter by lecturer ID                            |
+| `materialType` | string  | -       | Filter by type (`file` - only PDFs are supported for MVP) |
+| `isPublished`  | boolean | -       | Filter by publish status (`true` or `false`)              |
 
 ### Response
 
@@ -41,10 +41,10 @@ Retrieve a paginated list of materials. You can filter by lecturer, material typ
       "version": 1,
       "title": "Introduction to Python Variables",
       "description": "Learn about variable types and assignments.",
-      "materialType": "text",
-      "content": "<h1>Variables</h1><p>...</p>",
+      "materialType": "file",
+      "content": "/storage/materials/123456789-intro-to-python.pdf",
       "sourceUrl": null,
-      "iconName": "book-open",
+
       "isPublished": true,
       "publishedAt": "2026-07-04T10:00:00.000Z",
       "createdAt": "2026-07-04T09:00:00.000Z",
@@ -87,7 +87,7 @@ Retrieve detailed information for a specific material by its ID.
   "data": {
     "id": "mat123xyz...",
     "title": "Introduction to Python Variables",
-    "materialType": "text"
+    "materialType": "file"
     // ...other material fields
   }
 }
@@ -106,18 +106,18 @@ Create a new material assigned to the currently authenticated lecturer. **Use th
 
 ### Request Body (`multipart/form-data`)
 
-| Field          | Type    | Required | Description                                                 |
-| -------------- | ------- | -------- | ----------------------------------------------------------- |
-| `groupId`      | string  | Yes      | The ID of the student group this belongs to                 |
-| `title`        | string  | Yes      | The title of the material (max 200 chars)                   |
-| `materialType` | string  | Yes      | Must be one of: `text`, `file`, `video`, `link`             |
-| `description`  | string  | No       | Material description (max 1000 chars)                       |
-| `content`      | string  | No       | Text/HTML content (if type is `text`)                       |
-| `sourceUrl`    | string  | No       | URL (if type is `link` or `video`)                          |
-| `iconName`     | string  | No       | Icon identifier (max 50 chars)                              |
-| `isPublished`  | boolean | No       | Whether it should be published immediately (`true`/`false`) |
-| `sequence`     | number  | No       | Display order sequence                                      |
-| `file`         | File    | No       | File upload (if type is `file`). **Only PDFs up to 10MB.**  |
+| Field          | Type   | Required | Description                                 |
+| -------------- | ------ | -------- | ------------------------------------------- |
+| `groupId`      | string | Yes      | The ID of the student group this belongs to |
+| `title`        | string | Yes      | The title of the material (max 200 chars)   |
+| `materialType` | string | Yes      | Must be: `file`                             |
+| `description`  | string | No       | Material description (max 1000 chars)       |
+| `content`      | string | No       | Text/HTML content (Optional/unused for MVP) |
+| `sourceUrl`    | string | No       | URL (Optional/unused for MVP)               |
+
+| `isPublished` | boolean | No | Whether it should be published immediately (`true`/`false`) |
+| `sequence` | number | No | Display order sequence |
+| `file` | File | Yes | File upload. **Only PDFs up to 10MB are permitted.** |
 
 ### Response
 
@@ -154,18 +154,18 @@ Update an existing material. This endpoint supports updating text fields and/or 
 
 _At least one field must be provided._
 
-| Field          | Type    | Required | Description                                                     |
-| -------------- | ------- | -------- | --------------------------------------------------------------- |
-| `title`        | string  | No       | The new title                                                   |
-| `description`  | string  | No       | The new description                                             |
-| `materialType` | string  | No       | One of: `text`, `file`, `video`, `link`                         |
-| `content`      | string  | No       | New text/HTML content                                           |
-| `sourceUrl`    | string  | No       | New URL                                                         |
-| `iconName`     | string  | No       | New icon name                                                   |
-| `isPublished`  | boolean | No       | Publish or unpublish                                            |
-| `sequence`     | number  | No       | Update display order sequence                                   |
-| `forceReread`  | boolean | No       | If `true`, resets student read progress for this material       |
-| `file`         | File    | No       | Replace the file (if type is `file`). **Only PDFs up to 10MB.** |
+| Field          | Type   | Required | Description                                     |
+| -------------- | ------ | -------- | ----------------------------------------------- |
+| `title`        | string | No       | The new title                                   |
+| `description`  | string | No       | The new description                             |
+| `materialType` | string | No       | Must be: `file`                                 |
+| `content`      | string | No       | New text/HTML content (Optional/unused for MVP) |
+| `sourceUrl`    | string | No       | New URL (Optional/unused for MVP)               |
+
+| `isPublished` | boolean | No | Publish or unpublish |
+| `sequence` | number | No | Update display order sequence |
+| `forceReread` | boolean | No | If `true`, resets student read progress for this material |
+| `file` | File | No | Replace the file. **Only PDFs up to 10MB are permitted.** |
 
 ### Response
 
