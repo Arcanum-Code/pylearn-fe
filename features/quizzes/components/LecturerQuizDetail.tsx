@@ -8,6 +8,7 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { LecturerQuestionForm } from "./LecturerQuestionForm";
+import { useConfirm } from "@/hooks/use-confirm";
 
 interface LecturerQuizDetailProps {
   groupId: string;
@@ -19,6 +20,7 @@ export function LecturerQuizDetail({ groupId, quizId }: LecturerQuizDetailProps)
   const { data: quiz, isLoading } = useLecturerQuizDetail(quizId);
   const { mutate: publishQuiz, isPending: isPublishing } = usePublishLecturerQuiz(groupId, quizId);
   const { mutate: deleteQuiz, isPending: isDeleting } = useDeleteLecturerQuiz(groupId);
+  const { confirm } = useConfirm();
 
   const [questionModal, setQuestionModal] = useState<{
     isOpen: boolean;
@@ -47,8 +49,16 @@ export function LecturerQuizDetail({ groupId, quizId }: LecturerQuizDetailProps)
     );
   }
 
-  const handleDelete = () => {
-    if (confirm("Apakah Anda yakin ingin menghapus kuis ini? Semua data pertanyaan di dalamnya akan hilang.")) {
+  const handleDelete = async () => {
+    const isConfirmed = await confirm({
+      title: "Hapus Kuis?",
+      description: "Apakah Anda yakin ingin menghapus kuis ini? Semua data pertanyaan di dalamnya akan hilang.",
+      confirmText: "Hapus",
+      cancelText: "Batal",
+      variant: "destructive",
+    });
+
+    if (isConfirmed) {
       deleteQuiz(quizId, {
         onSuccess: () => {
           router.push(`/groups/${groupId}`);

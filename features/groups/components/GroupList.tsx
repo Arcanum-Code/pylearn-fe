@@ -21,6 +21,7 @@ import {
   Copy,
 } from "lucide-react";
 import { toast } from "sonner";
+import { useConfirm } from "@/hooks/use-confirm";
 
 const levelConfig = {
   BASIC: {
@@ -46,6 +47,7 @@ const levelConfig = {
 export function GroupList() {
   const { data: groups, isLoading } = useGroups();
   const deleteMutation = useDeleteGroup();
+  const { confirm } = useConfirm();
 
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [editingGroup, setEditingGroup] = useState<Group | null>(null);
@@ -56,9 +58,17 @@ export function GroupList() {
     setIsDialogOpen(true);
   };
 
-  const handleDelete = (e: React.MouseEvent, id: string) => {
+  const handleDelete = async (e: React.MouseEvent, id: string) => {
     e.preventDefault();
-    if (confirm("Apakah Anda yakin ingin menghapus kelas ini?")) {
+    const isConfirmed = await confirm({
+      title: "Hapus Kelas?",
+      description: "Apakah Anda yakin ingin menghapus kelas ini?",
+      confirmText: "Hapus",
+      cancelText: "Batal",
+      variant: "destructive",
+    });
+
+    if (isConfirmed) {
       deleteMutation.mutate(id);
     }
   };

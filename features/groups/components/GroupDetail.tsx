@@ -20,6 +20,7 @@ import { useAuth } from "@/features/auth";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { GroupDashboardView } from "@/features/dashboard";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
+import { useConfirm } from "@/hooks/use-confirm";
 
 export function GroupDetail({ id }: { id: string }) {
   const { data: group, isLoading } = useGroup(id);
@@ -31,9 +32,18 @@ export function GroupDetail({ id }: { id: string }) {
   const router = useRouter();
   const [isEditClassOpen, setIsEditClassOpen] = useState(false);
   const deleteGroupMutation = useDeleteGroup();
+  const { confirm } = useConfirm();
 
-  const handleDeleteClass = () => {
-    if (confirm("Apakah Anda yakin ingin menghapus kelas ini?")) {
+  const handleDeleteClass = async () => {
+    const isConfirmed = await confirm({
+      title: "Hapus Kelas?",
+      description: "Apakah Anda yakin ingin menghapus kelas ini?",
+      confirmText: "Hapus",
+      cancelText: "Batal",
+      variant: "destructive",
+    });
+
+    if (isConfirmed) {
       deleteGroupMutation.mutate(group.id, {
         onSuccess: () => {
           router.push("/dashboard");
