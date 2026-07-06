@@ -15,7 +15,7 @@ export const createMaterialSchema = z.object({
   title: z.string().min(1, "Judul materi wajib diisi").max(200, "Judul maksimal 200 karakter"),
   description: z.string().max(1000, "Deskripsi maksimal 1000 karakter").optional().or(z.literal("")),
   materialType: z.literal("file").default("file"),
-  isPublished: z.boolean().default(true),
+  publishedAt: z.date().nullable().optional(),
   file: z.any().refine((file) => file instanceof File, "File PDF wajib diunggah"),
 });
 
@@ -25,7 +25,7 @@ export const updateMaterialSchema = z.object({
   title: z.string().min(1, "Judul materi wajib diisi").max(200, "Judul maksimal 200 karakter").optional(),
   description: z.string().max(1000, "Deskripsi maksimal 1000 karakter").optional().or(z.literal("")),
   materialType: z.literal("file").default("file"),
-  isPublished: z.boolean().optional(),
+  publishedAt: z.date().nullable().optional(),
   file: z.any().optional(),
 });
 

@@ -36,7 +36,14 @@ export function EditMaterialDialog({
     formData.append("title", values.title);
     formData.append("description", values.description || "");
     formData.append("materialType", "file");
-    formData.append("isPublished", String(values.isPublished));
+
+    if (values.publishImmediately) {
+      formData.append("publishedAt", new Date().toISOString());
+    } else if (values.publishedAt) {
+      formData.append("publishedAt", values.publishedAt.toISOString());
+    } else {
+      formData.append("publishedAt", "");
+    }
 
     if (values.file instanceof File) {
       formData.append("file", values.file);
@@ -52,11 +59,11 @@ export function EditMaterialDialog({
     );
   };
 
-  const initialValues: UpdateMaterialRequest | undefined = material
+  const initialValues = material
     ? {
         title: material.title,
         description: material.description,
-        isPublished: material.isPublished,
+        publishedAt: material.publishedAt ? new Date(material.publishedAt) : null,
       }
     : undefined;
 

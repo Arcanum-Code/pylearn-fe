@@ -46,7 +46,7 @@ export interface CreateMaterialRequest {
   content?: string;
   sourceUrl?: string;
   iconName?: string;
-  isPublished: boolean;
+  publishedAt?: string | null;
   file?: File; // For PDF uploads
 }
 

@@ -19,6 +19,7 @@ import { CreateLecturerQuizDialog } from "@/features/quizzes";
 import { useAuth } from "@/features/auth";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { GroupDashboardView } from "@/features/dashboard";
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 
 export function GroupDetail({ id }: { id: string }) {
   const { data: group, isLoading } = useGroup(id);
@@ -57,6 +58,18 @@ export function GroupDetail({ id }: { id: string }) {
     );
   }
 
+  const formatScheduledTime = (dateStr: string) => {
+    return new Intl.DateTimeFormat("id-ID", {
+      weekday: "short",
+      day: "2-digit",
+      month: "short",
+      year: "numeric",
+      hour: "2-digit",
+      minute: "2-digit",
+      hour12: false,
+    }).format(new Date(dateStr)) + " WIB";
+  };
+
   const contentGrid = (
     <div className="grid grid-cols-1 md:grid-cols-2 gap-6 items-stretch">
       {/* Materials Bento Tile */}
@@ -80,67 +93,107 @@ export function GroupDetail({ id }: { id: string }) {
                 Belum ada materi untuk kelas ini.
               </p>
             )}
-            {group.materials?.map((m) => (
-              <div
-                key={m.id}
-                className="flex justify-between items-center p-4 rounded-xl bg-[#F7F8FA] border border-gray-150/40"
-              >
-                <span className="font-semibold text-sm text-[#1A1C1E]">{m.title}</span>
-                <div className="flex items-center gap-1">
-                  <span
-                    className={`font-mono text-[10px] px-2 py-0.5 rounded-md font-semibold tracking-wider mr-1 ${
-                      m.isPublished
-                        ? "bg-[#10B981]/10 text-[#10B981]"
-                        : "bg-[#F59E0B]/10 text-[#F59E0B]"
-                    }`}
-                  >
-                    {m.isPublished ? "PUBLISHED" : "DRAFT"}
-                  </span>
-                  <Button
-                    variant="ghost"
-                    size="icon"
-                    className="h-8 w-8 bg-branding-dark hover:bg-branding-dark/90"
-                    asChild
-                  >
-                    <Link href={`/materials/${m.id}`}>
-                      <Eye className="w-4 h-4 text-white" />
-                    </Link>
-                  </Button>
-                  {!isMahasiswa && (
-                    <>
-                      {!m.isPublished && (
+            {group.materials?.map((m) => {
+              const isScheduled = m.publishedAt && new Date(m.publishedAt) > new Date();
+              const isPublished = m.isPublished || (m.publishedAt && new Date(m.publishedAt) <= new Date());
+              
+              return (
+                <div
+                  key={m.id}
+                  className="flex justify-between items-center p-4 rounded-xl bg-[#F7F8FA] border border-gray-150/40"
+                >
+                  <span className="font-semibold text-sm text-[#1A1C1E]">{m.title}</span>
+                  <div className="flex items-center gap-1">
+                    {isScheduled ? (
+                      <Tooltip>
+                        <TooltipTrigger asChild>
+                          <span className="font-mono text-[10px] px-2 py-0.5 rounded-md font-semibold tracking-wider mr-1 bg-[#F59E0B]/10 text-[#F59E0B] cursor-help">
+                            SCHEDULED
+                          </span>
+                        </TooltipTrigger>
+                        <TooltipContent>
+                          Akan diterbitkan otomatis pada {formatScheduledTime(m.publishedAt!)}
+                        </TooltipContent>
+                      </Tooltip>
+                    ) : (
+                      <span
+                        className={`font-mono text-[10px] px-2 py-0.5 rounded-md font-semibold tracking-wider mr-1 ${
+                          isPublished
+                            ? "bg-[#10B981]/10 text-[#10B981]"
+                            : "bg-neutral-500/10 text-neutral-500"
+                        }`}
+                      >
+                        {isPublished ? "PUBLISHED" : "DRAFT"}
+                      </span>
+                    )}
+
+                    <Tooltip>
+                      <TooltipTrigger asChild>
                         <Button
                           variant="ghost"
                           size="icon"
-                          className="h-8 w-8 bg-emerald-500 hover:bg-emerald-600"
-                          onClick={() => publishMaterial(m.id)}
-                          disabled={isPublishingMaterial}
-                          title="Publish Materi"
+                          className="h-8 w-8 bg-branding-dark hover:bg-branding-dark/90"
+                          asChild
                         >
-                          <CheckCircle className="w-4 h-4 text-white" />
+                          <Link href={`/materials/${m.id}`}>
+                            <Eye className="w-4 h-4 text-white" />
+                          </Link>
                         </Button>
-                      )}
-                      <Button
-                        variant="ghost"
-                        size="icon"
-                        className="h-8 w-8 bg-orange-500 hover:bg-orange-600"
-                        onClick={() => setEditMaterialId(m.id)}
-                      >
-                        <Edit className="w-4 h-4 text-white" />
-                      </Button>
-                      <Button
-                        variant="ghost"
-                        size="icon"
-                        className="h-8 w-8 bg-destructive hover:bg-destructive/90"
-                        onClick={() => setDeleteMaterial({ id: m.id, title: m.title })}
-                      >
-                        <Trash2 className="w-4 h-4 text-white" />
-                      </Button>
-                    </>
-                  )}
+                      </TooltipTrigger>
+                      <TooltipContent>Lihat Detail</TooltipContent>
+                    </Tooltip>
+
+                    {!isMahasiswa && (
+                      <>
+                        {!isPublished && (
+                          <Tooltip>
+                            <TooltipTrigger asChild>
+                              <Button
+                                variant="ghost"
+                                size="icon"
+                                className="h-8 w-8 bg-emerald-500 hover:bg-emerald-600"
+                                onClick={() => publishMaterial(m.id)}
+                                disabled={isPublishingMaterial}
+                                title="Publish Materi"
+                              >
+                                <CheckCircle className="w-4 h-4 text-white" />
+                              </Button>
+                            </TooltipTrigger>
+                            <TooltipContent>Terbitkan Sekarang</TooltipContent>
+                          </Tooltip>
+                        )}
+                        <Tooltip>
+                          <TooltipTrigger asChild>
+                            <Button
+                              variant="ghost"
+                              size="icon"
+                              className="h-8 w-8 bg-orange-500 hover:bg-orange-600"
+                              onClick={() => setEditMaterialId(m.id)}
+                            >
+                              <Edit className="w-4 h-4 text-white" />
+                            </Button>
+                          </TooltipTrigger>
+                          <TooltipContent>Edit Materi</TooltipContent>
+                        </Tooltip>
+                        <Tooltip>
+                          <TooltipTrigger asChild>
+                            <Button
+                              variant="ghost"
+                              size="icon"
+                              className="h-8 w-8 bg-destructive hover:bg-destructive/90"
+                              onClick={() => setDeleteMaterial({ id: m.id, title: m.title })}
+                            >
+                              <Trash2 className="w-4 h-4 text-white" />
+                            </Button>
+                          </TooltipTrigger>
+                          <TooltipContent>Hapus Materi</TooltipContent>
+                        </Tooltip>
+                      </>
+                    )}
+                  </div>
                 </div>
-              </div>
-            ))}
+              );
+            })}
           </div>
         </div>
 
@@ -220,7 +273,8 @@ export function GroupDetail({ id }: { id: string }) {
   );
 
   return (
-    <div className="p-8 max-w-7xl mx-auto space-y-6 bg-[#F7F8FA] min-h-screen font-sans text-[#1A1C1E]">
+    <TooltipProvider>
+      <div className="p-8 max-w-7xl mx-auto space-y-6 bg-[#F7F8FA] min-h-screen font-sans text-[#1A1C1E]">
       <Link
         href="/dashboard"
         className="inline-flex items-center text-[#6366F1] font-mono text-sm hover:underline mb-2 transition-all"
@@ -310,6 +364,7 @@ export function GroupDetail({ id }: { id: string }) {
           group={group}
         />
       )}
-    </div>
+      </div>
+    </TooltipProvider>
   );
 }

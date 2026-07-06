@@ -25,7 +25,12 @@ export function CreateMaterialDialog({ groupId }: { groupId: string }) {
     formData.append("title", values.title);
     formData.append("description", values.description || "");
     formData.append("materialType", "file");
-    formData.append("isPublished", String(values.isPublished));
+
+    if (values.publishImmediately) {
+      formData.append("publishedAt", new Date().toISOString());
+    } else if (values.publishedAt) {
+      formData.append("publishedAt", values.publishedAt.toISOString());
+    }
 
     if (values.file) {
       formData.append("file", values.file);

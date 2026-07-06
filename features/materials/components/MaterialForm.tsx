@@ -15,6 +15,8 @@ import { Spinner } from "@/components/ui/spinner";
 import { useEffect, useState } from "react";
 import { FileText, Upload, Eye, EyeOff } from "lucide-react";
 import { API_ENDPOINTS } from "@/app/api/api";
+import { Switch } from "@/components/ui/switch";
+import { DateTimePicker } from "@/components/ui/datetime-picker";
 
 interface MaterialFormProps {
   initialValues?: Partial<UpdateMaterialRequest>;
@@ -34,6 +36,12 @@ export function MaterialForm({
   const [previewUrl, setPreviewUrl] = useState<string | null>(null);
   const [showPreview, setShowPreview] = useState(false);
   const [isDragging, setIsDragging] = useState(false);
+  const [publishImmediately, setPublishImmediately] = useState(() => {
+    if (isEdit) {
+      return false;
+    }
+    return true; // For create mode, default to publishing immediately
+  });
 
   const formSchema = isEdit ? updateMaterialSchema : createMaterialSchema;
 
@@ -43,13 +51,16 @@ export function MaterialForm({
       title: "",
       description: "",
       materialType: "file",
-      isPublished: true,
+      publishedAt: null,
     },
   });
 
   useEffect(() => {
     if (initialValues) {
       form.reset(initialValues);
+      if (initialValues.publishedAt) {
+        setPublishImmediately(false);
+      }
     }
   }, [initialValues, form]);
 
@@ -67,7 +78,10 @@ export function MaterialForm({
   }, [file]);
 
   const handleFormSubmit = (values: any) => {
-    const data = { ...values };
+    const data = {
+      ...values,
+      publishImmediately,
+    };
     if (file) {
       data.file = file;
     }
@@ -160,6 +174,56 @@ export function MaterialForm({
             </p>
           )}
         </div>
+
+        {/* Publish Immediately Toggle */}
+        <div className="space-y-2 sm:col-span-2">
+          <div className="flex items-center justify-between py-2 border-b border-neutral-100/80">
+            <div className="space-y-0.5 pr-4">
+              <Label htmlFor="publish-now" className="text-sm font-semibold text-neutral-800">
+                Terbitkan Langsung
+              </Label>
+              <p className="text-xs text-muted-foreground">
+                Aktifkan untuk langsung menerbitkan materi ini sekarang (Waktu Jakarta).
+              </p>
+            </div>
+            <Switch
+              id="publish-now"
+              checked={publishImmediately}
+              onCheckedChange={(checked) => {
+                setPublishImmediately(checked);
+                if (checked) {
+                  form.setValue("publishedAt", null);
+                }
+              }}
+              disabled={isLoading}
+            />
+          </div>
+        </div>
+
+        {/* Schedule Calendar (DateTimePicker) */}
+        {!publishImmediately && (
+          <div className="space-y-2 sm:col-span-2 animate-in fade-in slide-in-from-top-1 duration-150">
+            <Label className="text-sm font-medium">Jadwal Publikasi</Label>
+            <DateTimePicker
+              value={form.watch("publishedAt")}
+              onChange={(date) => {
+                form.setValue("publishedAt", date);
+                form.clearErrors("publishedAt");
+              }}
+              placeholder="Pilih tanggal dan waktu (Kosongkan untuk draf)..."
+              disabled={isLoading}
+              mode="inline"
+            />
+            <p className="text-xs text-neutral-400 mt-1">
+              Mahasiswa tidak akan dapat melihat materi ini sebelum waktu yang ditentukan. Biarkan kosong untuk menyimpannya sebagai Draf.
+            </p>
+            {form.formState.errors.publishedAt && (
+              <p className="text-xs text-destructive">
+                {form.formState.errors.publishedAt.message as string}
+              </p>
+            )}
+          </div>
+        )}
 
         {/* PDF File Upload */}
         <div className="space-y-2 sm:col-span-2">
