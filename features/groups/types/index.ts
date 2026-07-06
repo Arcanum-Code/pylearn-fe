@@ -1,9 +1,17 @@
+export type GroupLevel = "BASIC" | "INTERMEDIATE" | "ADVANCED";
+
 export interface Group {
   id: string;
   name: string;
   description?: string | null;
+  level?: GroupLevel | null;
   createdAt: string;
   updatedAt: string;
+  _count?: {
+    users: number;
+    materials: number;
+    quizzes: number;
+  };
   materials?: GroupMaterial[];
   quizzes?: GroupQuiz[];
 }
@@ -20,3 +28,4 @@ export interface GroupQuiz {
   levelNumber: number;
   isPublished: boolean;
 }
+

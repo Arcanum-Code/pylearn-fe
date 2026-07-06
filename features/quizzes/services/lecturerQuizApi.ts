@@ -48,8 +48,8 @@ export const LecturerQuizService = {
     return data;
   },
 
-  createQuestion: async (quizId: string, payload: LecturerQuestionFormData): Promise<{ success: boolean; message: string }> => {
-    const { data } = await ApiAxios.post<{ success: boolean; message: string }>(
+  createQuestion: async (quizId: string, payload: LecturerQuestionFormData): Promise<{ success: boolean; message: string; data?: any }> => {
+    const { data } = await ApiAxios.post<{ success: boolean; message: string; data?: any }>(
       API_ENDPOINTS.LECTURER_QUIZZES.CREATE_QUESTION(quizId),
       payload
     );

@@ -11,6 +11,13 @@ import {
 } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import { useCreateGroup, useUpdateGroup } from "../hooks/useGroups";
 import { Group } from "../types";
 import { useEffect } from "react";
@@ -34,16 +41,22 @@ export function GroupFormDialog({
     handleSubmit,
     formState: { errors },
     reset,
+    watch,
+    setValue,
   } = useForm<GroupFormData>({
     resolver: zodResolver(groupSchema),
-    defaultValues: { name: "", description: "" },
+    defaultValues: { name: "", description: "", level: "BASIC" },
   });
 
   useEffect(() => {
     if (group) {
-      reset({ name: group.name, description: group.description || "" });
+      reset({
+        name: group.name,
+        description: group.description || "",
+        level: group.level || "BASIC",
+      });
     } else {
-      reset({ name: "", description: "" });
+      reset({ name: "", description: "", level: "BASIC" });
     }
   }, [group, reset]);
 
@@ -78,6 +91,27 @@ export function GroupFormDialog({
             )}
           </div>
           <div className="space-y-1.5">
+            <label className="text-sm font-semibold text-[#1A1C1E]">Tingkat Kelas</label>
+            <Select
+              value={watch("level")}
+              onValueChange={(value) => setValue("level", value as any)}
+            >
+              <SelectTrigger className="w-full border-gray-200 focus:border-[#6366F1] focus:ring-[#6366F1] bg-white rounded-xl h-10 text-left px-3 text-sm">
+                <SelectValue placeholder="Pilih tingkat kelas" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="BASIC">Dasar (Basic)</SelectItem>
+                <SelectItem value="INTERMEDIATE">Menengah (Intermediate)</SelectItem>
+                <SelectItem value="ADVANCED">Lanjut (Advanced)</SelectItem>
+              </SelectContent>
+            </Select>
+            {errors.level && (
+              <span className="text-[#EF4444] text-xs font-mono block mt-1">
+                {errors.level.message}
+              </span>
+            )}
+          </div>
+          <div className="space-y-1.5">
             <label className="text-sm font-semibold text-[#1A1C1E]">Deskripsi</label>
             <Input
               {...register("description")}
@@ -107,3 +141,4 @@ export function GroupFormDialog({
     </Dialog>
   );
 }
+

@@ -7,7 +7,41 @@ import { Button } from "@/components/ui/button";
 import { Spinner } from "@/components/ui/spinner";
 import Link from "next/link";
 import { Group } from "../types";
-import { Trash, Edit, Plus, FolderKanban } from "lucide-react";
+import {
+  Trash,
+  Edit,
+  Plus,
+  FolderKanban,
+  Sprout,
+  Compass,
+  Rocket,
+  Users,
+  BookOpen,
+  HelpCircle,
+  Copy,
+} from "lucide-react";
+import { toast } from "sonner";
+
+const levelConfig = {
+  BASIC: {
+    label: "Dasar",
+    borderColor: "border-t-emerald-500",
+    badgeClass: "bg-emerald-50 text-emerald-700 border border-emerald-200/50",
+    icon: Sprout,
+  },
+  INTERMEDIATE: {
+    label: "Menengah",
+    borderColor: "border-t-amber-500",
+    badgeClass: "bg-amber-50 text-amber-700 border border-amber-200/50",
+    icon: Compass,
+  },
+  ADVANCED: {
+    label: "Lanjut",
+    borderColor: "border-t-rose-500",
+    badgeClass: "bg-rose-50 text-rose-700 border border-rose-200/50",
+    icon: Rocket,
+  },
+};
 
 export function GroupList() {
   const { data: groups, isLoading } = useGroups();
@@ -72,8 +106,18 @@ export function GroupList() {
           </div>
         )}
 
-        {groups?.map((group, i) => {
-          const isDarkTile = i % 4 === 0;
+        {groups?.map((group) => {
+          const level = group.level || "BASIC";
+          const config = levelConfig[level];
+          const LevelIcon = config.icon;
+
+          const handleCopyId = (e: React.MouseEvent, id: string) => {
+            e.preventDefault();
+            e.stopPropagation();
+            navigator.clipboard.writeText(id);
+            toast.success("ID Kelas disalin!");
+          };
+
           return (
             <Link
               href={`/groups/${group.id}`}
@@ -81,48 +125,70 @@ export function GroupList() {
               className="block group/item focus:outline-none"
             >
               <div
-                className={`p-6 rounded-2xl shadow-xs border transition-all duration-200 group-hover/item:-translate-y-1 group-hover/item:shadow-md h-full flex flex-col justify-between ${
-                  isDarkTile
-                    ? "bg-[#1E1E2E] text-gray-200 border-gray-800"
-                    : "bg-white text-[#1A1C1E] border-gray-150/60"
-                }`}
+                className={`rounded-2xl shadow-xs border border-gray-150/60 bg-white text-[#1A1C1E] transition-all duration-200 group-hover/item:-translate-y-1 group-hover/item:shadow-md h-full flex flex-col justify-between border-t-4 ${config.borderColor}`}
               >
-                <div>
-                  <h3
-                    className={`text-xl font-bold mb-2 tracking-tight group-hover/item:text-[#6366F1] transition-colors ${
-                      isDarkTile ? "text-white" : "text-[#1A1C1E]"
-                    }`}
-                  >
-                    {group.name}
-                  </h3>
-                  <p
-                    className={`text-sm mb-4 leading-relaxed line-clamp-3 ${
-                      isDarkTile ? "text-gray-400" : "text-gray-500"
-                    }`}
-                  >
-                    {group.description || "Tidak ada deskripsi"}
-                  </p>
-                  <div
-                    className={`inline-block px-3 py-1 rounded-md font-mono text-xs font-semibold ${
-                      isDarkTile
-                        ? "bg-[#10B981]/20 text-[#10B981]"
-                        : "bg-[#10B981]/10 text-[#10B981]"
-                    }`}
-                  >
-                    ID: {group.id.slice(0, 8)}
+                <div className="p-6 flex-1 flex flex-col justify-between">
+                  <div>
+                    <div className="flex justify-between items-start mb-3 gap-2">
+                      <span
+                        className={`px-2.5 py-0.5 rounded-full text-xs font-semibold flex items-center gap-1.5 ${config.badgeClass}`}
+                      >
+                        <LevelIcon className="w-3.5 h-3.5" />
+                        {config.label}
+                      </span>
+                      <button
+                        onClick={(e) => handleCopyId(e, group.id)}
+                        className="text-gray-400 hover:text-gray-600 p-1 rounded-md hover:bg-gray-100 transition-colors"
+                        title="Salin ID Kelas"
+                      >
+                        <Copy className="w-4 h-4" />
+                      </button>
+                    </div>
+
+                    <h3 className="text-xl font-bold tracking-tight group-hover/item:text-[#6366F1] transition-colors text-[#1A1C1E]">
+                      {group.name}
+                    </h3>
+                  </div>
+
+                  {/* Metrics Section */}
+                  <div className="grid grid-cols-3 gap-4 mt-6 pt-4 border-t border-gray-100/50">
+                    <div className="flex flex-col items-center justify-center p-2 rounded-xl bg-gray-50/50 border border-gray-100">
+                      <Users className="w-4.5 h-4.5 text-gray-400 mb-1" />
+                      <span className="text-sm font-bold text-gray-700">
+                        {group._count?.users ?? 0}
+                      </span>
+                      <span className="text-[10px] text-gray-400 uppercase font-semibold tracking-wider">
+                        Siswa
+                      </span>
+                    </div>
+                    <div className="flex flex-col items-center justify-center p-2 rounded-xl bg-gray-50/50 border border-gray-100">
+                      <BookOpen className="w-4.5 h-4.5 text-gray-400 mb-1" />
+                      <span className="text-sm font-bold text-gray-700">
+                        {group._count?.materials ?? 0}
+                      </span>
+                      <span className="text-[10px] text-gray-400 uppercase font-semibold tracking-wider">
+                        Materi
+                      </span>
+                    </div>
+                    <div className="flex flex-col items-center justify-center p-2 rounded-xl bg-gray-50/50 border border-gray-100">
+                      <HelpCircle className="w-4.5 h-4.5 text-gray-400 mb-1" />
+                      <span className="text-sm font-bold text-gray-700">
+                        {group._count?.quizzes ?? 0}
+                      </span>
+                      <span className="text-[10px] text-gray-400 uppercase font-semibold tracking-wider">
+                        Kuis
+                      </span>
+                    </div>
                   </div>
                 </div>
 
-                <div className="flex justify-end gap-2 mt-6 pt-4 border-t border-gray-150/20">
+                {/* Footer Actions Divider & Buttons */}
+                <div className="px-6 pb-6 pt-4 border-t border-gray-150/40 flex justify-end gap-2 bg-gray-50/30 rounded-b-2xl">
                   <Button
                     variant="ghost"
                     size="icon"
                     onClick={(e) => handleEdit(e, group)}
-                    className={`h-9 w-9 rounded-lg transition-colors ${
-                      isDarkTile
-                        ? "text-gray-400 hover:text-white hover:bg-gray-800"
-                        : "text-gray-400 hover:text-[#6366F1] hover:bg-gray-50"
-                    }`}
+                    className="h-9 w-9 rounded-lg text-gray-400 hover:text-[#6366F1] hover:bg-gray-100 transition-colors"
                   >
                     <Edit className="w-4.5 h-4.5" />
                   </Button>
@@ -130,11 +196,7 @@ export function GroupList() {
                     variant="ghost"
                     size="icon"
                     onClick={(e) => handleDelete(e, group.id)}
-                    className={`h-9 w-9 rounded-lg transition-colors ${
-                      isDarkTile
-                        ? "text-gray-400 hover:text-[#EF4444] hover:bg-gray-800"
-                        : "text-gray-400 hover:text-[#EF4444] hover:bg-gray-50"
-                    }`}
+                    className="h-9 w-9 rounded-lg text-gray-400 hover:text-[#EF4444] hover:bg-gray-100 transition-colors"
                   >
                     <Trash className="w-4.5 h-4.5" />
                   </Button>
@@ -153,3 +215,4 @@ export function GroupList() {
     </div>
   );
 }
+
