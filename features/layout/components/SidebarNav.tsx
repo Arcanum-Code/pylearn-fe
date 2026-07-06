@@ -84,8 +84,8 @@ const NavItem = ({
           onClick={handleClick}
           className={cn(
             "flex w-full items-center justify-between rounded-md px-3 py-2 text-sm font-medium transition-colors",
-            "text-sidebar-foreground/70 hover:bg-sidebar-accent hover:text-sidebar-accent-foreground",
-            (isActive || hasActiveChild) && "bg-primary/10 text-primary",
+            "text-slate-400 hover:bg-slate-800 hover:text-white",
+            (isActive || hasActiveChild) && "bg-indigo-600 text-white shadow-xs",
           )}
           style={{ paddingLeft: `${12 + depth * 12}px` }}
         >
@@ -127,8 +127,8 @@ const NavItem = ({
       onClick={onNavigate}
       className={cn(
         "flex items-center gap-3 rounded-md px-3 py-2 text-sm font-medium transition-colors",
-        "text-sidebar-foreground/70 hover:bg-sidebar-accent hover:text-sidebar-accent-foreground",
-        isActive && "bg-primary/10 text-primary",
+        "text-slate-400 hover:bg-slate-800 hover:text-white",
+        isActive && "bg-indigo-600 text-white shadow-xs",
       )}
       style={{ paddingLeft: `${12 + depth * 12}px` }}
     >
@@ -176,13 +176,13 @@ export function SidebarNav({
       {/* Sidebar */}
       <aside
         className={cn(
-          "fixed left-0 top-0 z-50 flex h-screen w-64 flex-col border-r border-sidebar-border bg-sidebar text-sidebar-foreground transition-transform duration-300 lg:translate-x-0",
+          "fixed left-0 top-0 z-50 flex h-screen w-64 flex-col border-r border-slate-800 bg-slate-900 text-slate-100 transition-transform duration-300 lg:translate-x-0",
           isOpen ? "translate-x-0" : "-translate-x-full",
         )}
       >
         {/* Logo / Brand */}
-        <div className="flex h-16 items-center border-b border-sidebar-border px-6">
-          <h1 className="text-xl font-bold font-mono tracking-tight">
+        <div className="flex h-16 items-center border-b border-slate-800 px-6">
+          <h1 className="text-xl font-bold font-mono tracking-tight text-white">
             {t(sidebarFooterConfig.nameKey)}
           </h1>
         </div>
@@ -199,12 +199,12 @@ export function SidebarNav({
         </nav>
 
         {/* System Info Footer */}
-        <div className="border-t border-sidebar-border px-6 py-4 pb-8 md:pb-4">
-          <p className="text-sm font-medium font-mono text-sidebar-foreground/60">
+        <div className="border-t border-slate-800 px-6 py-4 pb-8 md:pb-4">
+          <p className="text-sm font-medium font-mono text-slate-400">
             {t(sidebarFooterConfig.nameKey)}
           </p>
           {sidebarFooterConfig.versionKey && (
-            <p className="text-xs font-mono text-sidebar-foreground/40">
+            <p className="text-xs font-mono text-slate-600">
               {t(sidebarFooterConfig.versionKey)}
             </p>
           )}

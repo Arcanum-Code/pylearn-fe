@@ -115,3 +115,25 @@ export interface ContentHealthData {
 export type ApiGroupsResponse = ApiResponse<GroupData[]>;
 export type ApiGroupSummaryResponse = ApiResponse<GroupSummaryData>;
 export type ApiContentHealthResponse = ApiResponse<ContentHealthData>;
+
+export interface CalendarEvent {
+  id: string;
+  date: string;
+  time: string;
+  type: "quiz_open" | "quiz_close" | "material_release";
+  title: string;
+  targetId: string;
+  groupId: string;
+}
+
+export interface RecentActivity {
+  id: string;
+  studentName: string;
+  taskName: string;
+  submittedAt: string;
+  score: number;
+  groupId: string;
+}
+
+export type ApiCalendarEventsResponse = ApiResponse<CalendarEvent[]>;
+export type ApiRecentActivityResponse = ApiResponse<RecentActivity[]>;

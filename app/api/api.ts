@@ -46,6 +46,10 @@ export const API_ENDPOINTS = {
       `${API_URL}/lecturer/groups/${groupId}/dashboard/summary`,
     GROUP_CONTENT_HEALTH: (groupId: string) =>
       `${API_URL}/lecturer/groups/${groupId}/dashboard/content-health`,
+    CALENDAR_EVENTS: (year: number, month: number, groupId?: string) =>
+      `${API_URL}/lecturer/calendar/events?year=${year}&month=${month}${groupId ? `&groupId=${groupId}` : ""}`,
+    RECENT_ACTIVITY: (limit?: number, groupId?: string) =>
+      `${API_URL}/lecturer/dashboard/recent-activity?${limit ? `limit=${limit}` : ""}${groupId ? `&groupId=${groupId}` : ""}`,
   },
   GROUPS: {
     LIST: `${API_URL}/groups/`,

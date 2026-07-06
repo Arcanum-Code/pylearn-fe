@@ -6,8 +6,16 @@ import {
   fetchLecturerGroups,
   fetchGroupSummary,
   fetchGroupContentHealth,
+  fetchCalendarEvents,
+  fetchRecentActivity,
 } from "../services/lecturer.service";
-import { GroupData, GroupSummaryData, ContentHealthData } from "../types";
+import {
+  GroupData,
+  GroupSummaryData,
+  ContentHealthData,
+  CalendarEvent,
+  RecentActivity,
+} from "../types";
 
 export const lecturerDashboardKeys = {
   all: ["lecturer-dashboard"] as const,
@@ -16,6 +24,10 @@ export const lecturerDashboardKeys = {
     [...lecturerDashboardKeys.all, "summary", groupId] as const,
   groupContentHealth: (groupId: string) =>
     [...lecturerDashboardKeys.all, "content-health", groupId] as const,
+  calendarEvents: (year: number, month: number, groupId?: string) =>
+    [...lecturerDashboardKeys.all, "calendar", year, month, groupId || "all"] as const,
+  recentActivity: (limit?: number, groupId?: string) =>
+    [...lecturerDashboardKeys.all, "recent-activity", limit || 10, groupId || "all"] as const,
 };
 
 export function useFetchLecturerGroups() {
@@ -48,5 +60,27 @@ export function useFetchGroupContentHealth(groupId: string) {
     queryKey: lecturerDashboardKeys.groupContentHealth(groupId),
     queryFn: () => fetchGroupContentHealth(groupId),
     enabled: !!user && !isLoading && !!groupId && groupId !== "all" && roleName === "dosen",
+  });
+}
+
+export function useFetchCalendarEvents(year: number, month: number, groupId?: string) {
+  const { user, isLoading } = useAuth();
+  const roleName = user?.roleName?.toLowerCase();
+
+  return useQuery<CalendarEvent[]>({
+    queryKey: lecturerDashboardKeys.calendarEvents(year, month, groupId),
+    queryFn: () => fetchCalendarEvents(year, month, groupId),
+    enabled: !!user && !isLoading && roleName === "dosen",
+  });
+}
+
+export function useFetchRecentActivity(limit?: number, groupId?: string) {
+  const { user, isLoading } = useAuth();
+  const roleName = user?.roleName?.toLowerCase();
+
+  return useQuery<RecentActivity[]>({
+    queryKey: lecturerDashboardKeys.recentActivity(limit, groupId),
+    queryFn: () => fetchRecentActivity(limit, groupId),
+    enabled: !!user && !isLoading && roleName === "dosen",
   });
 }

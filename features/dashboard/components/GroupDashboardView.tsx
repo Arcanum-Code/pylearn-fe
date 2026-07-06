@@ -22,12 +22,10 @@ export function GroupDashboardView({ groupId }: GroupDashboardViewProps) {
 
   if (isLoading) {
     return (
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-        <Skeleton className="h-[120px] rounded-xl" />
-        <Skeleton className="h-[120px] rounded-xl" />
-        <Skeleton className="h-[120px] rounded-xl" />
-        <Skeleton className="h-[300px] md:col-span-2 rounded-xl" />
-        <Skeleton className="h-[300px] rounded-xl" />
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <Skeleton className="h-[120px] rounded-2xl" />
+        <Skeleton className="h-[120px] rounded-2xl" />
+        <Skeleton className="h-[300px] md:col-span-2 rounded-2xl" />
       </div>
     );
   }
@@ -39,7 +37,7 @@ export function GroupDashboardView({ groupId }: GroupDashboardViewProps) {
     return (
       <span
         className={`text-[10px] font-mono font-semibold ml-2 ${
-          isPositive ? "text-emerald-400" : "text-rose-400"
+          isPositive ? "text-emerald-600" : "text-rose-600"
         }`}
       >
         {isPositive ? "▲" : "▼"} {Math.abs(delta).toFixed(1)}%
@@ -50,80 +48,57 @@ export function GroupDashboardView({ groupId }: GroupDashboardViewProps) {
   return (
     <div className="space-y-6">
       {/* Overview Bento Cards */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         {/* Card 1: Total Siswa */}
-        <Card className="bg-white border-border rounded-xl shadow-sm">
+        <Card className="bg-indigo-50 border border-indigo-100/80 rounded-2xl shadow-[0_8px_30px_rgba(99,102,241,0.04)] hover:shadow-[0_8px_30px_rgba(99,102,241,0.08)] transition-all hover:-translate-y-0.5">
           <CardContent className="flex items-center gap-4 py-6">
-            <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-indigo-50 text-indigo-600">
+            <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-indigo-600 text-white shadow-xs">
               <Users className="h-6 w-6" />
             </div>
             <div>
-              <p className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">
+              <p className="text-xs font-semibold uppercase tracking-wider text-indigo-700/80">
                 Total Siswa
               </p>
-              <p className="text-3xl font-extrabold font-mono text-neutral-900 mt-1">
+              <p className="text-3xl font-extrabold font-mono text-indigo-950 mt-1">
                 {summary?.total_students ?? 0}
               </p>
-              <p className="text-xs text-muted-foreground mt-1">
+              <p className="text-xs text-indigo-600/70 mt-1 font-medium">
                 Siswa terdaftar dalam kelas
               </p>
             </div>
           </CardContent>
         </Card>
 
-        {/* Card 2: Materi Dibaca */}
-        <Card className="bg-white border-border rounded-xl shadow-sm">
+        {/* Card 2: Rata-rata Bacaan */}
+        <Card className="bg-emerald-50 border border-emerald-100/80 rounded-2xl shadow-[0_8px_30px_rgba(16,185,129,0.04)] hover:shadow-[0_8px_30px_rgba(16,185,129,0.08)] transition-all hover:-translate-y-0.5">
           <CardContent className="flex items-center gap-4 py-6">
-            <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-indigo-50 text-indigo-600">
+            <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-emerald-600 text-white shadow-xs">
               <BookOpen className="h-6 w-6" />
             </div>
             <div>
-              <p className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">
+              <p className="text-xs font-semibold uppercase tracking-wider text-emerald-700/80">
                 Rata-rata Bacaan
               </p>
-              <p className="text-3xl font-extrabold font-mono text-neutral-900 mt-1">
+              <p className="text-3xl font-extrabold font-mono text-emerald-950 mt-1">
                 {summary?.avg_materials_read ?? 0}
-                <span className="text-lg text-muted-foreground font-normal">
+                <span className="text-lg text-emerald-700/60 font-normal">
                   {" "}
                   / {summary?.total_materials ?? 0}
                 </span>
               </p>
-              <p className="text-xs text-muted-foreground mt-1">
+              <p className="text-xs text-emerald-600/70 mt-1 font-medium">
                 Materi diselesaikan per siswa
               </p>
             </div>
           </CardContent>
         </Card>
-
-        {/* Card 3: Rata-rata Kelulusan (Dark Terminal Accent) */}
-        <TerminalTile title="group_pass_rate.sh">
-          <div className="flex items-center gap-4 py-2">
-            <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-white/10 text-emerald-400">
-              <Percent className="h-5 w-5" />
-            </div>
-            <div>
-              <p className="text-xs font-semibold uppercase tracking-wider text-terminal-muted">
-                Rata-rata Kelulusan
-              </p>
-              <div className="flex items-center mt-1">
-                <p className="text-3xl font-extrabold font-mono text-emerald-400">
-                  {summary?.avg_pass_rate?.toFixed(1) ?? "0.0"}%
-                </p>
-                {renderTrend(summary?.pass_rate_trend?.delta)}
-              </div>
-              <p className="text-[10px] text-terminal-muted font-mono mt-1">
-                status: EXCELLENT_PROGRESS
-              </p>
-            </div>
-          </div>
-        </TerminalTile>
       </div>
 
       {/* Content Health Analysis Grid */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         {/* Table: Quiz Performance Health */}
-        <Card className="md:col-span-2 bg-white border-border rounded-xl shadow-sm">
-          <CardHeader className="border-b border-border/50 py-4 px-6">
+        <Card className="md:col-span-2 bg-white border border-gray-150/60 rounded-2xl shadow-[0_8px_30px_rgb(0,0,0,0.01)]">
+          <CardHeader className="border-b border-gray-100 py-4 px-6">
             <CardTitle className="text-lg font-bold text-neutral-900">
               Status Performa Kuis
             </CardTitle>
@@ -132,7 +107,7 @@ export function GroupDashboardView({ groupId }: GroupDashboardViewProps) {
             <div className="overflow-x-auto">
               <table className="w-full text-sm">
                 <thead>
-                  <tr className="border-b border-border bg-neutral-50 text-left font-semibold text-muted-foreground">
+                  <tr className="border-b border-gray-100 bg-neutral-50/50 text-left font-semibold text-muted-foreground">
                     <th className="py-3 px-6">Judul Kuis</th>
                     <th className="py-3 px-4 text-center">Level</th>
                     <th className="py-3 px-4 text-center">Kelulusan Pertama</th>
@@ -140,13 +115,13 @@ export function GroupDashboardView({ groupId }: GroupDashboardViewProps) {
                     <th className="py-3 px-6 text-right">Status Kesehatan</th>
                   </tr>
                 </thead>
-                <tbody className="divide-y divide-border/60">
+                <tbody className="divide-y divide-gray-100">
                   {health?.quizzes.map((quiz) => {
                     const isHighFailure = quiz.flag === "high_failure_rate";
                     return (
                       <tr
                         key={quiz.quiz_id}
-                        className="group hover:bg-neutral-50/50 transition-colors"
+                        className="group hover:bg-neutral-50/30 transition-colors"
                       >
                         <td className="py-4 px-6 font-semibold text-neutral-800">
                           {quiz.title}
@@ -193,57 +168,6 @@ export function GroupDashboardView({ groupId }: GroupDashboardViewProps) {
                   )}
                 </tbody>
               </table>
-            </div>
-          </CardContent>
-        </Card>
-
-        {/* List: Materials Read Rates */}
-        <Card className="bg-white border-border rounded-xl shadow-sm">
-          <CardHeader className="border-b border-border/50 py-4 px-6">
-            <CardTitle className="text-lg font-bold text-neutral-900">
-              Keterlibatan Materi
-            </CardTitle>
-          </CardHeader>
-          <CardContent className="p-0">
-            <div className="divide-y divide-border/60">
-              {health?.materials.map((mat) => {
-                const isLowRead = mat.read_rate < 60;
-                return (
-                  <div
-                    key={mat.material_id}
-                    className="p-4 hover:bg-neutral-50/50 transition-colors flex items-center justify-between gap-4"
-                  >
-                    <div className="min-w-0">
-                      <p className="font-semibold text-neutral-800 truncate text-sm">
-                        {mat.title}
-                      </p>
-                      <p className="text-xs text-muted-foreground mt-1">
-                        Tingkat penyelesaian:{" "}
-                        <span className="font-bold font-mono text-neutral-700">
-                          {mat.read_rate.toFixed(1)}%
-                        </span>
-                      </p>
-                    </div>
-
-                    <div>
-                      {isLowRead ? (
-                        <Badge className="bg-amber-50 text-amber-600 border border-amber-100/50 rounded-md font-semibold text-[10px] whitespace-nowrap">
-                          Keterlibatan Rendah
-                        </Badge>
-                      ) : (
-                        <Badge className="bg-emerald-50 text-emerald-600 border border-emerald-100/50 rounded-md font-semibold text-[10px] whitespace-nowrap">
-                          Aktif
-                        </Badge>
-                      )}
-                    </div>
-                  </div>
-                );
-              })}
-              {(!health?.materials || health.materials.length === 0) && (
-                <div className="py-12 text-center text-muted-foreground italic text-sm">
-                  Tidak ada materi aktif ditemukan.
-                </div>
-              )}
             </div>
           </CardContent>
         </Card>

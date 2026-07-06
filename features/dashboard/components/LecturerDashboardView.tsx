@@ -16,21 +16,21 @@ export function LecturerDashboardView({ data }: LecturerDashboardViewProps) {
   const statsData = data?.overview;
 
   return (
-    <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
       {/* Tile 1: Total Materi (Light Bento Card) */}
-      <Card className="bg-white border-border rounded-xl shadow-sm hover:shadow-md transition-all hover:-translate-y-0.5">
+      <Card className="bg-indigo-50 border border-indigo-100/80 rounded-2xl shadow-[0_8px_30px_rgba(99,102,241,0.04)] hover:shadow-[0_8px_30px_rgba(99,102,241,0.08)] transition-all hover:-translate-y-0.5">
         <CardContent className="flex items-center gap-4 py-6">
-          <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-indigo-50 text-indigo-600">
+          <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-indigo-600 text-white shadow-xs">
             <BookOpen className="h-6 w-6" />
           </div>
           <div>
-            <p className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">
+            <p className="text-xs font-semibold uppercase tracking-wider text-indigo-700/80">
               Total Materi
             </p>
-            <p className="text-3xl font-extrabold font-mono text-neutral-900 mt-1">
+            <p className="text-3xl font-extrabold font-mono text-indigo-950 mt-1">
               {statsData?.totalMaterials ?? "-"}
             </p>
-            <p className="text-xs text-muted-foreground mt-1">
+            <p className="text-xs text-indigo-600/70 mt-1 font-medium">
               Materi pembelajaran aktif
             </p>
           </div>
@@ -38,54 +38,28 @@ export function LecturerDashboardView({ data }: LecturerDashboardViewProps) {
       </Card>
 
       {/* Tile 2: Total Kuis (Light Bento Card) */}
-      <Card className="bg-white border-border rounded-xl shadow-sm hover:shadow-md transition-all hover:-translate-y-0.5">
+      <Card className="bg-emerald-50 border border-emerald-100/80 rounded-2xl shadow-[0_8px_30px_rgba(16,185,129,0.04)] hover:shadow-[0_8px_30px_rgba(16,185,129,0.08)] transition-all hover:-translate-y-0.5">
         <CardContent className="flex items-center gap-4 py-6">
-          <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-emerald-50 text-emerald-600">
+          <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-emerald-600 text-white shadow-xs">
             <ClipboardList className="h-6 w-6" />
           </div>
           <div>
-            <p className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">
+            <p className="text-xs font-semibold uppercase tracking-wider text-emerald-700/80">
               Total Kuis
             </p>
-            <p className="text-3xl font-extrabold font-mono text-neutral-900 mt-1">
+            <p className="text-3xl font-extrabold font-mono text-emerald-950 mt-1">
               {statsData?.totalQuizzes ?? "-"}
             </p>
-            <p className="text-xs text-muted-foreground mt-1">
+            <p className="text-xs text-emerald-600/70 mt-1 font-medium">
               Kuis penilaian terbit
             </p>
           </div>
         </CardContent>
       </Card>
 
-      {/* Tile 3: Total Pengerjaan (Dark Accent Terminal Card) */}
-      <TerminalTile
-        title="attempts_status.py"
-        className="shadow-sm hover:shadow-md transition-all hover:-translate-y-0.5"
-      >
-        <div className="flex items-center gap-4 py-2">
-          <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-white/10 text-emerald-400">
-            <Database className="h-5 w-5" />
-          </div>
-          <div>
-            <p className="text-xs font-semibold uppercase tracking-wider text-terminal-muted">
-              Total Pengerjaan
-            </p>
-            <div className="flex items-baseline gap-2 mt-1">
-              <span className="text-terminal-muted font-mono text-sm">$</span>
-              <p className="text-3xl font-extrabold font-mono text-emerald-400">
-                {statsData?.totalStudentAttempts ?? "-"}
-              </p>
-            </div>
-            <p className="text-[10px] text-terminal-muted font-mono mt-1">
-              stdout: SUCCESS_OK
-            </p>
-          </div>
-        </div>
-      </TerminalTile>
-
       {/* Tile 4: Analisis Materi (Full Width Table Bento Tile) */}
-      <Card className="md:col-span-3 bg-white border-border rounded-xl shadow-sm">
-        <CardHeader className="border-b border-border/50 py-4 px-6">
+      <Card className="md:col-span-2 bg-white border border-gray-150/60 rounded-2xl shadow-[0_8px_30px_rgb(0,0,0,0.01)]">
+        <CardHeader className="border-b border-gray-100 py-4 px-6">
           <CardTitle className="text-lg font-bold text-neutral-900">
             Analisis Materi
           </CardTitle>
@@ -94,7 +68,7 @@ export function LecturerDashboardView({ data }: LecturerDashboardViewProps) {
           <div className="overflow-x-auto">
             <table className="w-full text-sm">
               <thead>
-                <tr className="border-b border-border bg-neutral-50 text-left font-semibold text-muted-foreground">
+                <tr className="border-b border-gray-100 bg-neutral-50/50 text-left font-semibold text-muted-foreground">
                   <th className="py-3 px-6">Judul Materi</th>
                   <th className="py-3 px-4">Tipe</th>
                   <th className="py-3 px-4 text-center">Kuis</th>
@@ -102,11 +76,11 @@ export function LecturerDashboardView({ data }: LecturerDashboardViewProps) {
                   <th className="py-3 px-6 text-right">Siswa Terlibat</th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-border/60">
+              <tbody className="divide-y divide-gray-100">
                 {data?.materialBreakdown.map((item) => (
                   <tr
                     key={item.materialId}
-                    className="group hover:bg-neutral-50/50 transition-colors"
+                    className="group hover:bg-neutral-50/30 transition-colors"
                   >
                     <td className="py-4 px-6 font-semibold text-neutral-800">
                       {item.title}
@@ -148,13 +122,13 @@ export function LecturerDashboardView({ data }: LecturerDashboardViewProps) {
       </Card>
 
       {/* Daftar Kelas */}
-      <Card className="md:col-span-3 bg-white border-border rounded-xl shadow-sm">
-        <CardHeader className="border-b border-border/50 py-4 px-6 flex flex-row items-center justify-between">
+      <Card className="md:col-span-2 bg-white border border-gray-150/60 rounded-2xl shadow-[0_8px_30px_rgb(0,0,0,0.01)]">
+        <CardHeader className="border-b border-gray-100 py-4 px-6 flex flex-row items-center justify-between">
           <CardTitle className="text-lg font-bold text-neutral-900">
             Daftar Kelas
           </CardTitle>
           <Link href="/groups">
-            <Button variant="outline" size="sm" className="font-mono text-xs border-[#6366F1] text-[#6366F1] hover:bg-[#6366F1]/10">
+            <Button variant="outline" size="sm" className="font-mono text-xs border-[#6366F1] text-[#6366F1] hover:bg-[#6366F1]/10 rounded-xl">
               <Users className="w-3 h-3 mr-2" />
               Kelola Semua Kelas
             </Button>
@@ -164,7 +138,7 @@ export function LecturerDashboardView({ data }: LecturerDashboardViewProps) {
           <div className="overflow-x-auto">
             <table className="w-full text-sm">
               <thead>
-                <tr className="border-b border-border bg-neutral-50 text-left font-semibold text-muted-foreground">
+                <tr className="border-b border-gray-100 bg-neutral-50/50 text-left font-semibold text-muted-foreground">
                   <th className="py-3 px-6">Nama Kelas</th>
                   <th className="py-3 px-6 text-center">Total Siswa</th>
                   <th className="py-3 px-6 text-center">Rata-rata Lulus</th>
@@ -172,11 +146,11 @@ export function LecturerDashboardView({ data }: LecturerDashboardViewProps) {
                   <th className="py-3 px-6 text-right">Aksi</th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-border/60">
+              <tbody className="divide-y divide-gray-100">
                 {data?.groupsOverview?.map((group) => (
                   <tr
                     key={group.groupId}
-                    className="group hover:bg-neutral-50/50 transition-colors"
+                    className="group hover:bg-neutral-50/30 transition-colors"
                   >
                     <td className="py-4 px-6 font-semibold text-neutral-800">
                       {group.groupName}
@@ -203,7 +177,7 @@ export function LecturerDashboardView({ data }: LecturerDashboardViewProps) {
                     </td>
                     <td className="py-4 px-6 text-right">
                       <Link href={`/groups/${group.groupId}`}>
-                        <Button variant="ghost" size="sm" className="font-mono text-xs text-indigo-600 hover:text-indigo-700 hover:bg-indigo-50">
+                        <Button variant="ghost" size="sm" className="font-mono text-xs text-indigo-600 hover:text-indigo-700 hover:bg-indigo-50 rounded-lg">
                           Lihat Detail
                         </Button>
                       </Link>

@@ -5,6 +5,7 @@ export { UserDistribution } from "./components/UserDistribution";
 export { AdminDashboardView } from "./components/AdminDashboardView";
 export { LecturerDashboardView } from "./components/LecturerDashboardView";
 export { LecturerDashboardContainer } from "./components/LecturerDashboardContainer";
+export { LecturerRightPanel } from "./components/LecturerRightPanel";
 export { StudentDashboardView } from "./components/StudentDashboardView";
 export { CodeSnippetWidget } from "./components/CodeSnippetWidget";
 
