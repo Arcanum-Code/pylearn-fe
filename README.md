@@ -18,9 +18,9 @@ An interactive platform to learn Python featuring quizzes, learning materials, r
 ```bash
 git clone https://github.com/Arcanum-Code/pylearn-fe.git
 cd pylearn-fe
-pnpm install
+bun install
 cp .env .env.local
-pnpm dev
+bun run dev
 ```
 
 Open [http://localhost:3000](http://localhost:3000).
@@ -28,7 +28,7 @@ Open [http://localhost:3000](http://localhost:3000).
 ## Requirements
 
 - Node.js 18+
-- pnpm
+- Bun
 
 ## Environment Variables
 

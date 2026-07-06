@@ -3,15 +3,15 @@
 An interactive platform to learn Python featuring quizzes, learning materials, role-based access control, and multi-language support.
 
 ## Commands
-- `pnpm install` - Install dependencies
-- `pnpm dev` - Start development server at localhost:3000
-- `pnpm build` - Build for production
-- `pnpm start` - Start production server
-- `pnpm lint` - Run ESLint
+- `bun install` - Install dependencies
+- `bun run dev` - Start development server at localhost:3000
+- `bun run build` - Build for production
+- `bun run start` - Start production server
+- `bun run lint` - Run ESLint
 
 ## Gotchas
 - **IMPORTANT**: Always forward the `Authorization` and `accept-language` headers in Next.js API routes when proxying requests to the backend.
-- **IMPORTANT**: Use `pnpm` for all package management, never use `npm` or `yarn`.
+- **IMPORTANT**: Use `bun` for all package management, never use `npm`, `yarn`, or `pnpm`.
 
 ## Conventions
 - **Feature Architecture**: Code is strictly modularized in `features/[feature-name]/`. Each feature encapsulates its own components, config, hooks, services, and types. Export public members via `index.ts`.

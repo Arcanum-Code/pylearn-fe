@@ -2,12 +2,10 @@
 ARG NODE_VERSION=22
 
 # ────────────────────────────────────────────
-# Stage 1: base — shared pnpm + node image
+# Stage 1: base — shared bun + node image
 # ────────────────────────────────────────────
 FROM node:${NODE_VERSION}-alpine AS base
-ENV PNPM_HOME="/pnpm"
-ENV PATH="$PNPM_HOME:$PATH"
-RUN corepack enable && corepack prepare pnpm@10.2.1 --activate
+RUN npm install -g bun
 
 # ────────────────────────────────────────────
 # Stage 2: deps — install ALL dependencies
@@ -15,9 +13,9 @@ RUN corepack enable && corepack prepare pnpm@10.2.1 --activate
 FROM base AS deps
 WORKDIR /app
 
-COPY package.json pnpm-lock.yaml pnpm-workspace.yaml ./
-RUN --mount=type=cache,id=pnpm,target=/pnpm/store \
-    pnpm install --frozen-lockfile
+COPY package.json bun.lock ./
+RUN --mount=type=cache,id=bun,target=/root/.bun/install/cache \
+    bun install --frozen-lockfile
 
 # ────────────────────────────────────────────
 # Stage 3: builder — build the Next.js app
@@ -33,7 +31,7 @@ ARG NEXT_PUBLIC_API_URL
 ENV NEXT_PUBLIC_API_URL=$NEXT_PUBLIC_API_URL
 
 ENV NEXT_TELEMETRY_DISABLED=1
-RUN pnpm build
+RUN bun run build
 
 # ────────────────────────────────────────────
 # Stage 4: runner — minimal production image
