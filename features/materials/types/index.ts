@@ -18,6 +18,13 @@ export interface Material {
   publishedAt?: string | null;
   createdAt: string;
   updatedAt: string;
+  status?: "completed" | "in_progress" | "not_started";
+  scrollPercentage?: number | null;
+  attachmentUrl?: string | null;
+  navigation?: {
+    prevMaterialId: string | null;
+    nextMaterialId: string | null;
+  } | null;
 }
 
 export interface MaterialFilters {

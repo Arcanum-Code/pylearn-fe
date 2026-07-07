@@ -6,6 +6,8 @@ import {
   updateMaterial,
   deleteMaterial,
   publishMaterial,
+  updateMaterialProgress,
+  fetchStudentMaterialById,
 } from "../services/materialsApi";
 import {
   MaterialFilters,
@@ -38,6 +40,14 @@ export function useFetchMaterialById(id: string | null) {
   return useQuery<Material>({
     queryKey: materialKeys.detail(id || ""),
     queryFn: () => fetchMaterialById(id!),
+    enabled: !!id,
+  });
+}
+
+export function useFetchStudentMaterialById(id: string | null) {
+  return useQuery<Material>({
+    queryKey: materialKeys.detail(id || ""),
+    queryFn: () => fetchStudentMaterialById(id!),
     enabled: !!id,
   });
 }
@@ -113,6 +123,34 @@ export function usePublishMaterial(groupId?: string) {
     },
     onError: (error: any) => {
       toast.error(error.response?.data?.message || "Failed to publish material");
+    },
+  });
+}
+
+export function useUpdateMaterialProgress(groupId?: string) {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: ({
+      materialId,
+      status,
+      scrollPercentage,
+    }: {
+      materialId: string;
+      status: "in_progress" | "completed";
+      scrollPercentage: number;
+    }) => updateMaterialProgress(materialId, { status, scrollPercentage }),
+    onSuccess: (data, variables) => {
+      // Invalidate material query so progress indicator is updated
+      queryClient.invalidateQueries({
+        queryKey: materialKeys.detail(variables.materialId),
+      });
+      // Invalidate student-group details query so progress percentages are updated
+      if (groupId) {
+        queryClient.invalidateQueries({
+          queryKey: ["groups", "detail", groupId, "student"],
+        });
+      }
     },
   });
 }

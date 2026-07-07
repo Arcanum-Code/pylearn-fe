@@ -43,6 +43,7 @@ export const config = {
     "/login",
     "/register",
     "/dashboard/:path*",
+    "/groups/:path*",
     "/management/:path*",
     "/materials/:path*",
   ],

@@ -45,6 +45,15 @@ export async function fetchMaterialById(id: string): Promise<Material> {
   return data.data;
 }
 
+export async function fetchStudentMaterialById(id: string): Promise<Material> {
+  const { data } = await ApiAxios.get<{
+    data: Material;
+    message: string;
+  }>(`/student/materials/${id}`);
+  return data.data;
+}
+
+
 export async function createMaterial(
   data: CreateMaterialRequest | FormData,
 ): Promise<{ material: Material; message: string }> {
@@ -136,4 +145,25 @@ export async function publishMaterial(
     message: data.message,
   };
 }
+
+export async function updateMaterialProgress(
+  materialId: string,
+  data: { status: "in_progress" | "completed"; scrollPercentage: number },
+): Promise<{ success: boolean; message: string; data: unknown }> {
+  const { data: result } = await ApiAxios.patch<{
+    success: boolean;
+    message: string;
+    data: unknown;
+  }>(`/materials/${materialId}/progress`, {
+    status: data.status,
+    scroll_percentage: data.scrollPercentage,
+  });
+
+  return {
+    success: result.success,
+    message: result.message,
+    data: result.data,
+  };
+}
+
 

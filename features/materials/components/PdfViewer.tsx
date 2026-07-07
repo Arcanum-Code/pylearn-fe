@@ -1,24 +1,87 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect, useRef } from "react";
 import { Document, Page, pdfjs } from "react-pdf";
 import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Loader2, AlertCircle, ZoomIn, ZoomOut } from "lucide-react";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
+import { toast } from "sonner";
 
 // Set worker path
 pdfjs.GlobalWorkerOptions.workerSrc = `//unpkg.com/pdfjs-dist@${pdfjs.version}/build/pdf.worker.min.mjs`;
 
 interface PdfViewerProps {
   url: string;
+  onScroll?: (percentage: number) => void;
+  initialScrollPercentage?: number;
+  currentStatus?: string;
 }
 
-export function PdfViewer({ url }: PdfViewerProps) {
+export function PdfViewer({ 
+  url, 
+  onScroll,
+  initialScrollPercentage = 0,
+  currentStatus = "not_started"
+}: PdfViewerProps) {
   const [numPages, setNumPages] = useState<number | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [scale, setScale] = useState(1.0);
+  const containerRef = useRef<HTMLDivElement | null>(null);
+  const hasJumpedRef = useRef(false);
+
+  // Reset jump tracker when URL changes
+  useEffect(() => {
+    hasJumpedRef.current = false;
+  }, [url]);
+
+  // Jump to last saved progress once PDF pages render
+  useEffect(() => {
+    if (
+      !loading &&
+      numPages !== null &&
+      initialScrollPercentage > 0 &&
+      currentStatus !== "completed" &&
+      !hasJumpedRef.current
+    ) {
+      hasJumpedRef.current = true;
+
+      const timer = setTimeout(() => {
+        if (containerRef.current) {
+          const { scrollHeight, clientHeight } = containerRef.current;
+          const totalScrollableHeight = scrollHeight - clientHeight;
+
+          if (totalScrollableHeight > 0) {
+            const targetScrollTop = (initialScrollPercentage / 100) * totalScrollableHeight;
+            containerRef.current.scrollTo({ top: targetScrollTop });
+            
+            toast(`Melanjutkan membaca dari ${initialScrollPercentage}%`, {
+              icon: "📖",
+              duration: 3000,
+            });
+          }
+        }
+      }, 500); // 500ms delay to let pages finish rendering
+
+      return () => clearTimeout(timer);
+    }
+  }, [loading, numPages, initialScrollPercentage, currentStatus]);
+
+  const handleContainerScroll = (e: React.UIEvent<HTMLDivElement>) => {
+    if (!onScroll) return;
+    const target = e.currentTarget;
+    const { scrollTop, scrollHeight, clientHeight } = target;
+    const totalScrollableHeight = scrollHeight - clientHeight;
+    
+    console.log("PDF Container scroll event:", { scrollTop, scrollHeight, clientHeight, totalScrollableHeight });
+    
+    if (totalScrollableHeight <= 0) return;
+    
+    const percentage = Math.min(100, Math.max(0, Math.round((scrollTop / totalScrollableHeight) * 100)));
+    console.log("PDF Scroll percentage calculated:", percentage);
+    onScroll(percentage);
+  };
 
   function onDocumentLoadSuccess({ numPages }: { numPages: number }) {
     setNumPages(numPages);
@@ -67,7 +130,11 @@ export function PdfViewer({ url }: PdfViewerProps) {
               <ZoomIn className="h-4 w-4" />
             </Button>
           </div>
-          <div className="relative w-full overflow-auto flex flex-col items-center border rounded-md bg-white max-h-[800px] min-h-[500px]">
+          <div 
+            ref={containerRef}
+            className="relative w-full overflow-auto flex flex-col items-center border rounded-md bg-white max-h-[800px] min-h-[500px]"
+            onScroll={handleContainerScroll}
+          >
             {loading && (
               <div className="absolute inset-0 flex items-center justify-center bg-white/80 z-10 min-h-[500px]">
                 <Loader2 className="h-8 w-8 animate-spin text-primary" />

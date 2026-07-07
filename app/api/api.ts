@@ -76,8 +76,8 @@ export const API_ENDPOINTS = {
     PUBLISH: (id: string) => `${API_URL}/materials/${id}/publish`,
     LEVELS: (id: string) => `${API_URL}/materials/${id}/levels`,
     STUDENT_LIST: (groupId: string) => `${API_URL}/groups/${groupId}/materials`,
-    STUDENT_DETAIL: (id: string) => `${API_URL}/materials/${id}`,
-    STUDENT_PROGRESS: (id: string) => `${API_URL}/materials/${id}/progress`,
+    STUDENT_DETAIL: (id: string) => `${API_URL}/student/materials/${id}`,
+    STUDENT_PROGRESS: (id: string) => `${API_URL}/student/materials/${id}/progress`,
   },
   QUIZZES: {
     LIST: (materialId: string) => `${API_URL}/quizzes?materialId=${materialId}`,

@@ -452,7 +452,7 @@ export function StudentDashboardView({ data, isLoading }: StudentDashboardViewPr
                               return (
                                 <Link 
                                   key={material.materialId} 
-                                  href={`/materials/${material.materialId}`}
+                                  href={`/groups/${group.groupId}/materials/${material.materialId}`}
                                   onClick={(e) => e.stopPropagation()}
                                   className={`flex items-start justify-between p-3.5 rounded-xl border hover:border-[#6366F1]/30 transition-all hover:shadow-xs group/item cursor-pointer ${statusClass}`}
                                 >

@@ -114,6 +114,8 @@ export function StudentGroupDetail({ id }: { id: string }) {
   const quizzes = detail.items.filter((item) => item.type === "quiz");
   const allMaterialsCompleted =
     materials.length === 0 || materials.every((m) => m.status === "completed");
+  const completedMaterialsCount = materials.filter((m) => m.status === "completed").length;
+  const totalMaterialsCount = materials.length;
 
   return (
     <TooltipProvider>
@@ -200,7 +202,7 @@ export function StudentGroupDetail({ id }: { id: string }) {
                       );
                       actionButton = (
                         <Button size="sm" variant="outline" className="border-gray-200 text-gray-700 font-semibold hover:bg-gray-50 cursor-pointer" asChild>
-                          <Link href={`/materials/${item.id}`}>Baca Ulang</Link>
+                          <Link href={`/groups/${id}/materials/${item.id}`}>Baca Ulang</Link>
                         </Button>
                       );
                     } else if (item.status === "in_progress") {
@@ -213,7 +215,7 @@ export function StudentGroupDetail({ id }: { id: string }) {
                       );
                       actionButton = (
                         <Button size="sm" className="bg-[#6366F1] hover:bg-[#4F46E5] text-white font-semibold shadow-xs cursor-pointer" asChild>
-                          <Link href={`/materials/${item.id}`}>Lanjutkan</Link>
+                          <Link href={`/groups/${id}/materials/${item.id}`}>Lanjutkan</Link>
                         </Button>
                       );
                     } else {
@@ -224,7 +226,7 @@ export function StudentGroupDetail({ id }: { id: string }) {
                       );
                       actionButton = (
                         <Button size="sm" className="bg-[#6366F1] hover:bg-[#4F46E5] text-white font-semibold shadow-xs cursor-pointer" asChild>
-                          <Link href={`/materials/${item.id}`}>Mulai Belajar</Link>
+                          <Link href={`/groups/${id}/materials/${item.id}`}>Mulai Belajar</Link>
                         </Button>
                       );
                     }
@@ -276,6 +278,36 @@ export function StudentGroupDetail({ id }: { id: string }) {
                   <p className="text-xs text-gray-500 mt-0.5">Uji pemahaman Anda melalui kuis kelas.</p>
                 </div>
               </div>
+
+              {!allMaterialsCompleted && quizzes.length > 0 && (
+                <div className="mb-6 bg-amber-50/70 border border-amber-200/80 rounded-xl p-4 flex flex-col gap-2.5 animate-fadeIn">
+                  <div className="flex items-start gap-3">
+                    <div className="p-2 bg-amber-100 text-amber-700 rounded-lg shrink-0">
+                      <Lock className="w-4.5 h-4.5" />
+                    </div>
+                    <div className="space-y-1">
+                      <h4 className="text-sm font-semibold text-amber-900">Kuis Masih Terkunci</h4>
+                      <p className="text-xs text-amber-700 leading-relaxed">
+                        Selesaikan membaca seluruh materi kelas untuk membuka akses pengerjaan kuis.
+                      </p>
+                    </div>
+                  </div>
+                  
+                  {/* Progress Tracker */}
+                  <div className="space-y-1.5 mt-1">
+                    <div className="flex justify-between items-center text-xs font-medium text-amber-800">
+                      <span>Progres Membaca Materi</span>
+                      <span>{completedMaterialsCount} dari {totalMaterialsCount} Selesai</span>
+                    </div>
+                    <div className="w-full bg-amber-250/30 rounded-full h-2 overflow-hidden">
+                      <div 
+                        className="bg-amber-500 h-full rounded-full transition-all duration-500 ease-out" 
+                        style={{ width: `${(completedMaterialsCount / totalMaterialsCount) * 100}%` }}
+                      />
+                    </div>
+                  </div>
+                </div>
+              )}
 
               <div className="space-y-4">
                 {quizzes.length === 0 ? (
