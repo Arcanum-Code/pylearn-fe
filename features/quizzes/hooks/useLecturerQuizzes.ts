@@ -134,14 +134,18 @@ export const useDeleteLecturerQuestion = (quizId: string) => {
 export const useReplaceLecturerBlanks = (quizId: string) => {
   const queryClient = useQueryClient();
   return useMutation({
-    mutationFn: ({ questionId, data }: { questionId: string; data: ReplaceBlanksFormData }) => 
+    mutationFn: ({ questionId, data }: { questionId: string; data: ReplaceBlanksFormData; silent?: boolean }) => 
       LecturerQuizService.replaceBlanks(questionId, data),
-    onSuccess: (res) => {
+    onSuccess: (res, variables) => {
       queryClient.invalidateQueries({ queryKey: lecturerQuizKeys.detail(quizId) });
-      toast.success(res.message || "Berhasil memperbarui blanko");
+      if (!variables.silent) {
+        toast.success(res.message || "Berhasil memperbarui blanko");
+      }
     },
-    onError: (error: any) => {
-      toast.error(error.response?.data?.message || "Gagal memperbarui blanko");
+    onError: (error: any, variables) => {
+      if (!variables.silent) {
+        toast.error(error.response?.data?.message || "Gagal memperbarui blanko");
+      }
     }
   });
 };

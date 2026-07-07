@@ -76,16 +76,17 @@ export async function updateMaterial(
   } else {
     // Jika data berupa objek JSON biasa, lakukan mapping properti seperti semula
     const cleanPayload: Record<string, unknown> = {};
-    if (data.lecturerId !== undefined)
-      cleanPayload.lecturerId = data.lecturerId;
-    if (data.title !== undefined) cleanPayload.title = data.title;
-    if (data.description !== undefined)
-      cleanPayload.description = data.description;
-    if (data.content !== undefined) cleanPayload.content = data.content;
-    if (data.sourceUrl !== undefined) cleanPayload.sourceUrl = data.sourceUrl;
-    if (data.iconName !== undefined) cleanPayload.iconName = data.iconName;
-    if (data.isPublished !== undefined)
-      cleanPayload.isPublished = data.isPublished;
+    const anyData = data as any;
+    if (anyData.lecturerId !== undefined)
+      cleanPayload.lecturerId = anyData.lecturerId;
+    if (anyData.title !== undefined) cleanPayload.title = anyData.title;
+    if (anyData.description !== undefined)
+      cleanPayload.description = anyData.description;
+    if (anyData.content !== undefined) cleanPayload.content = anyData.content;
+    if (anyData.sourceUrl !== undefined) cleanPayload.sourceUrl = anyData.sourceUrl;
+    if (anyData.iconName !== undefined) cleanPayload.iconName = anyData.iconName;
+    if (anyData.isPublished !== undefined)
+      cleanPayload.isPublished = anyData.isPublished;
 
     payload = cleanPayload;
   }

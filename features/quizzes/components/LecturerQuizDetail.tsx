@@ -199,7 +199,7 @@ export function LecturerQuizDetail({ groupId, quizId }: LecturerQuizDetailProps)
 
                     <div className="bg-white p-3 rounded-lg border border-gray-200 text-xs space-y-2">
                       <span className="font-semibold text-gray-500 block">Kunci Jawaban &amp; Blanko:</span>
-                      <p className="font-mono bg-gray-50 p-2 rounded text-gray-800">
+                      <p className="font-mono bg-gray-50 p-2 rounded text-gray-800 whitespace-pre-wrap">
                         {q.key_answer_text}
                       </p>
                       {q.blanks && q.blanks.length > 0 && (

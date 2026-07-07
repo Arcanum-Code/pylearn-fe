@@ -43,7 +43,7 @@ export function GroupDetail({ id }: { id: string }) {
       variant: "destructive",
     });
 
-    if (isConfirmed) {
+    if (isConfirmed && group) {
       deleteGroupMutation.mutate(group.id, {
         onSuccess: () => {
           router.push("/dashboard");

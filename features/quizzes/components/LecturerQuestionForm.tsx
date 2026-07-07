@@ -187,6 +187,7 @@ export function LecturerQuestionForm({
         await replaceBlanks({
           questionId: targetQuestionId,
           data: { blanks: selectedBlanks },
+          silent: true,
         });
       }
 
@@ -254,17 +255,17 @@ export function LecturerQuestionForm({
                   Pilih Kata untuk Dijadikan Blanko (Fill in the Blank)
                   <HelpCircle className="w-3.5 h-3.5 text-gray-400" />
                 </FormLabel>
-                <div className="flex flex-wrap gap-y-2 font-mono text-sm bg-white p-3 rounded-md border leading-relaxed">
+                <div className="font-mono text-sm bg-white p-3 rounded-md border leading-relaxed whitespace-pre-wrap">
                   {tokens.map((token, index) => {
                     if (token.isSpace) {
-                      return <span key={index} className="whitespace-pre">{token.text}</span>;
+                      return <span key={index}>{token.text}</span>;
                     }
                     const selected = isTokenSelected(token);
                     return (
                       <span
                         key={index}
                         onClick={() => handleTokenClick(token)}
-                        className={`cursor-pointer px-1 rounded transition-colors select-none ${
+                        className={`inline-block cursor-pointer px-1 rounded transition-colors select-none ${
                           selected
                             ? "bg-[#10B981] text-white font-bold"
                             : "hover:bg-gray-150 border border-transparent hover:border-gray-300"

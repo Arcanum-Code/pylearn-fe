@@ -20,6 +20,7 @@ export interface GroupMaterial {
   id: string;
   title: string;
   isPublished: boolean;
+  publishedAt?: string | null;
 }
 
 export interface GroupQuiz {

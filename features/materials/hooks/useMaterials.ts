@@ -10,10 +10,12 @@ import {
 import {
   MaterialFilters,
   MaterialsResponse,
-  CreateMaterialRequest,
-  UpdateMaterialRequest,
   Material,
 } from "../types";
+import {
+  CreateMaterialRequest,
+  UpdateMaterialRequest,
+} from "../schemas/materialSchema";
 import { toast } from "sonner";
 
 export const materialKeys = {
