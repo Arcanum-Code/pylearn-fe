@@ -39,7 +39,11 @@ export const API_ENDPOINTS = {
     LIST: `${API_URL}/dashboard`,
     DOSEN: () => `${API_URL}/dashboard/dosen`,
     MAHASISWA: () => `${API_URL}/dashboard/mahasiswa`,
-    MAHASISWA_CALENDAR_EVENTS: (year: number, month: number, groupId?: string) =>
+    MAHASISWA_CALENDAR_EVENTS: (
+      year: number,
+      month: number,
+      groupId?: string,
+    ) =>
       `${API_URL}/dashboard/mahasiswa/calendar/events?year=${year}&month=${month}${groupId ? `&groupId=${groupId}` : ""}`,
     MAHASISWA_RECENT_ACTIVITY: (limit: number, groupId?: string) =>
       `${API_URL}/dashboard/mahasiswa/recent-activity?limit=${limit}${groupId ? `&groupId=${groupId}` : ""}`,
@@ -61,7 +65,7 @@ export const API_ENDPOINTS = {
     DETAIL: (id: string) => `${API_URL}/groups/${id}`,
     UPDATE: (id: string) => `${API_URL}/groups/${id}`,
     DELETE: (id: string) => `${API_URL}/groups/${id}`,
-    STUDENT_DETAIL: (id: string) => `${API_URL}/groups/mahasiswa/${id}`,
+    STUDENT_DETAIL: (id: string) => `${API_URL}/student/groups/mahasiswa/${id}`,
   },
   MATERIALS: {
     LIST: `${API_URL}/materials`,
@@ -107,16 +111,23 @@ export const API_ENDPOINTS = {
     GET_ALL_ATTEMPT_RESULTS: () => `${API_URL}/quizzes/attempts/results`,
   },
   LECTURER_QUIZZES: {
-    LIST_BY_GROUP: (groupId: string) => `${API_URL}/lecturer/groups/${groupId}/quizzes`,
+    LIST_BY_GROUP: (groupId: string) =>
+      `${API_URL}/lecturer/groups/${groupId}/quizzes`,
     DETAIL: (quizId: string) => `${API_URL}/lecturer/quizzes/${quizId}`,
-    CREATE: (groupId: string) => `${API_URL}/lecturer/groups/${groupId}/quizzes`,
+    CREATE: (groupId: string) =>
+      `${API_URL}/lecturer/groups/${groupId}/quizzes`,
     UPDATE: (quizId: string) => `${API_URL}/lecturer/quizzes/${quizId}`,
     DELETE: (quizId: string) => `${API_URL}/lecturer/quizzes/${quizId}`,
-    PUBLISH: (quizId: string) => `${API_URL}/lecturer/quizzes/${quizId}/publish`,
-    CREATE_QUESTION: (quizId: string) => `${API_URL}/lecturer/quizzes/${quizId}/questions`,
-    UPDATE_QUESTION: (questionId: string) => `${API_URL}/lecturer/questions/${questionId}`,
-    DELETE_QUESTION: (questionId: string) => `${API_URL}/lecturer/questions/${questionId}`,
-    REPLACE_BLANKS: (questionId: string) => `${API_URL}/lecturer/questions/${questionId}/blanks`,
+    PUBLISH: (quizId: string) =>
+      `${API_URL}/lecturer/quizzes/${quizId}/publish`,
+    CREATE_QUESTION: (quizId: string) =>
+      `${API_URL}/lecturer/quizzes/${quizId}/questions`,
+    UPDATE_QUESTION: (questionId: string) =>
+      `${API_URL}/lecturer/questions/${questionId}`,
+    DELETE_QUESTION: (questionId: string) =>
+      `${API_URL}/lecturer/questions/${questionId}`,
+    REPLACE_BLANKS: (questionId: string) =>
+      `${API_URL}/lecturer/questions/${questionId}/blanks`,
   },
   STORAGE: (path: string) => `/api${path.startsWith("/") ? "" : "/"}${path}`,
 };
