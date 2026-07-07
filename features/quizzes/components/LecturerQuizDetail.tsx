@@ -206,25 +206,37 @@ export function LecturerQuizDetail({ groupId, quizId }: LecturerQuizDetailProps)
                         <p className="text-sm font-medium text-[#1A1C1E]">{q.question_text}</p>
                       </div>
                       <div className="flex gap-1">
-                        <Button
-                          variant="ghost"
-                          size="icon"
-                          className="h-8 w-8 text-[#6366F1]"
-                          onClick={() =>
-                            setQuestionModal({
-                              isOpen: true,
-                              mode: "edit",
-                              questionId: q.question_id,
-                              initialData: {
-                                question_text: q.question_text,
-                                key_answer_text: q.key_answer_text,
-                                sequence_order: q.sequence_order,
-                              },
-                            })
-                          }
-                        >
-                          <Edit3 className="w-4 h-4" />
-                        </Button>
+                        <Tooltip>
+                          <TooltipTrigger asChild>
+                            <span tabIndex={0}>
+                              <Button
+                                variant="ghost"
+                                size="icon"
+                                disabled={quiz.status === "published"}
+                                className="h-8 w-8 text-[#6366F1]"
+                                onClick={() =>
+                                  setQuestionModal({
+                                    isOpen: true,
+                                    mode: "edit",
+                                    questionId: q.question_id,
+                                    initialData: {
+                                      question_text: q.question_text,
+                                      key_answer_text: q.key_answer_text,
+                                      sequence_order: q.sequence_order,
+                                    },
+                                  })
+                                }
+                              >
+                                <Edit3 className="w-4 h-4" />
+                              </Button>
+                            </span>
+                          </TooltipTrigger>
+                          {quiz.status === "published" && (
+                            <TooltipContent>
+                              Kuis yang sudah dipublikasikan tidak dapat diedit.
+                            </TooltipContent>
+                          )}
+                        </Tooltip>
                       </div>
                     </div>
 

@@ -54,4 +54,5 @@ export interface TimelineItem {
   deadline?: string | null;
   bestScore?: number | null;
   order: number;
+  levelNumber?: number;
 }

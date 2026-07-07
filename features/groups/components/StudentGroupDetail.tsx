@@ -312,6 +312,11 @@ export function StudentGroupDetail({ id }: { id: string }) {
                     let statusBadge = null;
                     let actionButton = null;
                     const isLocked = !allMaterialsCompleted;
+                    const sortedQuizzes = [...quizzes].sort((a, b) => a.order - b.order);
+                    const currentIndex = sortedQuizzes.findIndex(q => q.id === item.id);
+                    const previousIncomplete = sortedQuizzes.slice(0, currentIndex).find(q => q.status !== "completed");
+                    const isLockedByLevel = !!previousIncomplete && !isLocked;
+                    const lockedByQuiz = isLockedByLevel ? previousIncomplete! : null;
 
                     if (item.status === "completed") {
                       cardClass = "bg-white border-green-100 hover:border-green-200";
@@ -335,7 +340,7 @@ export function StudentGroupDetail({ id }: { id: string }) {
                         </Button>
                       );
                     } else {
-                      if (isLocked) {
+                      if (isLocked || isLockedByLevel) {
                         cardClass = "bg-gray-50 border-gray-200 opacity-75";
                         iconBgClass = "bg-gray-100 text-gray-400";
                         statusBadge = (
@@ -358,7 +363,9 @@ export function StudentGroupDetail({ id }: { id: string }) {
                               </span>
                             </TooltipTrigger>
                             <TooltipContent>
-                              Selesaikan semua materi terlebih dahulu
+                              {isLockedByLevel
+                                ? `Selesaikan kuis "${lockedByQuiz?.title}" terlebih dahulu`
+                                : "Selesaikan semua materi terlebih dahulu"}
                             </TooltipContent>
                           </Tooltip>
                         );
@@ -406,7 +413,7 @@ export function StudentGroupDetail({ id }: { id: string }) {
                             <div className={`p-2.5 rounded-xl flex-shrink-0 ${iconBgClass}`}>
                               {item.status === "completed" ? (
                                 <Award className="h-5 w-5" />
-                              ) : isLocked ? (
+                              ) : (isLocked || isLockedByLevel) ? (
                                 <Lock className="h-5 w-5" />
                               ) : (
                                 <HelpCircle className="h-5 w-5" />
