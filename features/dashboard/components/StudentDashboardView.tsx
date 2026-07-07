@@ -17,6 +17,7 @@ import {
   ArrowUpRight,
   ChevronLeft,
   ChevronRight,
+  ChevronDown,
   CalendarDays,
   FileText,
   HelpCircle,
@@ -244,10 +245,27 @@ function StudentRightPanel() {
 export function StudentDashboardView({ data, isLoading }: StudentDashboardViewProps) {
   const router = useRouter();
   const [mounted, setMounted] = useState(false);
+  const [expandedGroups, setExpandedGroups] = useState<Record<string, boolean>>({});
 
   useEffect(() => {
     setMounted(true);
   }, []);
+
+  useEffect(() => {
+    if (data?.enrolledGroups && data.enrolledGroups.length > 0 && Object.keys(expandedGroups).length === 0) {
+      // Expand the first group by default
+      const initial: Record<string, boolean> = {};
+      initial[data.enrolledGroups[0].groupId] = true;
+      setExpandedGroups(initial);
+    }
+  }, [data, expandedGroups]);
+
+  const toggleGroup = (groupId: string) => {
+    setExpandedGroups((prev) => ({
+      ...prev,
+      [groupId]: !prev[groupId],
+    }));
+  };
 
   const statsConfig = [
     {
@@ -353,80 +371,107 @@ export function StudentDashboardView({ data, isLoading }: StudentDashboardViewPr
                   const percentage = group.materialsTotal > 0 
                     ? Math.round((group.materialsCompleted / group.materialsTotal) * 100)
                     : 0;
+                  const isExpanded = !!expandedGroups[group.groupId];
+
                   return (
                     <Card 
                       key={group.groupId} 
-                      onClick={() => router.push(`/groups/${group.groupId}`)}
-                      className="overflow-hidden border border-gray-150/85 shadow-xs hover:shadow-md hover:-translate-y-0.5 cursor-pointer transition-all duration-200 group bg-white"
+                      onClick={() => toggleGroup(group.groupId)}
+                      className="overflow-hidden border border-gray-150/85 shadow-xs hover:shadow-sm cursor-pointer transition-all duration-200 bg-white"
                     >
-                      <CardHeader className="bg-gray-50/40 pb-4 border-b border-gray-150/60">
-                        <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
-                          <div className="flex items-center gap-3">
-                            <div className="p-2 rounded-lg bg-[#6366F1]/10 text-[#6366F1] group-hover:bg-[#6366F1] group-hover:text-white transition-all duration-300">
+                      <CardHeader className={`bg-gray-50/40 pb-4 transition-all duration-300 ${isExpanded ? "border-b border-gray-150/60" : ""}`}>
+                        <div className="flex items-center justify-between gap-4">
+                          <div className="flex items-center gap-3 min-w-0">
+                            <div className="p-2 rounded-lg bg-[#6366F1]/10 text-[#6366F1] transition-all duration-300">
                               <GraduationCap className="h-5 w-5" />
                             </div>
-                            <div>
-                              <CardTitle className="text-base font-bold group-hover:text-[#6366F1] transition-colors">{group.groupName}</CardTitle>
+                            <div className="min-w-0">
+                              <CardTitle className="text-sm md:text-base font-bold truncate">{group.groupName}</CardTitle>
                               <p className="text-xs text-muted-foreground mt-0.5">
                                 {group.materialsCompleted} dari {group.materialsTotal} materi selesai
                               </p>
                             </div>
                           </div>
-                          <div className="flex items-center gap-3 w-full md:w-auto">
-                            <span className="text-xs font-semibold text-[#6366F1]">{percentage}% Selesai</span>
-                            <div className="w-full md:w-32 bg-gray-100 dark:bg-gray-700 rounded-full h-2">
-                              <div 
-                                className="bg-gradient-to-r from-[#6366F1] to-indigo-500 h-2 rounded-full transition-all duration-1000 ease-out" 
-                                style={{ width: mounted ? `${percentage}%` : "0%" }}
-                              ></div>
+
+                          <div className="flex items-center gap-4 flex-shrink-0">
+                            <div className="hidden md:flex items-center gap-3">
+                              <span className="text-xs font-semibold text-[#6366F1]">{percentage}% Selesai</span>
+                              <div className="w-24 bg-gray-100 dark:bg-gray-700 rounded-full h-1.5">
+                                <div 
+                                  className="bg-gradient-to-r from-[#6366F1] to-indigo-500 h-1.5 rounded-full transition-all duration-1000 ease-out" 
+                                  style={{ width: mounted ? `${percentage}%` : "0%" }}
+                                ></div>
+                              </div>
+                            </div>
+
+                            <div className="flex items-center gap-1">
+                              <Button 
+                                variant="ghost" 
+                                size="sm" 
+                                onClick={(e) => {
+                                  e.stopPropagation();
+                                  router.push(`/groups/${group.groupId}`);
+                                }}
+                                className="text-xs text-[#6366F1] hover:text-[#4F46E5] hover:bg-[#6366F1]/10 font-semibold h-8 py-0 px-2.5 rounded-lg flex items-center gap-1"
+                              >
+                                Detail Kelas
+                                <ArrowRight className="h-3 w-3" />
+                              </Button>
+
+                              <div className="p-1 rounded-lg text-gray-500 hover:bg-gray-100 transition-colors">
+                                <ChevronDown className={`h-4 w-4 transition-transform duration-200 ${isExpanded ? "rotate-180" : ""}`} />
+                              </div>
                             </div>
                           </div>
                         </div>
                       </CardHeader>
-                      <CardContent className="pt-6">
-                        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                          {group.materials.map((material) => {
-                            let statusBadge = null;
-                            let statusIcon = null;
-                            let statusClass = "";
+                      
+                      {isExpanded && (
+                        <CardContent className="pt-6 bg-white transition-all duration-300">
+                          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                            {group.materials.map((material) => {
+                              let statusBadge = null;
+                              let statusIcon = null;
+                              let statusClass = "";
 
-                            if (material.status === "completed") {
-                              statusBadge = <Badge className="bg-green-100 hover:bg-green-100 text-green-800 border-green-200 text-[10px]">Selesai</Badge>;
-                              statusIcon = <CheckCircle2 className="h-4 w-4 text-green-500 flex-shrink-0" />;
-                              statusClass = "border-green-100 bg-green-50/10";
-                            } else if (material.status === "in_progress") {
-                              const scroll = material.scrollPercentage !== null ? `${material.scrollPercentage}%` : "0%";
-                              statusBadge = <Badge className="bg-orange-100 hover:bg-orange-100 text-orange-800 border-orange-250 text-[10px]">Dibaca ({scroll})</Badge>;
-                              statusIcon = <BookOpen className="h-4 w-4 text-orange-500 flex-shrink-0" />;
-                              statusClass = "border-orange-100 bg-orange-50/10";
-                            } else {
-                              statusBadge = <Badge variant="outline" className="text-gray-400 border-gray-200 text-[10px] bg-white">Belum Mulai</Badge>;
-                              statusIcon = <BookOpen className="h-4 w-4 text-gray-300 flex-shrink-0" />;
-                              statusClass = "border-gray-100 bg-gray-50/5";
-                            }
+                              if (material.status === "completed") {
+                                statusBadge = <Badge className="bg-green-100 hover:bg-green-100 text-green-800 border-green-200 text-[10px]">Selesai</Badge>;
+                                statusIcon = <CheckCircle2 className="h-4 w-4 text-green-500 flex-shrink-0" />;
+                                statusClass = "border-green-100 bg-green-50/10";
+                              } else if (material.status === "in_progress") {
+                                const scroll = material.scrollPercentage !== null ? `${material.scrollPercentage}%` : "0%";
+                                statusBadge = <Badge className="bg-orange-100 hover:bg-orange-100 text-orange-800 border-orange-250 text-[10px]">Dibaca ({scroll})</Badge>;
+                                statusIcon = <BookOpen className="h-4 w-4 text-orange-500 flex-shrink-0" />;
+                                statusClass = "border-orange-100 bg-orange-50/10";
+                              } else {
+                                statusBadge = <Badge variant="outline" className="text-gray-400 border-gray-200 text-[10px] bg-white">Belum Mulai</Badge>;
+                                statusIcon = <BookOpen className="h-4 w-4 text-gray-300 flex-shrink-0" />;
+                                statusClass = "border-gray-100 bg-gray-50/5";
+                              }
 
-                            return (
-                              <Link 
-                                key={material.materialId} 
-                                href={`/materials/${material.materialId}`}
-                                onClick={(e) => e.stopPropagation()}
-                                className={`flex items-start justify-between p-3 rounded-xl border hover:border-[#6366F1]/30 transition-all hover:shadow-xs group/item cursor-pointer ${statusClass}`}
-                              >
-                                <div className="flex items-start gap-3 min-w-0 mr-2">
-                                  {statusIcon}
-                                  <div className="min-w-0">
-                                    <p className="font-semibold text-xs group-hover/item:text-[#6366F1] transition-colors truncate">{material.title}</p>
-                                    <div className="mt-1 flex items-center gap-1.5">
-                                      {statusBadge}
+                              return (
+                                <Link 
+                                  key={material.materialId} 
+                                  href={`/materials/${material.materialId}`}
+                                  onClick={(e) => e.stopPropagation()}
+                                  className={`flex items-start justify-between p-3.5 rounded-xl border hover:border-[#6366F1]/30 transition-all hover:shadow-xs group/item cursor-pointer ${statusClass}`}
+                                >
+                                  <div className="flex items-start gap-3 min-w-0 mr-2">
+                                    {statusIcon}
+                                    <div className="min-w-0">
+                                      <p className="font-semibold text-xs group-hover/item:text-[#6366F1] transition-colors truncate">{material.title}</p>
+                                      <div className="mt-1 flex items-center gap-1.5">
+                                        {statusBadge}
+                                      </div>
                                     </div>
                                   </div>
-                                </div>
-                                <ArrowUpRight className="h-3 w-3 text-gray-400 opacity-0 group-hover/item:opacity-100 transition-opacity flex-shrink-0 mt-0.5" />
-                              </Link>
-                            );
-                          })}
-                        </div>
-                      </CardContent>
+                                  <ArrowUpRight className="h-3 w-3 text-gray-400 opacity-0 group-hover/item:opacity-100 transition-opacity flex-shrink-0 mt-0.5" />
+                                </Link>
+                              );
+                            })}
+                          </div>
+                        </CardContent>
+                      )}
                     </Card>
                   );
                 })}
@@ -507,7 +552,7 @@ export function StudentDashboardView({ data, isLoading }: StudentDashboardViewPr
                 <div className="space-y-4">
                   {data?.recentResults && data.recentResults.length > 0 ? (
                     data.recentResults.map((item) => (
-                      <div key={item.attemptId} className="flex items-center justify-between p-3.5 rounded-xl border border-gray-100">
+                      <div key={item.attemptId} className="flex items-center justify-between p-3.5 rounded-xl border border-gray-150">
                         <div className="flex-1 min-w-0">
                           <p className="font-semibold text-xs truncate">{item.quizTitle}</p>
                           <p className="text-[10px] text-muted-foreground mt-0.5">
