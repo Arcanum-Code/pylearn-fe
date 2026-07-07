@@ -39,6 +39,10 @@ export const API_ENDPOINTS = {
     LIST: `${API_URL}/dashboard`,
     DOSEN: () => `${API_URL}/dashboard/dosen`,
     MAHASISWA: () => `${API_URL}/dashboard/mahasiswa`,
+    MAHASISWA_CALENDAR_EVENTS: (year: number, month: number, groupId?: string) =>
+      `${API_URL}/dashboard/mahasiswa/calendar/events?year=${year}&month=${month}${groupId ? `&groupId=${groupId}` : ""}`,
+    MAHASISWA_RECENT_ACTIVITY: (limit: number, groupId?: string) =>
+      `${API_URL}/dashboard/mahasiswa/recent-activity?limit=${limit}${groupId ? `&groupId=${groupId}` : ""}`,
   },
   LECTURER: {
     GROUPS: `${API_URL}/groups/`,

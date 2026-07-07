@@ -2,19 +2,30 @@
 
 import { useQuery } from "@tanstack/react-query";
 import { useAuth } from "@features/auth/context/AuthProvider";
-import { fetchDashboard } from "../services/dashboardApi";
-import { DashboardData } from "../types";
-import {
+import { 
+  fetchDashboard,
   getLecturerDashboard,
   getStudentDashboard,
+  getStudentCalendarEvents,
+  getStudentRecentActivity,
 } from "../services/dashboardApi";
-import { LecturerDashboardData, StudentDashboardData } from "../types";
+import { 
+  DashboardData, 
+  LecturerDashboardData, 
+  StudentDashboardData,
+  CalendarEvent,
+  RecentActivity,
+} from "../types";
 
 export const dashboardKeys = {
   all: ["dashboard"] as const,
   detail: () => [...dashboardKeys.all, "detail"] as const,
   lecturer: () => [...dashboardKeys.all, "lecturer"] as const,
   student: () => [...dashboardKeys.all, "student"] as const,
+  studentCalendar: (year: number, month: number, groupId?: string) =>
+    [...dashboardKeys.student(), "calendar", year, month, groupId || ""] as const,
+  studentRecentActivity: (limit: number, groupId?: string) =>
+    [...dashboardKeys.student(), "recent-activity", limit, groupId || ""] as const,
 };
 
 export function useFetchDashboard() {
@@ -46,6 +57,35 @@ export function useFetchStudentDashboard() {
   return useQuery<StudentDashboardData>({
     queryKey: dashboardKeys.student(),
     queryFn: getStudentDashboard,
+    enabled: !!user && !isAuthLoading && roleName === "mahasiswa",
+  });
+}
+
+export function useFetchStudentCalendarEvents(
+  year: number,
+  month: number,
+  groupId?: string,
+) {
+  const { user, isLoading: isAuthLoading } = useAuth();
+  const roleName = user?.roleName?.toLowerCase();
+
+  return useQuery<CalendarEvent[]>({
+    queryKey: dashboardKeys.studentCalendar(year, month, groupId),
+    queryFn: () => getStudentCalendarEvents(year, month, groupId),
+    enabled: !!user && !isAuthLoading && roleName === "mahasiswa",
+  });
+}
+
+export function useFetchStudentRecentActivity(
+  limit: number,
+  groupId?: string,
+) {
+  const { user, isLoading: isAuthLoading } = useAuth();
+  const roleName = user?.roleName?.toLowerCase();
+
+  return useQuery<RecentActivity[]>({
+    queryKey: dashboardKeys.studentRecentActivity(limit, groupId),
+    queryFn: () => getStudentRecentActivity(limit, groupId),
     enabled: !!user && !isAuthLoading && roleName === "mahasiswa",
   });
 }
