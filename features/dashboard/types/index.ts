@@ -64,6 +64,7 @@ export interface StudentDashboardData {
     quizId: string;
     quizTitle: string;
     submittedAt: string;
+    groupId?: string;
   }[];
   enrolledGroups?: {
     groupId: string;

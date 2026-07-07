@@ -560,7 +560,7 @@ export function StudentDashboardView({ data, isLoading }: StudentDashboardViewPr
                           </p>
                         </div>
                         <Button variant="outline" size="sm" asChild className="ml-4 border-gray-250 hover:bg-gray-50 text-xs">
-                          <Link href={`/quizzes/attempts/${item.attemptId}`}>
+                          <Link href={item.groupId ? `/groups/${item.groupId}/quizzes/attempts/${item.attemptId}` : `/quizzes/attempts/${item.attemptId}`}>
                             Lihat Hasil
                           </Link>
                         </Button>

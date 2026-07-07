@@ -184,15 +184,12 @@ export function QuizAttemptClient({ groupId, attemptId }: QuizAttemptClientProps
     <TooltipProvider>
       <div className="p-8 max-w-7xl mx-auto space-y-6 bg-[#F7F8FA] min-h-screen font-sans text-[#1A1C1E]">
         {/* Back Link */}
-        <Button
-          variant="ghost"
-          size="sm"
-          className="w-fit pl-0"
+        <button
           onClick={() => router.push(groupId ? `/groups/${groupId}` : "/materials")}
+          className="inline-flex items-center text-[#6366F1] font-mono text-sm hover:underline mb-2 transition-all"
         >
-          <ArrowLeft className="h-4 w-4 mr-2" />
-          {groupId ? "Kembali ke Detail Kelas" : "Kembali ke Hasil Kuis"}
-        </Button>
+          <ArrowLeft className="w-4 h-4 mr-2" /> {groupId ? "Kembali ke Detail Kelas" : "Kembali ke Hasil Kuis"}
+        </button>
 
         {/* Dark Hero Header */}
         <div className="bg-[#1E1E2E] text-white p-8 rounded-2xl shadow-lg border border-gray-800 relative overflow-hidden">
@@ -285,9 +282,6 @@ export function QuizAttemptClient({ groupId, attemptId }: QuizAttemptClientProps
                                     key={i}
                                     className="inline-flex items-center mx-1 align-middle"
                                   >
-                                    <span className="text-xs font-sans font-bold text-muted-foreground mr-1 px-1.5 py-0.5 rounded bg-muted">
-                                      #{order}
-                                    </span>
                                     <input
                                       type="text"
                                       disabled={isSubmitted}
@@ -309,7 +303,7 @@ export function QuizAttemptClient({ groupId, attemptId }: QuizAttemptClientProps
                                           e.target.value,
                                         )
                                       }
-                                      placeholder="jawaban..."
+                                      placeholder={`#${order}`}
                                       style={{ width: getInputWidth(blank.correctAnswerLength) }}
                                       className="h-8 px-2 py-1 text-sm font-sans font-semibold rounded border border-primary/40 bg-background text-foreground shadow-sm focus:border-primary focus:ring-2 focus:ring-primary/20 focus:outline-none transition-all text-center placeholder:font-normal placeholder:text-muted-foreground"
                                     />
@@ -333,9 +327,6 @@ export function QuizAttemptClient({ groupId, attemptId }: QuizAttemptClientProps
                                   key={blank.keywordId}
                                   className="flex items-center gap-2 bg-background p-2 rounded-md border border-border/80 shadow-2xs"
                                 >
-                                  <span className="flex-shrink-0 w-6 h-6 rounded bg-primary/10 text-primary flex items-center justify-center text-xs font-bold font-mono">
-                                    #{blank.blankOrder}
-                                  </span>
                                   <input
                                     type="text"
                                     disabled={isSubmitted}
@@ -357,7 +348,7 @@ export function QuizAttemptClient({ groupId, attemptId }: QuizAttemptClientProps
                                         e.target.value,
                                       )
                                     }
-                                    placeholder={`Jawaban untuk #${blank.blankOrder}`}
+                                    placeholder={`#${blank.blankOrder}`}
                                     style={{ minWidth: getInputWidth(blank.correctAnswerLength) }}
                                     className="flex-1 h-8 px-2 text-sm rounded border-0 bg-transparent focus:outline-none focus:ring-0 font-medium text-foreground"
                                   />
