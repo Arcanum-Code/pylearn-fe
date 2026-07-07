@@ -22,7 +22,7 @@ import {
 } from "lucide-react";
 import Link from "next/link";
 import { toast } from "sonner";
-import { getQuizAttempts, createQuizAttempt, getQuizLevels } from "@/features/quizzes/services/quizApi";
+import { getStudentQuizAttempts, createStudentQuizAttempt } from "@/features/quizzes";
 
 export function StudentGroupDetail({ id }: { id: string }) {
   const router = useRouter();
@@ -33,34 +33,25 @@ export function StudentGroupDetail({ id }: { id: string }) {
     setActionLoadingId(item.id);
     try {
       // Fetch attempts for this quiz
-      const attempts = await getQuizAttempts({ quizId: item.id });
+      const attempts = await getStudentQuizAttempts({ quizId: item.id });
       
       if (item.status === "completed") {
         const completedAttempt = attempts.find(a => !!a.submittedAt);
         if (completedAttempt) {
-          router.push(`/quizzes/attempts/${completedAttempt.id}`);
+          router.push(`/groups/${id}/quizzes/attempts/${completedAttempt.id}`);
           return;
         }
       } else if (item.status === "in_progress") {
         const activeAttempt = attempts.find(a => !a.submittedAt);
         if (activeAttempt) {
-          router.push(`/quizzes/attempts/${activeAttempt.id}`);
+          router.push(`/groups/${id}/quizzes/attempts/${activeAttempt.id}`);
           return;
         }
       }
       
-      // If not started or no attempt found, start a new one
-      const levels = await getQuizLevels(item.id);
-      if (levels && levels.length > 0) {
-        // Sort levels by levelOrder and take the first one
-        const sortedLevels = [...levels].sort((a, b) => a.levelOrder - b.levelOrder);
-        const firstLevel = sortedLevels[0];
-        
-        const { attempt } = await createQuizAttempt({ quizLevelId: firstLevel.id });
-        router.push(`/quizzes/attempts/${attempt.id}`);
-      } else {
-        toast.error("Kuis ini belum memiliki level pertanyaan.");
-      }
+      // If not started or no attempt found, start a new one directly using quizId
+      const { attempt } = await createStudentQuizAttempt({ quizId: item.id });
+      router.push(`/groups/${id}/quizzes/attempts/${attempt.id}`);
     } catch (error: any) {
       console.error("Quiz action error:", error);
       toast.error(error?.response?.data?.message || "Gagal memproses pengerjaan kuis.");

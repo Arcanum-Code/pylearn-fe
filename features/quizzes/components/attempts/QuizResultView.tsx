@@ -3,11 +3,11 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { CheckCircle2, XCircle, Trophy } from "lucide-react";
-import { QuizAttemptResultData } from "../../types";
+import { QuizAttemptResultData, StudentQuizAttemptResultData } from "../../types";
 import { Skeleton } from "@/components/ui/skeleton";
 
 interface QuizResultViewProps {
-  results: QuizAttemptResultData | undefined;
+  results: QuizAttemptResultData | StudentQuizAttemptResultData | undefined;
   isLoading: boolean;
 }
 

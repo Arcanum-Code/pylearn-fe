@@ -95,6 +95,14 @@ export interface MyQuizStatusData {
   attemptHistory: MyQuizAttemptHistory[];
 }
 
+export interface QuizAttemptResultBlank {
+  keywordId: string;
+  blankOrder: number;
+  userAnswer: string;
+  correctAnswer: string;
+  isCorrect: boolean;
+}
+
 export interface QuizAttemptResultDetail {
   questionId: string;
   questionText: string;
@@ -102,6 +110,7 @@ export interface QuizAttemptResultDetail {
   userAnswer: string;
   correctAnswer: string;
   isCorrect: boolean;
+  blanks?: QuizAttemptResultBlank[];
 }
 
 export interface QuizAttemptResultData {
@@ -148,4 +157,5 @@ export type ApiAllQuizResultsResponse = ApiResponse<
 >;
 
 export * from "./lecturer-quiz";
+export * from "./student-quiz";
 

@@ -6,3 +6,6 @@ export type { CreateLecturerQuizFormData } from "./schemas/lecturerQuizSchema";
 export { CreateLecturerQuizDialog } from "./components/CreateLecturerQuizDialog";
 export { LecturerQuizDetail } from "./components/LecturerQuizDetail";
 export { LecturerQuestionForm } from "./components/LecturerQuestionForm";
+
+export * from "./hooks/useStudentQuizzes";
+export * from "./services/studentQuizApi";
