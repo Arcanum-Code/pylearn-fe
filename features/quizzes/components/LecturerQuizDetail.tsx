@@ -4,6 +4,7 @@ import { useLecturerQuizDetail, usePublishLecturerQuiz, useDeleteLecturerQuiz } 
 import { Spinner } from "@/components/ui/spinner";
 import { Button } from "@/components/ui/button";
 import { ArrowLeft, BookOpen, Trash2, CheckCircle2, AlertCircle, Plus, Edit3 } from "lucide-react";
+import { Tooltip, TooltipContent, TooltipTrigger, TooltipProvider } from "@/components/ui/tooltip";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
@@ -67,7 +68,22 @@ export function LecturerQuizDetail({ groupId, quizId }: LecturerQuizDetailProps)
     }
   };
 
+  const handlePublish = async () => {
+    const isConfirmed = await confirm({
+      title: "Publikasikan Kuis?",
+      description: "Kuis yang sudah dipublikasikan tidak dapat diedit lagi. Apakah Anda yakin ingin mempublikasikan kuis ini?",
+      confirmText: "Publikasikan",
+      cancelText: "Batal",
+      variant: "warning",
+    });
+
+    if (isConfirmed) {
+      publishQuiz();
+    }
+  };
+
   return (
+    <TooltipProvider>
     <div className="p-8 max-w-7xl mx-auto space-y-6 bg-[#F7F8FA] min-h-screen font-sans text-[#1A1C1E]">
       <Link
         href={`/groups/${groupId}`}
@@ -105,21 +121,24 @@ export function LecturerQuizDetail({ groupId, quizId }: LecturerQuizDetailProps)
 
         <div className="flex gap-3">
           {quiz.status === "draft" && (
-            <div
-              title={
-                quiz.can_publish === false
-                  ? "Grup ini belum memiliki materi yang dipublikasikan, sehingga kuis ini tidak dapat dikunci."
-                  : ""
-              }
-            >
-              <Button
-                onClick={() => publishQuiz()}
-                disabled={isPublishing || quiz.can_publish === false}
-                className="bg-[#10B981] hover:bg-[#10B981]/90 text-white font-semibold"
-              >
-                {isPublishing ? "Publishing..." : "Publish Kuis"}
-              </Button>
-            </div>
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <span tabIndex={0}>
+                  <Button
+                    onClick={handlePublish}
+                    disabled={isPublishing || quiz.can_publish === false}
+                    className="bg-[#10B981] hover:bg-[#10B981]/90 text-white font-semibold"
+                  >
+                    {isPublishing ? "Publishing..." : "Publish Kuis"}
+                  </Button>
+                </span>
+              </TooltipTrigger>
+              {quiz.can_publish === false && (
+                <TooltipContent>
+                  Grup ini belum memiliki materi yang dipublikasikan, sehingga kuis ini tidak dapat dikunci.
+                </TooltipContent>
+              )}
+            </Tooltip>
           )}
           <Button
             variant="destructive"
@@ -141,23 +160,35 @@ export function LecturerQuizDetail({ groupId, quizId }: LecturerQuizDetailProps)
                 <CheckCircle2 className="w-5 h-5 text-[#10B981]" />
                 Daftar Pertanyaan ({quiz.questions?.length || 0})
               </h2>
-              <Button
-                onClick={() =>
-                  setQuestionModal({
-                    isOpen: true,
-                    mode: "create",
-                    initialData: {
-                      question_text: "",
-                      key_answer_text: "",
-                      sequence_order: (quiz.questions?.length || 0) + 1,
-                    },
-                  })
-                }
-                size="sm"
-                className="bg-[#6366F1] hover:bg-[#6366F1]/90"
-              >
-                <Plus className="w-4 h-4 mr-2" /> Tambah Soal
-              </Button>
+              <Tooltip>
+                <TooltipTrigger asChild>
+                  <span tabIndex={0}>
+                    <Button
+                      onClick={() =>
+                        setQuestionModal({
+                          isOpen: true,
+                          mode: "create",
+                          initialData: {
+                            question_text: "",
+                            key_answer_text: "",
+                            sequence_order: (quiz.questions?.length || 0) + 1,
+                          },
+                        })
+                      }
+                      size="sm"
+                      disabled={quiz.status === "published"}
+                      className="bg-[#6366F1] hover:bg-[#6366F1]/90"
+                    >
+                      <Plus className="w-4 h-4 mr-2" /> Tambah Soal
+                    </Button>
+                  </span>
+                </TooltipTrigger>
+                {quiz.status === "published" && (
+                  <TooltipContent>
+                    Kuis yang sudah dipublikasikan tidak dapat ditambahkan soal baru.
+                  </TooltipContent>
+                )}
+              </Tooltip>
             </div>
 
             <div className="space-y-4">
@@ -258,5 +289,6 @@ export function LecturerQuizDetail({ groupId, quizId }: LecturerQuizDetailProps)
         />
       )}
     </div>
+    </TooltipProvider>
   );
 }
