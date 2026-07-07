@@ -15,13 +15,22 @@ export const useGroups = () => {
   });
 };
 
-export const useGroup = (id: string) => {
+export const useGroup = (id: string, enabled = true) => {
   return useQuery({
     queryKey: groupKeys.detail(id),
     queryFn: () => GroupService.getGroup(id),
-    enabled: !!id,
+    enabled: !!id && enabled,
   });
 };
+
+export const useStudentGroup = (id: string, enabled = true) => {
+  return useQuery({
+    queryKey: [...groupKeys.detail(id), "student"],
+    queryFn: () => GroupService.getStudentGroupDetail(id),
+    enabled: !!id && enabled,
+  });
+};
+
 
 export const useCreateGroup = () => {
   const queryClient = useQueryClient();

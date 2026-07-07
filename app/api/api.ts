@@ -61,6 +61,7 @@ export const API_ENDPOINTS = {
     DETAIL: (id: string) => `${API_URL}/groups/${id}`,
     UPDATE: (id: string) => `${API_URL}/groups/${id}`,
     DELETE: (id: string) => `${API_URL}/groups/${id}`,
+    STUDENT_DETAIL: (id: string) => `${API_URL}/groups/mahasiswa/${id}`,
   },
   MATERIALS: {
     LIST: `${API_URL}/materials`,
@@ -70,6 +71,9 @@ export const API_ENDPOINTS = {
     DELETE: (id: string) => `${API_URL}/materials/${id}`,
     PUBLISH: (id: string) => `${API_URL}/materials/${id}/publish`,
     LEVELS: (id: string) => `${API_URL}/materials/${id}/levels`,
+    STUDENT_LIST: (groupId: string) => `${API_URL}/groups/${groupId}/materials`,
+    STUDENT_DETAIL: (id: string) => `${API_URL}/materials/${id}`,
+    STUDENT_PROGRESS: (id: string) => `${API_URL}/materials/${id}/progress`,
   },
   QUIZZES: {
     LIST: (materialId: string) => `${API_URL}/quizzes?materialId=${materialId}`,

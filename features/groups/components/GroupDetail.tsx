@@ -21,11 +21,12 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { GroupDashboardView } from "@/features/dashboard";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 import { useConfirm } from "@/hooks/use-confirm";
+import { StudentGroupDetail } from "./StudentGroupDetail";
 
 export function GroupDetail({ id }: { id: string }) {
-  const { data: group, isLoading } = useGroup(id);
-  const { user } = useAuth();
+  const { user, isLoading: isAuthLoading } = useAuth();
   const isMahasiswa = user?.roleName?.toLowerCase() === "mahasiswa";
+  const { data: group, isLoading } = useGroup(id, !isMahasiswa && !isAuthLoading);
   const [editMaterialId, setEditMaterialId] = useState<string | null>(null);
   const [deleteMaterial, setDeleteMaterial] = useState<{ id: string; title: string } | null>(null);
   const { mutate: publishMaterial, isPending: isPublishingMaterial } = usePublishMaterial(id);
@@ -51,6 +52,18 @@ export function GroupDetail({ id }: { id: string }) {
       });
     }
   };
+
+  if (isAuthLoading) {
+    return (
+      <div className="flex justify-center items-center p-24 bg-[#F7F8FA] min-h-screen">
+        <Spinner className="w-10 h-10 text-[#6366F1]" />
+      </div>
+    );
+  }
+
+  if (isMahasiswa) {
+    return <StudentGroupDetail id={id} />;
+  }
 
   if (isLoading) {
     return (

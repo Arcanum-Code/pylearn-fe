@@ -1,5 +1,5 @@
 import { ApiAxios } from "@/app/utils/axios";
-import { Group } from "../types";
+import { Group, StudentGroupDetail } from "../types";
 
 export const GroupService = {
   getGroups: async (): Promise<Group[]> => {
@@ -24,5 +24,9 @@ export const GroupService = {
   deleteGroup: async (id: string) => {
     const { data } = await ApiAxios.delete(`/groups/${id}`);
     return data;
+  },
+  getStudentGroupDetail: async (id: string): Promise<StudentGroupDetail> => {
+    const { data } = await ApiAxios.get(`/groups/mahasiswa/${id}`);
+    return data.data;
   },
 };

@@ -29,4 +29,29 @@ export interface GroupQuiz {
   levelNumber: number;
   isPublished: boolean;
 }
+export interface StudentGroupDetail {
+  groupId: string;
+  groupName: string;
+  description: string;
+  lecturerName: string;
+  progress: {
+    materialsCompleted: number;
+    materialsTotal: number;
+    percentage: number;
+  };
+  items: TimelineItem[];
+}
 
+export type TimelineItemType = "material" | "quiz";
+
+export interface TimelineItem {
+  type: TimelineItemType;
+  id: string;
+  title: string;
+  description?: string | null;
+  status: "completed" | "in_progress" | "not_started";
+  scrollPercentage?: number | null;
+  deadline?: string | null;
+  bestScore?: number | null;
+  order: number;
+}
