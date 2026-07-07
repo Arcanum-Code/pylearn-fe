@@ -23,7 +23,12 @@ export default function DashboardPage() {
       case "dosen":
         return <LecturerDashboardContainer />;
       case "mahasiswa":
-        return <StudentDashboardView data={studentQuery.data} />;
+        return (
+          <StudentDashboardView
+            data={studentQuery.data}
+            isLoading={studentQuery.isLoading}
+          />
+        );
       default:
         return <AdminDashboardView data={adminQuery.data} />;
     }

@@ -65,6 +65,18 @@ export interface StudentDashboardData {
     quizTitle: string;
     submittedAt: string;
   }[];
+  enrolledGroups?: {
+    groupId: string;
+    groupName: string;
+    materialsCompleted: number;
+    materialsTotal: number;
+    materials: {
+      materialId: string;
+      title: string;
+      status: "not_started" | "in_progress" | "completed";
+      scrollPercentage: number | null;
+    }[];
+  }[];
 }
 
 export type UserDistributionData = DashboardUserDistribution;
