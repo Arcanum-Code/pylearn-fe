@@ -14,6 +14,7 @@ import { useTranslations } from "@/lib/i18n/useTranslation";
 import { usePermissions } from "@/features/rbac/context/PermissionsProvider";
 import { useAuth } from "@features/auth/context/AuthProvider";
 import { useFetchLecturerGroups } from "@features/dashboard/hooks/useLecturerDashboard";
+import { useFetchStudentDashboard } from "@features/dashboard/hooks/useDashboard";
 
 /**
  * Collapsible nav item with smooth animation.
@@ -190,22 +191,42 @@ function SidebarNavItems({
 }) {
   const { user } = useAuth();
   const { data: groups } = useFetchLecturerGroups();
+  const { data: studentDashboard } = useFetchStudentDashboard();
   const roleName = user?.roleName?.toLowerCase();
 
   const activeGroupsItem = React.useMemo(() => {
-    if (roleName !== "dosen" || !groups || groups.length === 0) return null;
-
-    return {
-      labelKey: "navigation.activeGroups",
-      icon: GraduationCap,
-      children: groups.map((g) => ({
-        labelKey: "",
-        label: g.name,
-        href: `/groups/${g.id}`,
+    if (roleName === "dosen" && groups && groups.length > 0) {
+      return {
+        labelKey: "navigation.activeGroups",
         icon: GraduationCap,
-      })),
-    };
-  }, [roleName, groups]);
+        children: groups.map((g) => ({
+          labelKey: "",
+          label: g.name,
+          href: `/groups/${g.id}`,
+          icon: GraduationCap,
+        })),
+      };
+    }
+
+    if (
+      roleName === "mahasiswa" &&
+      studentDashboard?.enrolledGroups &&
+      studentDashboard.enrolledGroups.length > 0
+    ) {
+      return {
+        labelKey: "navigation.activeGroups",
+        icon: GraduationCap,
+        children: studentDashboard.enrolledGroups.map((g) => ({
+          labelKey: "",
+          label: g.groupName,
+          href: `/groups/${g.groupId}`,
+          icon: GraduationCap,
+        })),
+      };
+    }
+
+    return null;
+  }, [roleName, groups, studentDashboard]);
 
   const menuItems = React.useMemo(() => {
     const items = [...sidebarConfig];
