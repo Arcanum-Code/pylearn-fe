@@ -13,6 +13,7 @@ export interface StudentQuizAttempt {
 export interface StudentQuizBlank {
   keywordId: string;
   blankOrder: number;
+  correctAnswerLength: number;
 }
 
 export interface StudentQuizQuestionAttempt {

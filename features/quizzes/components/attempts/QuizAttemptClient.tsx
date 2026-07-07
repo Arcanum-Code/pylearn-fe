@@ -81,6 +81,11 @@ export function QuizAttemptClient({ groupId, attemptId }: QuizAttemptClientProps
   const submitAttempt = useSubmitStudentQuizAttempt(attemptId);
   const submitBulkAnswers = useSubmitBulkStudentQuizAnswers(attemptId);
 
+  const getInputWidth = (correctAnswerLength: number): string => {
+    const ch = Math.max(correctAnswerLength + 2, 4);
+    return `${Math.min(ch, 32)}ch`;
+  };
+
   const handleStandardAnswerChange = (questionId: string, answer: string) => {
     setStandardAnswers((prev) => ({
       ...prev,
@@ -305,7 +310,8 @@ export function QuizAttemptClient({ groupId, attemptId }: QuizAttemptClientProps
                                         )
                                       }
                                       placeholder="jawaban..."
-                                      className="w-32 h-8 px-2 py-1 text-sm font-sans font-semibold rounded border border-primary/40 bg-background text-foreground shadow-sm focus:border-primary focus:ring-2 focus:ring-primary/20 focus:outline-none transition-all text-center placeholder:font-normal placeholder:text-muted-foreground"
+                                      style={{ width: getInputWidth(blank.correctAnswerLength) }}
+                                      className="h-8 px-2 py-1 text-sm font-sans font-semibold rounded border border-primary/40 bg-background text-foreground shadow-sm focus:border-primary focus:ring-2 focus:ring-primary/20 focus:outline-none transition-all text-center placeholder:font-normal placeholder:text-muted-foreground"
                                     />
                                   </span>
                                 );
@@ -352,7 +358,8 @@ export function QuizAttemptClient({ groupId, attemptId }: QuizAttemptClientProps
                                       )
                                     }
                                     placeholder={`Jawaban untuk #${blank.blankOrder}`}
-                                    className="flex-1 min-w-0 h-8 px-2 text-sm rounded border-0 bg-transparent focus:outline-none focus:ring-0 font-medium text-foreground"
+                                    style={{ minWidth: getInputWidth(blank.correctAnswerLength) }}
+                                    className="flex-1 h-8 px-2 text-sm rounded border-0 bg-transparent focus:outline-none focus:ring-0 font-medium text-foreground"
                                   />
                                 </div>
                               ))}
