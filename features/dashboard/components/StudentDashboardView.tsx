@@ -530,7 +530,7 @@ export function StudentDashboardView({ data, isLoading }: StudentDashboardViewPr
                       </div>
                       <p className="text-xs font-semibold text-gray-700">Tidak ada kuis aktif</p>
                       <p className="text-[11px] text-muted-foreground mt-0.5 mb-4">Kamu telah menyelesaikan semua pengerjaan kuis.</p>
-                      <Button size="sm" variant="outline" asChild className="border-orange-200 text-orange-700 hover:bg-orange-50 text-xs">
+                      <Button size="sm" asChild className="bg-orange-500 hover:bg-orange-600 text-white text-xs shadow-sm">
                         <Link href="/groups">Cari Kuis Baru</Link>
                       </Button>
                     </div>
@@ -574,7 +574,7 @@ export function StudentDashboardView({ data, isLoading }: StudentDashboardViewPr
                       </div>
                       <p className="text-xs font-semibold text-gray-700">Belum ada riwayat kuis</p>
                       <p className="text-[11px] text-muted-foreground mt-0.5 mb-4">Selesaikan kuis pertamamu untuk melacak hasil di sini.</p>
-                      <Button size="sm" variant="outline" asChild className="border-green-200 text-green-700 hover:bg-green-50 text-xs">
+                      <Button size="sm" asChild className="bg-green-600 hover:bg-green-700 text-white text-xs shadow-sm">
                         <Link href="/groups">Buka Kelas & Belajar</Link>
                       </Button>
                     </div>
