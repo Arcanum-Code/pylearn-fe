@@ -9,6 +9,7 @@ import { Badge } from "@/components/ui/badge";
 import { useTranslations, useLocale } from "@/lib/i18n/useTranslation";
 import { Search, AlertTriangle, UserCheck, UserMinus, Users, ChevronRight } from "lucide-react";
 import { GroupStudentActivityDetailSheet } from "./GroupStudentActivityDetailSheet";
+import { formatScoreOrPoints } from "../utils/format";
 
 interface GroupStudentListProps {
   groupId: string;
@@ -310,7 +311,7 @@ export function GroupStudentList({ groupId }: GroupStudentListProps) {
                               : "text-[#EF4444]"
                           }
                         >
-                          {Math.round(s.avg_quiz_score)} pt
+                          {formatScoreOrPoints(s.avg_quiz_score)} pt
                         </span>
                       ) : (
                         <span className="text-gray-400 font-normal">-</span>

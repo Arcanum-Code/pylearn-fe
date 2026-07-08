@@ -23,6 +23,7 @@ import {
   HelpCircle,
 } from "lucide-react";
 import { StudentQuizAttemptHistoryItem } from "../types";
+import { formatScoreOrPoints } from "../utils/format";
 
 interface GroupStudentActivityDetailSheetProps {
   groupId: string;
@@ -90,7 +91,7 @@ function QuizAttemptCardWithQuestions({
                 : "bg-[#EF4444]/10 text-[#EF4444] border-[#EF4444]/20"
             }`}
           >
-            {attempt.score} pt
+            {formatScoreOrPoints(attempt.score)} pt
           </Badge>
           <button
             type="button"
@@ -199,8 +200,8 @@ function QuizAttemptCardWithQuestions({
                             }`}
                           >
                             {t("groups.students.drawer.points", {
-                              earned: q.points_earned,
-                              possible: q.points_possible,
+                              earned: formatScoreOrPoints(q.points_earned),
+                              possible: formatScoreOrPoints(q.points_possible),
                             })}
                           </Badge>
                         </div>
