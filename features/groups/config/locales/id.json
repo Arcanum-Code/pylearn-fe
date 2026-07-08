@@ -43,7 +43,17 @@
       "noReadingTimeline": "Belum ada aktivitas membaca materi.",
       "attempt": "Percobaan #{number}",
       "score": "Nilai: {score} pt",
-      "duration": "{minutes}m {seconds}d"
+      "duration": "{minutes}m {seconds}d",
+      "viewQuestions": "Lihat Soal & Jawaban",
+      "hideQuestions": "Sembunyikan Soal",
+      "filterAll": "Semua Soal ({count})",
+      "filterIncorrect": "Hanya Salah ({count})",
+      "studentAnswer": "Jawaban Mahasiswa:",
+      "correctAnswer": "Jawaban Benar:",
+      "points": "Poin: {earned} / {possible} pt",
+      "noQuestionsData": "Belum ada detail soal untuk percobaan ini.",
+      "noIncorrectQuestions": "Tidak ada soal yang salah pada percobaan ini.",
+      "unanswered": "Kosong / Tidak dijawab"
     }
   }
 }

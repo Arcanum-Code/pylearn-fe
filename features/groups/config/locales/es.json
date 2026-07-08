@@ -43,7 +43,17 @@
       "noReadingTimeline": "Sin actividad de lectura aún.",
       "attempt": "Intento #{number}",
       "score": "Puntaje: {score} pt",
-      "duration": "{minutes}m {seconds}s"
+      "duration": "{minutes}m {seconds}s",
+      "viewQuestions": "Ver Preguntas y Respuestas",
+      "hideQuestions": "Ocultar Preguntas",
+      "filterAll": "Todas las Preguntas ({count})",
+      "filterIncorrect": "Solo Incorrectas ({count})",
+      "studentAnswer": "Respuesta del Estudiante:",
+      "correctAnswer": "Respuesta Correcta:",
+      "points": "Puntos: {earned} / {possible} pt",
+      "noQuestionsData": "No hay detalles de preguntas para este intento.",
+      "noIncorrectQuestions": "No se encontraron preguntas incorrectas en este intento.",
+      "unanswered": "Vacío / No respondido"
     }
   }
 }

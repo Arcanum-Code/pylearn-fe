@@ -1,3 +1,182 @@
+# Quiz Attempts Question Breakdown Implementation Plan
+
+> **For agentic workers:** REQUIRED SUB-SKILL: Use superpowers:subagent-driven-development (recommended) or superpowers:executing-plans to implement this plan task-by-task. Steps use checkbox (`- [ ]`) syntax for tracking.
+
+**Goal:** Add detailed question-by-question answer and failure breakdown to quiz attempts inside the lecturer's student activity drawer, featuring an interactive accordion and a "Hanya Salah" (Only Incorrect) filter toggle.
+
+**Architecture:** We will extend the existing `StudentQuizAttemptHistoryItem` TypeScript interface with an optional `questions` array matching the newly designed backend schema. We will add localization keys across Indonesian (`id`), English (`en`), and Spanish (`es`) locales. Finally, inside `GroupStudentActivityDetailSheet.tsx`, we will encapsulate each quiz attempt card into an interactive expandable sub-component (`QuizAttemptCardWithQuestions`) that renders the question list with high-contrast styling for failed questions (`!is_correct`) and includes a toggle pill filter between all questions (`Semua Soal`) and only incorrect questions (`Hanya Salah`).
+
+**Tech Stack:** Next.js 16 (App Router), React 19, TypeScript, Tailwind CSS v4, Lucide React icons, shadcn/ui.
+
+---
+
+### Task 1: TypeScript Interfaces Update
+
+**Files:**
+- Modify: `features/groups/types/index.ts:119-130`
+
+- [ ] **Step 1: Write the updated TypeScript interface definition in `features/groups/types/index.ts`**
+
+In `features/groups/types/index.ts`, locate the `StudentQuizAttemptHistoryItem` definition around lines 119-130. Insert `StudentQuizAttemptQuestionItem` just before it, and add the optional `questions?: StudentQuizAttemptQuestionItem[];` property to `StudentQuizAttemptHistoryItem`.
+
+Replace lines 119-130:
+```typescript
+export interface StudentQuizAttemptHistoryItem {
+  attempt_id: string;
+  quiz_id: string;
+  quiz_title: string;
+  attempt_number: number;
+  score: number;
+  status: string;
+  started_at: string;
+  submitted_at: string;
+  time_spent_seconds: number;
+}
+```
+
+With exactly the following code:
+```typescript
+export interface StudentQuizAttemptQuestionItem {
+  question_id: string;
+  question_text: string;
+  question_type?: string | null;
+  student_answer: string | null;
+  correct_answer: string | null;
+  is_correct: boolean;
+  points_earned: number;
+  points_possible: number;
+  explanation?: string | null;
+}
+
+export interface StudentQuizAttemptHistoryItem {
+  attempt_id: string;
+  quiz_id: string;
+  quiz_title: string;
+  attempt_number: number;
+  score: number;
+  status: string;
+  started_at: string;
+  submitted_at: string;
+  time_spent_seconds: number;
+  questions?: StudentQuizAttemptQuestionItem[];
+}
+```
+
+- [ ] **Step 2: Run typecheck/build to verify TypeScript compiles cleanly**
+
+Run: `bun run build`
+Expected: Passes compile step without any interface or type definition errors.
+
+---
+
+### Task 2: i18n Translation Keys Update
+
+**Files:**
+- Modify: `features/groups/config/locales/id.json:37-47`
+- Modify: `features/groups/config/locales/en.json:37-47`
+- Modify: `features/groups/config/locales/es.json:37-47`
+
+- [ ] **Step 1: Update Indonesian locale (`features/groups/config/locales/id.json`)**
+
+Locate the `drawer` object in `features/groups/config/locales/id.json` around line 37 and add the new question breakdown keys:
+
+```json
+    "drawer": {
+      "title": "Detail Aktivitas Mahasiswa",
+      "enrolledAt": "Bergabung pada",
+      "quizHistory": "Riwayat Pengerjaan Kuis",
+      "readingTimeline": "Aktivitas Baca Materi",
+      "noQuizHistory": "Belum ada riwayat pengerjaan kuis.",
+      "noReadingTimeline": "Belum ada aktivitas membaca materi.",
+      "attempt": "Percobaan #{number}",
+      "score": "Nilai: {score} pt",
+      "duration": "{minutes}m {seconds}d",
+      "viewQuestions": "Lihat Soal & Jawaban",
+      "hideQuestions": "Sembunyikan Soal",
+      "filterAll": "Semua Soal ({count})",
+      "filterIncorrect": "Hanya Salah ({count})",
+      "studentAnswer": "Jawaban Mahasiswa:",
+      "correctAnswer": "Jawaban Benar:",
+      "points": "Poin: {earned} / {possible} pt",
+      "noQuestionsData": "Belum ada detail soal untuk percobaan ini.",
+      "noIncorrectQuestions": "Tidak ada soal yang salah pada percobaan ini.",
+      "unanswered": "Kosong / Tidak dijawab"
+    }
+```
+
+- [ ] **Step 2: Update English locale (`features/groups/config/locales/en.json`)**
+
+Locate the `drawer` object in `features/groups/config/locales/en.json` around line 37 and add the new question breakdown keys:
+
+```json
+    "drawer": {
+      "title": "Student Activity Detail",
+      "enrolledAt": "Enrolled on",
+      "quizHistory": "Quiz Attempt History",
+      "readingTimeline": "Material Reading Timeline",
+      "noQuizHistory": "No quiz attempt history yet.",
+      "noReadingTimeline": "No material reading timeline yet.",
+      "attempt": "Attempt #{number}",
+      "score": "Score: {score} pt",
+      "duration": "{minutes}m {seconds}s",
+      "viewQuestions": "View Questions & Answers",
+      "hideQuestions": "Hide Questions",
+      "filterAll": "All Questions ({count})",
+      "filterIncorrect": "Only Incorrect ({count})",
+      "studentAnswer": "Student Answer:",
+      "correctAnswer": "Correct Answer:",
+      "points": "Points: {earned} / {possible} pt",
+      "noQuestionsData": "No question details available for this attempt.",
+      "noIncorrectQuestions": "No incorrect questions found in this attempt.",
+      "unanswered": "Empty / Not answered"
+    }
+```
+
+- [ ] **Step 3: Update Spanish locale (`features/groups/config/locales/es.json`)**
+
+Locate the `drawer` object in `features/groups/config/locales/es.json` around line 37 and add the new question breakdown keys:
+
+```json
+    "drawer": {
+      "title": "Detalle de Actividad del Estudiante",
+      "enrolledAt": "Inscrito en",
+      "quizHistory": "Historial de Intentos",
+      "readingTimeline": "Cronología de Lectura",
+      "noQuizHistory": "Sin historial de intentos aún.",
+      "noReadingTimeline": "Sin actividad de lectura aún.",
+      "attempt": "Intento #{number}",
+      "score": "Puntaje: {score} pt",
+      "duration": "{minutes}m {seconds}s",
+      "viewQuestions": "Ver Preguntas y Respuestas",
+      "hideQuestions": "Ocultar Preguntas",
+      "filterAll": "Todas las Preguntas ({count})",
+      "filterIncorrect": "Solo Incorrectas ({count})",
+      "studentAnswer": "Respuesta del Estudiante:",
+      "correctAnswer": "Respuesta Correcta:",
+      "points": "Puntos: {earned} / {possible} pt",
+      "noQuestionsData": "No hay detalles de preguntas para este intento.",
+      "noIncorrectQuestions": "No se encontraron preguntas incorrectas en este intento.",
+      "unanswered": "Vacío / No respondido"
+    }
+```
+
+- [ ] **Step 4: Run linting to verify valid JSON formatting across all locale files**
+
+Run: `bun run lint`
+Expected: No ESLint or JSON formatting errors reported.
+
+---
+
+### Task 3: Quiz Attempt Questions Accordion UI Implementation
+
+**Files:**
+- Modify: `features/groups/components/GroupStudentActivityDetailSheet.tsx`
+
+- [ ] **Step 1: Replace `GroupStudentActivityDetailSheet.tsx` with the accordion and filter implementation**
+
+Replace the entire content of `features/groups/components/GroupStudentActivityDetailSheet.tsx` with the complete implementation below. This introduces a clean `QuizAttemptCardWithQuestions` component that manages expand/collapse state (`isExpanded`) and filter selection (`filterMode: "all" | "incorrect"`), highlighting wrong questions (`!is_correct`) with high contrast:
+
+```tsx
 "use client";
 
 import { useState } from "react";
@@ -392,3 +571,22 @@ export function GroupStudentActivityDetailSheet({
     </Sheet>
   );
 }
+```
+
+- [ ] **Step 2: Run verification build and lint checks**
+
+Run: `bun run build && bun run lint`
+Expected: Next.js builds successfully without type errors, and ESLint passes cleanly.
+
+---
+
+### Task Final: Commit all plan changes
+
+- [ ] **Step 1: Commit everything**
+
+> This is the **only** commit step in the entire plan. All files created/modified are committed together.
+
+```bash
+git add .
+git commit -m "feat: add quiz attempt question breakdown with accordion and incorrect filter"
+```

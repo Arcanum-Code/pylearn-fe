@@ -43,7 +43,17 @@
       "noReadingTimeline": "No material reading timeline yet.",
       "attempt": "Attempt #{number}",
       "score": "Score: {score} pt",
-      "duration": "{minutes}m {seconds}s"
+      "duration": "{minutes}m {seconds}s",
+      "viewQuestions": "View Questions & Answers",
+      "hideQuestions": "Hide Questions",
+      "filterAll": "All Questions ({count})",
+      "filterIncorrect": "Only Incorrect ({count})",
+      "studentAnswer": "Student Answer:",
+      "correctAnswer": "Correct Answer:",
+      "points": "Points: {earned} / {possible} pt",
+      "noQuestionsData": "No question details available for this attempt.",
+      "noIncorrectQuestions": "No incorrect questions found in this attempt.",
+      "unanswered": "Empty / Not answered"
     }
   }
 }

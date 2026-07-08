@@ -116,6 +116,18 @@ export interface GroupStudentsActivityData {
   students: GroupStudentActivityItem[];
 }
 
+export interface StudentQuizAttemptQuestionItem {
+  question_id: string;
+  question_text: string;
+  question_type?: string | null;
+  student_answer: string | null;
+  correct_answer: string | null;
+  is_correct: boolean;
+  points_earned: number;
+  points_possible: number;
+  explanation?: string | null;
+}
+
 export interface StudentQuizAttemptHistoryItem {
   attempt_id: string;
   quiz_id: string;
@@ -126,6 +138,7 @@ export interface StudentQuizAttemptHistoryItem {
   started_at: string;
   submitted_at: string;
   time_spent_seconds: number;
+  questions?: StudentQuizAttemptQuestionItem[];
 }
 
 export interface StudentMaterialReadingTimelineItem {
