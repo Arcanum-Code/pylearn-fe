@@ -55,7 +55,7 @@ export function GroupStudentActivityDetailSheet({
             {t("groups.students.drawer.title")}
           </SheetTitle>
           {data?.student && (
-            <SheetDescription className="text-sm text-gray-500 font-mono">
+            <SheetDescription className="text-sm text-gray-500 font-sans">
               {data.student.name} • {data.student.email}
             </SheetDescription>
           )}
@@ -66,7 +66,7 @@ export function GroupStudentActivityDetailSheet({
             <Spinner className="w-8 h-8 text-[#6366F1]" />
           </div>
         ) : !data ? (
-          <div className="py-12 text-center text-gray-400 font-mono text-sm">
+          <div className="py-12 text-center text-gray-400 font-sans text-sm">
             Data tidak ditemukan
           </div>
         ) : (
@@ -77,7 +77,7 @@ export function GroupStudentActivityDetailSheet({
                 <Award className="w-4 h-4 text-[#6366F1]" /> {t("groups.students.drawer.quizHistory")}
               </h3>
               {data.quiz_attempts_history.length === 0 ? (
-                <p className="text-xs text-gray-400 font-mono py-4 bg-[#F7F8FA] rounded-xl text-center border border-gray-150">
+                <p className="text-xs text-gray-400 font-sans py-4 bg-[#F7F8FA] rounded-xl text-center border border-gray-150">
                   {t("groups.students.drawer.noQuizHistory")}
                 </p>
               ) : (
@@ -93,7 +93,7 @@ export function GroupStudentActivityDetailSheet({
                           <p className="font-semibold text-sm text-[#1A1C1E]">
                             {attempt.quiz_title}
                           </p>
-                          <div className="flex items-center gap-2 text-xs text-gray-500 font-mono">
+                          <div className="flex items-center gap-2 text-xs text-gray-500 font-sans">
                             <span>Percobaan #{attempt.attempt_number}</span>
                             <span>•</span>
                             <span>{formatDate(attempt.submitted_at)}</span>
@@ -126,7 +126,7 @@ export function GroupStudentActivityDetailSheet({
                 <BookOpen className="w-4 h-4 text-[#6366F1]" /> {t("groups.students.drawer.readingTimeline")}
               </h3>
               {data.material_reading_timeline.length === 0 ? (
-                <p className="text-xs text-gray-400 font-mono py-4 bg-[#F7F8FA] rounded-xl text-center border border-gray-150">
+                <p className="text-xs text-gray-400 font-sans py-4 bg-[#F7F8FA] rounded-xl text-center border border-gray-150">
                   {t("groups.students.drawer.noReadingTimeline")}
                 </p>
               ) : (
@@ -142,7 +142,7 @@ export function GroupStudentActivityDetailSheet({
                           <p className="font-semibold text-sm text-[#1A1C1E]">
                             {item.material_title}
                           </p>
-                          <p className="text-xs text-gray-500 font-mono">
+                          <p className="text-xs text-gray-500 font-sans">
                             {item.completed_at
                               ? `Selesai: ${formatDate(item.completed_at)}`
                               : item.first_opened_at
