@@ -365,13 +365,22 @@ export function GroupDetail({ id }: { id: string }) {
       ) : (
         <Tabs defaultValue="overview" className="space-y-6">
           <TabsList className="bg-white border border-gray-150/60 p-1 rounded-xl">
-            <TabsTrigger value="overview" className="rounded-lg font-mono text-sm">
+            <TabsTrigger
+              value="overview"
+              className="rounded-lg font-mono text-sm data-[state=active]:bg-indigo-600 data-[state=active]:text-white"
+            >
               {t("groups.tabs.overview")}
             </TabsTrigger>
-            <TabsTrigger value="content" className="rounded-lg font-mono text-sm">
+            <TabsTrigger
+              value="content"
+              className="rounded-lg font-mono text-sm data-[state=active]:bg-indigo-600 data-[state=active]:text-white"
+            >
               {t("groups.tabs.content")}
             </TabsTrigger>
-            <TabsTrigger value="students" className="rounded-lg font-mono text-sm">
+            <TabsTrigger
+              value="students"
+              className="rounded-lg font-mono text-sm data-[state=active]:bg-indigo-600 data-[state=active]:text-white"
+            >
               {t("groups.tabs.students")}
             </TabsTrigger>
           </TabsList>
