@@ -1,6 +1,12 @@
 import { NextRequest, NextResponse } from "next/server";
 import { API_ENDPOINTS } from "@api/api";
 
+type RouteParams = {
+  params: Promise<{
+    groupId: string;
+  }>;
+};
+
 export async function GET(request: NextRequest, { params }: RouteParams) {
   try {
     const { groupId } = await params;
