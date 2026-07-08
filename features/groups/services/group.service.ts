@@ -5,7 +5,6 @@ import {
   GroupStudentsActivityData,
   GroupStudentActivityDetailData,
 } from "../types";
-import { API_ENDPOINTS } from "@/app/api/api";
 
 export const GroupService = {
   getGroups: async (): Promise<Group[]> => {
@@ -36,7 +35,7 @@ export const GroupService = {
     return data.data;
   },
   getGroupStudentsActivity: async (groupId: string): Promise<GroupStudentsActivityData> => {
-    const { data } = await ApiAxios.get(API_ENDPOINTS.LECTURER.GROUP_STUDENTS_ACTIVITY(groupId));
+    const { data } = await ApiAxios.get(`/lecturer/groups/${groupId}/students-activity`);
     return data.data;
   },
   getGroupStudentActivityDetail: async (
@@ -44,7 +43,7 @@ export const GroupService = {
     studentId: string
   ): Promise<GroupStudentActivityDetailData> => {
     const { data } = await ApiAxios.get(
-      API_ENDPOINTS.LECTURER.GROUP_STUDENT_ACTIVITY_DETAIL(groupId, studentId)
+      `/lecturer/groups/${groupId}/students/${studentId}/activity`
     );
     return data.data;
   },
