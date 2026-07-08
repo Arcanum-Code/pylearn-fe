@@ -37,6 +37,10 @@ import materialsEn from "@/features/materials/config/locales/en.json";
 import materialsEs from "@/features/materials/config/locales/es.json";
 import materialsId from "@/features/materials/config/locales/id.json";
 
+import groupsEn from "@/features/groups/config/locales/en.json";
+import groupsEs from "@/features/groups/config/locales/es.json";
+import groupsId from "@/features/groups/config/locales/id.json";
+
 const messages = {
   en: {
     common: commonEn.common,
@@ -46,6 +50,7 @@ const messages = {
     dashboard: dashboardEn,
     navigation: navigationEn,
     materials: materialsEn,
+    groups: groupsEn,
   },
   es: {
     common: commonEs.common,
@@ -55,6 +60,7 @@ const messages = {
     dashboard: dashboardEs,
     navigation: navigationEs,
     materials: materialsEs,
+    groups: groupsEs,
   },
   id: {
     common: commonId.common,
@@ -64,6 +70,7 @@ const messages = {
     dashboard: dashboardId,
     navigation: navigationId,
     materials: materialsId,
+    groups: groupsId,
   },
 };
 

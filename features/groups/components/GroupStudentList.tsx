@@ -1,0 +1,334 @@
+"use client";
+
+import { useState, useMemo } from "react";
+import { useGroupStudentsActivity } from "../hooks/useGroups";
+import { Spinner } from "@/components/ui/spinner";
+import { Input } from "@/components/ui/input";
+import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
+import { useTranslations, useLocale } from "@/lib/i18n/useTranslation";
+import { Search, AlertTriangle, UserCheck, UserMinus, Users, ChevronRight } from "lucide-react";
+import { GroupStudentActivityDetailSheet } from "./GroupStudentActivityDetailSheet";
+
+interface GroupStudentListProps {
+  groupId: string;
+}
+
+type BucketFilter = "ALL" | "AT_RISK" | "INACTIVE" | "ON_TRACK";
+type SortOption = "name" | "progress" | "score" | "lastActive";
+
+export function GroupStudentList({ groupId }: GroupStudentListProps) {
+  const t = useTranslations();
+  const locale = useLocale();
+  const { data, isLoading } = useGroupStudentsActivity(groupId);
+  const [bucket, setBucket] = useState<BucketFilter>("ALL");
+  const [search, setSearch] = useState("");
+  const [sortBy, setSortBy] = useState<SortOption>("name");
+  const [selectedStudentId, setSelectedStudentId] = useState<string | null>(null);
+
+  const students = data?.students;
+
+  const filteredStudents = useMemo(() => {
+    if (!students) return [];
+
+    return students
+      .filter((s) => {
+        if (bucket !== "ALL" && s.status?.toUpperCase() !== bucket) return false;
+        if (search.trim() !== "") {
+          const q = search.toLowerCase();
+          return (
+            s.name.toLowerCase().includes(q) ||
+            s.email.toLowerCase().includes(q)
+          );
+        }
+        return true;
+      })
+      .sort((a, b) => {
+        if (sortBy === "name") return a.name.localeCompare(b.name);
+        if (sortBy === "progress") return a.overall_progress_percentage - b.overall_progress_percentage;
+        if (sortBy === "score") return (a.avg_quiz_score || 0) - (b.avg_quiz_score || 0);
+        if (sortBy === "lastActive") {
+          const timeA = a.last_active_at ? new Date(a.last_active_at).getTime() : 0;
+          const timeB = b.last_active_at ? new Date(b.last_active_at).getTime() : 0;
+          return timeA - timeB;
+        }
+        return 0;
+      });
+  }, [students, bucket, search, sortBy]);
+
+  const formatDate = (dateStr?: string | null) => {
+    if (!dateStr) return "-";
+    return new Intl.DateTimeFormat(locale === "id" ? "id-ID" : "en-US", {
+      day: "2-digit",
+      month: "short",
+      hour: "2-digit",
+      minute: "2-digit",
+    }).format(new Date(dateStr));
+  };
+
+  const getStatusBadge = (status?: string, statusReasons?: string[]) => {
+    const st = status?.toUpperCase();
+    if (st === "AT_RISK") {
+      return (
+        <Badge
+          variant="outline"
+          className="bg-[#EF4444]/10 text-[#EF4444] border-[#EF4444]/20 font-mono text-[10px] px-2 py-0.5"
+          title={statusReasons?.join(", ")}
+        >
+          <AlertTriangle className="w-3 h-3 mr-1 inline" /> {t("groups.students.statusLabels.AT_RISK")}
+        </Badge>
+      );
+    }
+    if (st === "INACTIVE") {
+      return (
+        <Badge
+          variant="outline"
+          className="bg-amber-500/10 text-amber-600 border-amber-500/20 font-mono text-[10px] px-2 py-0.5"
+          title={statusReasons?.join(", ")}
+        >
+          <UserMinus className="w-3 h-3 mr-1 inline" /> {t("groups.students.statusLabels.INACTIVE")}
+        </Badge>
+      );
+    }
+    return (
+      <Badge
+        variant="outline"
+        className="bg-[#10B981]/10 text-[#10B981] border-[#10B981]/20 font-mono text-[10px] px-2 py-0.5"
+      >
+        <UserCheck className="w-3 h-3 mr-1 inline" /> {t("groups.students.statusLabels.ON_TRACK")}
+      </Badge>
+    );
+  };
+
+  if (isLoading) {
+    return (
+      <div className="flex justify-center items-center py-20 bg-white rounded-2xl border border-gray-150/60 shadow-xs">
+        <Spinner className="w-8 h-8 text-[#6366F1]" />
+      </div>
+    );
+  }
+
+  if (!data) {
+    return (
+      <div className="p-12 text-center text-gray-400 font-mono bg-white rounded-2xl border border-gray-150/60 shadow-xs">
+        Data aktivitas mahasiswa tidak tersedia
+      </div>
+    );
+  }
+
+  const { summary } = data;
+
+  return (
+    <div className="space-y-6">
+      {/* Smart Status Buckets Bento Header */}
+      <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
+        <button
+          onClick={() => setBucket("ALL")}
+          className={`p-4 rounded-2xl border text-left transition-all cursor-pointer ${
+            bucket === "ALL"
+              ? "bg-[#6366F1]/10 border-[#6366F1] ring-2 ring-[#6366F1]/20"
+              : "bg-white border-gray-150/60 hover:border-gray-300 shadow-xs"
+          }`}
+        >
+          <div className="flex items-center justify-between mb-2">
+            <span className="font-mono text-xs font-semibold text-gray-500 uppercase tracking-wider">
+              {t("groups.students.buckets.all")}
+            </span>
+            <Users className="w-4 h-4 text-[#6366F1]" />
+          </div>
+          <p className="text-2xl font-bold text-[#1A1C1E] font-mono">
+            {summary.total_students || 0}
+          </p>
+        </button>
+
+        <button
+          onClick={() => setBucket("AT_RISK")}
+          className={`p-4 rounded-2xl border text-left transition-all cursor-pointer ${
+            bucket === "AT_RISK"
+              ? "bg-[#EF4444]/10 border-[#EF4444] ring-2 ring-[#EF4444]/20"
+              : "bg-white border-gray-150/60 hover:border-gray-300 shadow-xs"
+          }`}
+        >
+          <div className="flex items-center justify-between mb-2">
+            <span className="font-mono text-xs font-semibold text-[#EF4444] uppercase tracking-wider">
+              {t("groups.students.buckets.atRisk")}
+            </span>
+            <AlertTriangle className="w-4 h-4 text-[#EF4444]" />
+          </div>
+          <p className="text-2xl font-bold text-[#1A1C1E] font-mono">
+            {summary.at_risk_count || 0}
+          </p>
+        </button>
+
+        <button
+          onClick={() => setBucket("INACTIVE")}
+          className={`p-4 rounded-2xl border text-left transition-all cursor-pointer ${
+            bucket === "INACTIVE"
+              ? "bg-amber-500/10 border-amber-500 ring-2 ring-amber-500/20"
+              : "bg-white border-gray-150/60 hover:border-gray-300 shadow-xs"
+          }`}
+        >
+          <div className="flex items-center justify-between mb-2">
+            <span className="font-mono text-xs font-semibold text-amber-600 uppercase tracking-wider">
+              {t("groups.students.buckets.inactive")}
+            </span>
+            <UserMinus className="w-4 h-4 text-amber-600" />
+          </div>
+          <p className="text-2xl font-bold text-[#1A1C1E] font-mono">
+            {summary.inactive_count || 0}
+          </p>
+        </button>
+
+        <button
+          onClick={() => setBucket("ON_TRACK")}
+          className={`p-4 rounded-2xl border text-left transition-all cursor-pointer ${
+            bucket === "ON_TRACK"
+              ? "bg-[#10B981]/10 border-[#10B981] ring-2 ring-[#10B981]/20"
+              : "bg-white border-gray-150/60 hover:border-gray-300 shadow-xs"
+          }`}
+        >
+          <div className="flex items-center justify-between mb-2">
+            <span className="font-mono text-xs font-semibold text-[#10B981] uppercase tracking-wider">
+              {t("groups.students.buckets.onTrack")}
+            </span>
+            <UserCheck className="w-4 h-4 text-[#10B981]" />
+          </div>
+          <p className="text-2xl font-bold text-[#1A1C1E] font-mono">
+            {summary.on_track_count || 0}
+          </p>
+        </button>
+      </div>
+
+      {/* Search and Sort Bar */}
+      <div className="bg-white p-4 rounded-2xl shadow-xs border border-gray-150/60 flex flex-col sm:flex-row justify-between items-center gap-4">
+        <div className="relative w-full sm:w-80">
+          <Search className="w-4 h-4 absolute left-3 top-3 text-gray-400" />
+          <Input
+            type="text"
+            placeholder={t("groups.students.searchPlaceholder")}
+            value={search}
+            onChange={(e) => setSearch(e.target.value)}
+            className="pl-9 bg-[#F7F8FA] border-gray-200 focus:bg-white text-sm"
+          />
+        </div>
+
+        <div className="flex items-center gap-2 w-full sm:w-auto justify-end">
+          <span className="text-xs font-mono text-gray-500 whitespace-nowrap">
+            {t("groups.students.sortBy")}:
+          </span>
+          <select
+            value={sortBy}
+            onChange={(e) => setSortBy(e.target.value as SortOption)}
+            className="bg-[#F7F8FA] border border-gray-200 rounded-xl px-3 py-1.5 text-xs font-mono text-[#1A1C1E] focus:outline-none focus:ring-2 focus:ring-[#6366F1]"
+          >
+            <option value="name">{t("groups.students.sortOptions.name")}</option>
+            <option value="progress">{t("groups.students.sortOptions.progress")}</option>
+            <option value="score">{t("groups.students.sortOptions.score")}</option>
+            <option value="lastActive">{t("groups.students.sortOptions.lastActive")}</option>
+          </select>
+        </div>
+      </div>
+
+      {/* Students Activity Table */}
+      <div className="bg-white rounded-2xl shadow-xs border border-gray-150/60 overflow-hidden">
+        <div className="overflow-x-auto">
+          <table className="w-full text-left border-collapse">
+            <thead>
+              <tr className="bg-[#F7F8FA] border-b border-gray-150 font-mono text-xs font-semibold text-gray-500 uppercase tracking-wider">
+                <th className="py-4 px-6">{t("groups.students.table.student")}</th>
+                <th className="py-4 px-4">{t("groups.students.table.status")}</th>
+                <th className="py-4 px-4">{t("groups.students.table.progress")}</th>
+                <th className="py-4 px-4">{t("groups.students.table.quizScore")}</th>
+                <th className="py-4 px-4">{t("groups.students.table.lastActive")}</th>
+                <th className="py-4 px-6 text-right">{t("groups.students.table.actions")}</th>
+              </tr>
+            </thead>
+            <tbody className="divide-y divide-gray-150/60 text-sm">
+              {filteredStudents.length === 0 ? (
+                <tr>
+                  <td colSpan={6} className="py-12 text-center text-gray-400 font-mono">
+                    Tidak ada mahasiswa yang sesuai dengan filter
+                  </td>
+                </tr>
+              ) : (
+                filteredStudents.map((s) => (
+                  <tr
+                    key={s.student_id}
+                    onClick={() => setSelectedStudentId(s.student_id)}
+                    className="hover:bg-[#F7F8FA]/60 transition-colors cursor-pointer group"
+                  >
+                    <td className="py-4 px-6">
+                      <div className="font-semibold text-[#1A1C1E] group-hover:text-[#6366F1] transition-colors">
+                        {s.name}
+                      </div>
+                      <div className="text-xs text-gray-400 font-mono mt-0.5">
+                        {s.email}
+                      </div>
+                    </td>
+                    <td className="py-4 px-4">
+                      {getStatusBadge(s.status, s.status_reasons)}
+                    </td>
+                    <td className="py-4 px-4">
+                      <div className="flex items-center gap-2">
+                        <div className="w-24 bg-gray-100 rounded-full h-2 overflow-hidden">
+                          <div
+                            className="bg-[#6366F1] h-full rounded-full transition-all"
+                            style={{ width: `${s.overall_progress_percentage || 0}%` }}
+                          />
+                        </div>
+                        <span className="font-mono text-xs text-gray-600 font-semibold">
+                          {Math.round(s.overall_progress_percentage || 0)}%
+                        </span>
+                      </div>
+                    </td>
+                    <td className="py-4 px-4 font-mono font-semibold">
+                      {s.avg_quiz_score !== null && s.avg_quiz_score !== undefined ? (
+                        <span
+                          className={
+                            s.avg_quiz_score >= 60
+                              ? "text-[#10B981]"
+                              : "text-[#EF4444]"
+                          }
+                        >
+                          {Math.round(s.avg_quiz_score)} pt
+                        </span>
+                      ) : (
+                        <span className="text-gray-400 font-normal">-</span>
+                      )}
+                    </td>
+                    <td className="py-4 px-4 text-xs font-mono text-gray-500">
+                      {formatDate(s.last_active_at)}
+                    </td>
+                    <td className="py-4 px-6 text-right">
+                      <Button
+                        variant="ghost"
+                        size="sm"
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          setSelectedStudentId(s.student_id);
+                        }}
+                        className="h-8 rounded-xl font-mono text-xs text-[#6366F1] hover:bg-[#6366F1]/10"
+                      >
+                        Detail <ChevronRight className="w-4 h-4 ml-1" />
+                      </Button>
+                    </td>
+                  </tr>
+                ))
+              )}
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      {/* Slide-out Sheet for Granular Detail */}
+      {selectedStudentId && (
+        <GroupStudentActivityDetailSheet
+          groupId={groupId}
+          studentId={selectedStudentId}
+          isOpen={!!selectedStudentId}
+          onClose={() => setSelectedStudentId(null)}
+        />
+      )}
+    </div>
+  );
+}

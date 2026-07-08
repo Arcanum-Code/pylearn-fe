@@ -1,0 +1,49 @@
+{
+  "tabs": {
+    "overview": "Overview",
+    "content": "Materi & Kuis",
+    "students": "Mahasiswa"
+  },
+  "students": {
+    "title": "Aktivitas & Progress Mahasiswa",
+    "subtitle": "Pantau bacaan materi, nilai kuis, serta keaktifan mahasiswa di kelas ini.",
+    "searchPlaceholder": "Cari nama atau email mahasiswa...",
+    "sortBy": "Urutkan berdasarkan",
+    "sortOptions": {
+      "name": "Nama (A-Z)",
+      "progress": "Progress Terendah",
+      "score": "Nilai Kuis Terendah",
+      "lastActive": "Terakhir Aktif"
+    },
+    "buckets": {
+      "all": "Semua Mahasiswa",
+      "atRisk": "Perlu Perhatian",
+      "inactive": "Kurang Aktif",
+      "onTrack": "Selesai & Aktif"
+    },
+    "table": {
+      "student": "Mahasiswa",
+      "status": "Status",
+      "progress": "Progress Materi",
+      "quizScore": "Rata-rata Kuis",
+      "lastActive": "Terakhir Aktif",
+      "actions": "Aksi"
+    },
+    "statusLabels": {
+      "AT_RISK": "Perlu Perhatian",
+      "INACTIVE": "Kurang Aktif",
+      "ON_TRACK": "Aktif & Lancar"
+    },
+    "drawer": {
+      "title": "Detail Aktivitas Mahasiswa",
+      "enrolledAt": "Bergabung pada",
+      "quizHistory": "Riwayat Pengerjaan Kuis",
+      "readingTimeline": "Aktivitas Baca Materi",
+      "noQuizHistory": "Belum ada riwayat pengerjaan kuis.",
+      "noReadingTimeline": "Belum ada aktivitas membaca materi.",
+      "attempt": "Percobaan #{number}",
+      "score": "Nilai: {score} pt",
+      "duration": "{minutes}m {seconds}d"
+    }
+  }
+}

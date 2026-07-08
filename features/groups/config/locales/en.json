@@ -1,0 +1,49 @@
+{
+  "tabs": {
+    "overview": "Overview",
+    "content": "Materials & Quizzes",
+    "students": "Students"
+  },
+  "students": {
+    "title": "Student Activity & Progress",
+    "subtitle": "Monitor material reading, quiz scores, and engagement in this class.",
+    "searchPlaceholder": "Search by student name or email...",
+    "sortBy": "Sort by",
+    "sortOptions": {
+      "name": "Name (A-Z)",
+      "progress": "Lowest Progress",
+      "score": "Lowest Quiz Score",
+      "lastActive": "Last Active"
+    },
+    "buckets": {
+      "all": "All Students",
+      "atRisk": "Needs Attention",
+      "inactive": "Inactive",
+      "onTrack": "On Track"
+    },
+    "table": {
+      "student": "Student",
+      "status": "Status",
+      "progress": "Material Progress",
+      "quizScore": "Avg Quiz Score",
+      "lastActive": "Last Active",
+      "actions": "Actions"
+    },
+    "statusLabels": {
+      "AT_RISK": "Needs Attention",
+      "INACTIVE": "Inactive",
+      "ON_TRACK": "On Track"
+    },
+    "drawer": {
+      "title": "Student Activity Detail",
+      "enrolledAt": "Enrolled on",
+      "quizHistory": "Quiz Attempt History",
+      "readingTimeline": "Material Reading Timeline",
+      "noQuizHistory": "No quiz attempt history yet.",
+      "noReadingTimeline": "No material reading timeline yet.",
+      "attempt": "Attempt #{number}",
+      "score": "Score: {score} pt",
+      "duration": "{minutes}m {seconds}s"
+    }
+  }
+}

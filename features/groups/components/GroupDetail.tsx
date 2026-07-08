@@ -22,6 +22,8 @@ import { GroupDashboardView } from "@/features/dashboard";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 import { useConfirm } from "@/hooks/use-confirm";
 import { StudentGroupDetail } from "./StudentGroupDetail";
+import { GroupStudentList } from "./GroupStudentList";
+import { useTranslations } from "@/lib/i18n/useTranslation";
 
 export function GroupDetail({ id }: { id: string }) {
   const { user, isLoading: isAuthLoading } = useAuth();
@@ -34,6 +36,7 @@ export function GroupDetail({ id }: { id: string }) {
   const [isEditClassOpen, setIsEditClassOpen] = useState(false);
   const deleteGroupMutation = useDeleteGroup();
   const { confirm } = useConfirm();
+  const t = useTranslations();
 
   const handleDeleteClass = async () => {
     const isConfirmed = await confirm({
@@ -363,10 +366,13 @@ export function GroupDetail({ id }: { id: string }) {
         <Tabs defaultValue="overview" className="space-y-6">
           <TabsList className="bg-white border border-gray-150/60 p-1 rounded-xl">
             <TabsTrigger value="overview" className="rounded-lg font-mono text-sm">
-              Overview
+              {t("groups.tabs.overview")}
             </TabsTrigger>
             <TabsTrigger value="content" className="rounded-lg font-mono text-sm">
-              Materi & Kuis
+              {t("groups.tabs.content")}
+            </TabsTrigger>
+            <TabsTrigger value="students" className="rounded-lg font-mono text-sm">
+              {t("groups.tabs.students")}
             </TabsTrigger>
           </TabsList>
 
@@ -376,6 +382,10 @@ export function GroupDetail({ id }: { id: string }) {
 
           <TabsContent value="content" className="space-y-6 outline-none">
             {contentGrid}
+          </TabsContent>
+
+          <TabsContent value="students" className="space-y-6 outline-none">
+            <GroupStudentList groupId={group.id} />
           </TabsContent>
         </Tabs>
       )}

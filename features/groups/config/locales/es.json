@@ -1,0 +1,49 @@
+{
+  "tabs": {
+    "overview": "Resumen",
+    "content": "Materiales y Cuestionarios",
+    "students": "Estudiantes"
+  },
+  "students": {
+    "title": "Actividad y Progreso de Estudiantes",
+    "subtitle": "Monitorea la lectura de materiales, puntajes de cuestionarios y participación en esta clase.",
+    "searchPlaceholder": "Buscar por nombre o correo...",
+    "sortBy": "Ordenar por",
+    "sortOptions": {
+      "name": "Nombre (A-Z)",
+      "progress": "Menor Progreso",
+      "score": "Menor Puntaje",
+      "lastActive": "Última Actividad"
+    },
+    "buckets": {
+      "all": "Todos",
+      "atRisk": "Requiere Atención",
+      "inactive": "Inactivos",
+      "onTrack": "En Marcha"
+    },
+    "table": {
+      "student": "Estudiante",
+      "status": "Estado",
+      "progress": "Progreso de Materiales",
+      "quizScore": "Puntaje Promedio",
+      "lastActive": "Última Actividad",
+      "actions": "Acciones"
+    },
+    "statusLabels": {
+      "AT_RISK": "Requiere Atención",
+      "INACTIVE": "Inactivo",
+      "ON_TRACK": "En Marcha"
+    },
+    "drawer": {
+      "title": "Detalle de Actividad del Estudiante",
+      "enrolledAt": "Inscrito en",
+      "quizHistory": "Historial de Intentos",
+      "readingTimeline": "Cronología de Lectura",
+      "noQuizHistory": "Sin historial de intentos aún.",
+      "noReadingTimeline": "Sin actividad de lectura aún.",
+      "attempt": "Intento #{number}",
+      "score": "Puntaje: {score} pt",
+      "duration": "{minutes}m {seconds}s"
+    }
+  }
+}

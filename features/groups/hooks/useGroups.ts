@@ -6,6 +6,9 @@ export const groupKeys = {
   all: ["groups"] as const,
   lists: () => [...groupKeys.all, "list"] as const,
   detail: (id: string) => [...groupKeys.all, "detail", id] as const,
+  studentsActivity: (groupId: string) => [...groupKeys.detail(groupId), "students-activity"] as const,
+  studentActivityDetail: (groupId: string, studentId: string) =>
+    [...groupKeys.detail(groupId), "student-activity-detail", studentId] as const,
 };
 
 export const useGroups = () => {
@@ -30,6 +33,27 @@ export const useStudentGroup = (id: string, enabled = true) => {
     enabled: !!id && enabled,
   });
 };
+
+export const useGroupStudentsActivity = (groupId: string, enabled = true) => {
+  return useQuery({
+    queryKey: groupKeys.studentsActivity(groupId),
+    queryFn: () => GroupService.getGroupStudentsActivity(groupId),
+    enabled: !!groupId && enabled,
+  });
+};
+
+export const useGroupStudentActivityDetail = (
+  groupId: string,
+  studentId: string | null,
+  enabled = true
+) => {
+  return useQuery({
+    queryKey: groupKeys.studentActivityDetail(groupId, studentId || ""),
+    queryFn: () => GroupService.getGroupStudentActivityDetail(groupId, studentId!),
+    enabled: !!groupId && !!studentId && enabled,
+  });
+};
+
 
 
 export const useCreateGroup = () => {
