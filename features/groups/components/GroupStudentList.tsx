@@ -127,15 +127,17 @@ export function GroupStudentList({ groupId }: GroupStudentListProps) {
           onClick={() => setBucket("ALL")}
           className={`flex items-center gap-4 p-6 rounded-2xl border text-left transition-all cursor-pointer hover:-translate-y-0.5 ${
             bucket === "ALL"
-              ? "bg-indigo-50 border-indigo-500 ring-2 ring-indigo-500/20 shadow-[0_8px_30px_rgba(99,102,241,0.06)]"
-              : "bg-indigo-50/20 border-indigo-100/60 shadow-[0_8px_30px_rgba(99,102,241,0.01)] hover:border-indigo-200/80 hover:bg-indigo-50/40"
+              ? "bg-indigo-100 border-indigo-600 ring-4 ring-indigo-600/15 shadow-[0_8px_30px_rgba(99,102,241,0.12)]"
+              : "bg-white border-gray-150/60 shadow-[0_8px_30px_rgba(99,102,241,0.005)] hover:border-indigo-200/80 hover:bg-indigo-50/10"
           }`}
         >
-          <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-indigo-600 text-white shadow-xs">
+          <div className={`flex h-12 w-12 shrink-0 items-center justify-center rounded-xl shadow-xs transition-colors ${
+            bucket === "ALL" ? "bg-indigo-600 text-white" : "bg-indigo-50 text-indigo-600"
+          }`}>
             <Users className="h-6 w-6" />
           </div>
           <div>
-            <span className="text-[10px] font-bold text-indigo-700/80 uppercase tracking-wider">
+            <span className="text-[10px] font-bold text-gray-500 uppercase tracking-wider">
               {t("groups.students.buckets.all")}
             </span>
             <p className="text-3xl font-extrabold font-mono text-indigo-950 mt-1">
@@ -149,15 +151,17 @@ export function GroupStudentList({ groupId }: GroupStudentListProps) {
           onClick={() => setBucket("AT_RISK")}
           className={`flex items-center gap-4 p-6 rounded-2xl border text-left transition-all cursor-pointer hover:-translate-y-0.5 ${
             bucket === "AT_RISK"
-              ? "bg-red-50 border-red-500 ring-2 ring-red-500/20 shadow-[0_8px_30px_rgba(239,68,68,0.06)]"
-              : "bg-red-50/20 border-red-100/60 shadow-[0_8px_30px_rgba(239,68,68,0.01)] hover:border-red-200/80 hover:bg-red-50/40"
+              ? "bg-red-100 border-red-600 ring-4 ring-red-600/15 shadow-[0_8px_30px_rgba(239,68,68,0.12)]"
+              : "bg-white border-gray-150/60 shadow-[0_8px_30px_rgba(239,68,68,0.005)] hover:border-red-200/80 hover:bg-red-50/10"
           }`}
         >
-          <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-red-600 text-white shadow-xs">
+          <div className={`flex h-12 w-12 shrink-0 items-center justify-center rounded-xl shadow-xs transition-colors ${
+            bucket === "AT_RISK" ? "bg-red-600 text-white" : "bg-red-50 text-red-600"
+          }`}>
             <AlertTriangle className="h-6 w-6" />
           </div>
           <div>
-            <span className="text-[10px] font-bold text-red-700/80 uppercase tracking-wider">
+            <span className="text-[10px] font-bold text-gray-500 uppercase tracking-wider">
               {t("groups.students.buckets.atRisk")}
             </span>
             <p className="text-3xl font-extrabold font-mono text-red-950 mt-1">
@@ -171,15 +175,17 @@ export function GroupStudentList({ groupId }: GroupStudentListProps) {
           onClick={() => setBucket("INACTIVE")}
           className={`flex items-center gap-4 p-6 rounded-2xl border text-left transition-all cursor-pointer hover:-translate-y-0.5 ${
             bucket === "INACTIVE"
-              ? "bg-amber-50 border-amber-500 ring-2 ring-amber-500/20 shadow-[0_8px_30px_rgba(245,158,11,0.06)]"
-              : "bg-amber-50/20 border-amber-100/60 shadow-[0_8px_30px_rgba(245,158,11,0.01)] hover:border-amber-200/80 hover:bg-amber-50/40"
+              ? "bg-amber-100 border-amber-600 ring-4 ring-amber-600/15 shadow-[0_8px_30px_rgba(245,158,11,0.12)]"
+              : "bg-white border-gray-150/60 shadow-[0_8px_30px_rgba(245,158,11,0.005)] hover:border-amber-200/80 hover:bg-amber-50/10"
           }`}
         >
-          <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-amber-500 text-white shadow-xs">
+          <div className={`flex h-12 w-12 shrink-0 items-center justify-center rounded-xl shadow-xs transition-colors ${
+            bucket === "INACTIVE" ? "bg-amber-500 text-white" : "bg-amber-50 text-amber-600"
+          }`}>
             <UserMinus className="h-6 w-6" />
           </div>
           <div>
-            <span className="text-[10px] font-bold text-amber-700/80 uppercase tracking-wider">
+            <span className="text-[10px] font-bold text-gray-500 uppercase tracking-wider">
               {t("groups.students.buckets.inactive")}
             </span>
             <p className="text-3xl font-extrabold font-mono text-amber-950 mt-1">
@@ -193,15 +199,17 @@ export function GroupStudentList({ groupId }: GroupStudentListProps) {
           onClick={() => setBucket("ON_TRACK")}
           className={`flex items-center gap-4 p-6 rounded-2xl border text-left transition-all cursor-pointer hover:-translate-y-0.5 ${
             bucket === "ON_TRACK"
-              ? "bg-emerald-50 border-emerald-500 ring-2 ring-emerald-500/20 shadow-[0_8px_30px_rgba(16,185,129,0.06)]"
-              : "bg-emerald-50/20 border-emerald-100/60 shadow-[0_8px_30px_rgba(16,185,129,0.01)] hover:border-emerald-200/80 hover:bg-emerald-50/40"
+              ? "bg-emerald-100 border-emerald-600 ring-4 ring-emerald-600/15 shadow-[0_8px_30px_rgba(16,185,129,0.12)]"
+              : "bg-white border-gray-150/60 shadow-[0_8px_30px_rgba(16,185,129,0.005)] hover:border-emerald-200/80 hover:bg-emerald-50/10"
           }`}
         >
-          <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-emerald-600 text-white shadow-xs">
+          <div className={`flex h-12 w-12 shrink-0 items-center justify-center rounded-xl shadow-xs transition-colors ${
+            bucket === "ON_TRACK" ? "bg-emerald-600 text-white" : "bg-emerald-50 text-emerald-600"
+          }`}>
             <UserCheck className="h-6 w-6" />
           </div>
           <div>
-            <span className="text-[10px] font-bold text-emerald-700/80 uppercase tracking-wider">
+            <span className="text-[10px] font-bold text-gray-500 uppercase tracking-wider">
               {t("groups.students.buckets.onTrack")}
             </span>
             <p className="text-3xl font-extrabold font-mono text-emerald-950 mt-1">
