@@ -280,8 +280,8 @@ export function StudentMaterialDetailView({
         </Link>
 
         {/* Scoped Premium Hero Header */}
-        <div className="bg-[#1E1E2E] text-white p-8 rounded-2xl shadow-lg border border-gray-800 relative overflow-hidden">
-          <div className="absolute right-8 top-8 opacity-5 text-gray-400">
+        <div className="bg-[#1E1E2E] text-white p-8 rounded-2xl shadow-lg border border-gray-800 relative overflow-hidden group">
+          <div className="absolute right-8 top-8 opacity-5 text-gray-400 transition-all duration-500 ease-in-out group-hover:opacity-20 group-hover:scale-110 group-hover:-translate-x-2 group-hover:-translate-y-2 pointer-events-none">
             <BookOpen className="w-36 h-36" />
           </div>
 
