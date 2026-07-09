@@ -541,7 +541,7 @@ export function StudentDashboardView({ data, isLoading }: StudentDashboardViewPr
                       <p className="text-xs font-semibold text-gray-700">Tidak ada kuis aktif</p>
                       <p className="text-[11px] text-muted-foreground mt-0.5 mb-4">Kamu telah menyelesaikan semua pengerjaan kuis.</p>
                       <Button size="sm" asChild className="bg-orange-500 hover:bg-orange-600 text-white text-xs shadow-sm">
-                        <Link href="/groups">Cari Kuis Baru</Link>
+                        <Link href="/dashboard?expand=groups">Cari Kuis Baru di Kelas...</Link>
                       </Button>
                     </div>
                   )}

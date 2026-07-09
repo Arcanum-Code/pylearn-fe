@@ -47,6 +47,7 @@ const NavItem = ({
   const pathname = usePathname();
   const searchParams = useSearchParams();
   const currentGroupId = searchParams.get("groupId") || "all";
+  const expandParam = searchParams.get("expand");
   const [isExpanded, setIsExpanded] = React.useState(false);
   const { canRead, isLoading: isLoadingPermissions } = usePermissions();
 
@@ -92,12 +93,24 @@ const NavItem = ({
     });
   }, [visibleChildren, pathname, currentGroupId]);
 
-  // Expand automatically if a child is active
+  const highlightClass = React.useMemo(() => {
+    if (isActive || hasActiveChild) {
+      return "bg-indigo-600 text-white shadow-xs";
+    }
+    if (expandParam === "groups" && item.labelKey === "navigation.activeGroups") {
+      return "bg-indigo-500/80 text-white shadow-xs animate-pulse";
+    }
+    return "";
+  }, [isActive, hasActiveChild, expandParam, item.labelKey]);
+
+  // Expand automatically if a child is active or if requested by the expand parameter
   React.useEffect(() => {
     if (hasActiveChild) {
       setIsExpanded(true);
+    } else if (expandParam === "groups" && item.labelKey === "navigation.activeGroups") {
+      setIsExpanded(true);
     }
-  }, [hasActiveChild]);
+  }, [hasActiveChild, expandParam, item.labelKey]);
 
   if (item.feature && !isLoadingPermissions) {
     const hasPermission = canRead(item.feature);
@@ -128,7 +141,7 @@ const NavItem = ({
             <button
               className={cn(
                 "flex w-full items-center justify-center rounded-md p-2.5 text-slate-400 transition-colors hover:bg-slate-800 hover:text-white",
-                (isActive || hasActiveChild) && "bg-indigo-600 text-white shadow-xs",
+                highlightClass,
               )}
             >
               <Icon className="h-5 w-5 flex-shrink-0" />
@@ -202,7 +215,7 @@ const NavItem = ({
           className={cn(
             "flex w-full items-center justify-between rounded-md px-3 py-2 text-sm font-medium transition-colors",
             "text-slate-400 hover:bg-slate-800 hover:text-white",
-            (isActive || hasActiveChild) && "bg-indigo-600 text-white shadow-xs",
+            highlightClass,
           )}
           style={{ paddingLeft: `${12 + depth * 12}px` }}
         >
