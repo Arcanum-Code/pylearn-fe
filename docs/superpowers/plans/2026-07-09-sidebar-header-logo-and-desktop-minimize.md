@@ -1,3 +1,225 @@
+# Sidebar Header Logo, Logout Footer, and Desktop Minimize Implementation Plan
+
+> **For agentic workers:** REQUIRED SUB-SKILL: Use superpowers:subagent-driven-development (recommended) or superpowers:executing-plans to implement this plan task-by-task. Steps use checkbox (`- [ ]`) syntax for tracking.
+
+**Goal:** Enhance the sidebar layout by adding the PyLearn `>_` terminal logo next to the title, replacing the system info footer with a Logout button, and adding a hamburger menu icon on desktop (`Navbar.tsx`) that minimizes the sidebar to an icon-only (`w-16`) mode with hover tooltips and dropdown submenus.
+
+**Architecture:**
+1. Update `MainLayout` (`app/(main)/layout.tsx`) to manage `isCollapsed` desktop state (`w-64` vs `w-16`) and update main content left padding (`lg:pl-64` vs `lg:pl-16`).
+2. Update `Navbar` (`features/layout/components/Navbar.tsx`) to render a desktop hamburger menu button (`hidden lg:flex`) that calls `onToggleCollapse`.
+3. Update `SidebarNav` (`features/layout/components/SidebarNav.tsx`):
+   - Add `isCollapsed?: boolean` prop.
+   - Update header to include the `>_` indigo badge and hide the `"PyLearn"` title when `isCollapsed` is true.
+   - Replace the system info footer with a `logout()` button (icon-only with tooltip when collapsed).
+   - In `NavItem`, when `isCollapsed === true`:
+     - For single items without children: render an icon-only button/link wrapped in `<Tooltip side="right">`.
+     - For parent items with children: render an icon-only button wrapped in `<DropdownMenu side="right">` containing `<DropdownMenuItem>`s for each child submenu item.
+
+**Tech Stack:** React 19, Next.js, Tailwind CSS v4, shadcn/ui (`Tooltip`, `DropdownMenu`).
+
+---
+
+### Task 1: Update `MainLayout` and `Navbar` for Desktop Collapse State
+
+**Files:**
+- Modify: `app/(main)/layout.tsx`
+- Modify: `features/layout/components/Navbar.tsx`
+
+- [ ] **Step 1: Update `Navbar.tsx` to accept `onToggleCollapse` and render desktop hamburger menu**
+
+In `features/layout/components/Navbar.tsx`, locate the `Navbar` component definition and top header left section around lines 33-68:
+
+```tsx
+export function Navbar({
+  title,
+  onMenuClick,
+}: {
+  title?: string;
+  onMenuClick?: () => void;
+}) {
+  const { user, logout } = useAuth();
+  const t = useTranslations();
+  const locale = useLocale();
+
+  const [time, setTime] = React.useState<Date | null>(null);
+
+  React.useEffect(() => {
+    setTime(new Date());
+    const timer = setInterval(() => {
+      setTime(new Date());
+    }, 1000);
+
+    return () => clearInterval(timer);
+  }, []);
+
+  return (
+    <header className="sticky top-0 z-30 flex h-16 w-full items-center justify-between border-b bg-background px-6">
+      {/* Left side: Menu button (mobile) + Page title */}
+      <div className="flex items-center gap-4">
+        {/* Hamburger menu button - only visible on mobile */}
+        <Button
+          variant="ghost"
+          size="icon"
+          className="lg:hidden"
+          onClick={onMenuClick}
+        >
+          <Menu className="h-5 w-5" />
+        </Button>
+
+        {/* Page Title */}
+        {title && <h1 className="text-xl font-semibold">{title}</h1>}
+      </div>
+```
+
+Replace with:
+
+```tsx
+export function Navbar({
+  title,
+  onMenuClick,
+  onToggleCollapse,
+}: {
+  title?: string;
+  onMenuClick?: () => void;
+  onToggleCollapse?: () => void;
+}) {
+  const { user, logout } = useAuth();
+  const t = useTranslations();
+  const locale = useLocale();
+
+  const [time, setTime] = React.useState<Date | null>(null);
+
+  React.useEffect(() => {
+    setTime(new Date());
+    const timer = setInterval(() => {
+      setTime(new Date());
+    }, 1000);
+
+    return () => clearInterval(timer);
+  }, []);
+
+  return (
+    <header className="sticky top-0 z-30 flex h-16 w-full items-center justify-between border-b bg-background px-6">
+      {/* Left side: Menu button (mobile & desktop) + Page title */}
+      <div className="flex items-center gap-4">
+        {/* Hamburger menu button - mobile overlay toggle */}
+        <Button
+          variant="ghost"
+          size="icon"
+          className="lg:hidden"
+          onClick={onMenuClick}
+        >
+          <Menu className="h-5 w-5" />
+        </Button>
+
+        {/* Hamburger menu button - desktop minimize toggle */}
+        <Button
+          variant="ghost"
+          size="icon"
+          className="hidden lg:flex"
+          onClick={onToggleCollapse}
+        >
+          <Menu className="h-5 w-5" />
+        </Button>
+
+        {/* Page Title */}
+        {title && <h1 className="text-xl font-semibold">{title}</h1>}
+      </div>
+```
+
+- [ ] **Step 2: Update `MainLayout` (`app/(main)/layout.tsx`) to track `isCollapsed` and adjust sidebar & main content widths/padding**
+
+In `app/(main)/layout.tsx`, replace the entire file with:
+
+```tsx
+"use client";
+
+import React from "react";
+import { SidebarNav, Navbar } from "@features/layout";
+import { cn } from "@/lib/utils";
+
+/**
+ * Main layout for authenticated pages.
+ * Wraps all pages in app/(main) with the sidebar and navbar.
+ */
+export default function MainLayout({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
+  const [sidebarOpen, setSidebarOpen] = React.useState(false);
+  const [isCollapsed, setIsCollapsed] = React.useState(false);
+
+  return (
+    <div className="flex h-screen w-screen overflow-hidden">
+      {/* Sidebar - fixed position with mobile toggle support */}
+      <div className="lg:hidden">
+        <SidebarNav
+          isOpen={sidebarOpen}
+          onClose={() => setSidebarOpen(false)}
+          isCollapsed={false}
+        />
+      </div>
+
+      {/* Desktop sidebar - always visible, supports collapse to w-16 */}
+      <div className="hidden lg:block">
+        <SidebarNav isCollapsed={isCollapsed} />
+      </div>
+
+      {/* Main content area - dynamic left padding based on isCollapsed */}
+      <div
+        className={cn(
+          "flex flex-1 flex-col w-full min-w-0 transition-all duration-300",
+          isCollapsed ? "lg:pl-16" : "lg:pl-64",
+        )}
+      >
+        <Navbar
+          onMenuClick={() => setSidebarOpen(true)}
+          onToggleCollapse={() => setIsCollapsed(!isCollapsed)}
+        />
+        <main className="flex-1 overflow-y-auto bg-muted/30 p-3 sm:p-6 md:pb-6">
+          {children}
+        </main>
+      </div>
+    </div>
+  );
+}
+```
+
+---
+
+### Task 2: Refactor `SidebarNav` with Logo, Logout Footer, and Minimized (`w-16`) Mode
+
+**Files:**
+- Modify: `features/layout/components/SidebarNav.tsx`
+
+- [ ] **Step 1: Update imports in `SidebarNav.tsx`**
+
+In `features/layout/components/SidebarNav.tsx`, check imports at the top around lines 1-18:
+
+```tsx
+"use client";
+
+import React, { Suspense } from "react";
+import Link from "next/link";
+import { usePathname, useSearchParams } from "next/navigation";
+import { ChevronDown, GraduationCap } from "lucide-react";
+import { cn } from "@/lib/utils";
+import {
+  SidebarNavItem,
+  sidebarConfig,
+  sidebarFooterConfig,
+} from "@features/layout/config/sidebar";
+import { useTranslations } from "@/lib/i18n/useTranslation";
+import { usePermissions } from "@/features/rbac/context/PermissionsProvider";
+import { useAuth } from "@features/auth/context/AuthProvider";
+import { useFetchLecturerGroups } from "@features/dashboard/hooks/useLecturerDashboard";
+import { useFetchStudentDashboard } from "@features/dashboard/hooks/useDashboard";
+```
+
+Replace with:
+
+```tsx
 "use client";
 
 import React, { Suspense } from "react";
@@ -27,11 +249,15 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+```
 
-/**
- * Collapsible nav item with smooth animation.
- * Filters children based on user permissions.
- */
+- [ ] **Step 2: Update `NavItem` to handle `isCollapsed` (`w-16`) icon-only mode with tooltips & dropdown submenus**
+
+In `features/layout/components/SidebarNav.tsx`, locate `const NavItem = ({ ... })` around lines 23-31 and its return statements around lines 120-198:
+
+Replace `const NavItem = ({ ...` and its entire implementation with:
+
+```tsx
 const NavItem = ({
   item,
   depth = 0,
@@ -91,13 +317,6 @@ const NavItem = ({
         : pathname === child.href || pathname.startsWith(child.href + "/");
     });
   }, [visibleChildren, pathname, currentGroupId]);
-
-  // Expand automatically if a child is active
-  React.useEffect(() => {
-    if (hasActiveChild) {
-      setIsExpanded(true);
-    }
-  }, [hasActiveChild]);
 
   if (item.feature && !isLoadingPermissions) {
     const hasPermission = canRead(item.feature);
@@ -255,11 +474,21 @@ const NavItem = ({
     </Link>
   );
 };
+```
 
+- [ ] **Step 3: Update `SidebarNavItems` and `SidebarNav` components to accept and propagate `isCollapsed`**
+
+In `features/layout/components/SidebarNav.tsx`, locate `function SidebarNavItems` and `export function SidebarNav` around lines 198 to 328:
+
+Replace both component functions with:
+
+```tsx
 function SidebarNavItems({
+  isOpen,
   isCollapsed = false,
   handleNavigate,
 }: {
+  isOpen?: boolean;
   isCollapsed?: boolean;
   handleNavigate: () => void;
 }) {
@@ -392,6 +621,7 @@ export function SidebarNav({
         <nav className={cn("flex-1 space-y-1 overflow-y-auto p-3", isCollapsed && "px-2")}>
           <Suspense fallback={<div className="h-8 w-full bg-slate-800 animate-pulse rounded-md" />}>
             <SidebarNavItems
+              isOpen={isOpen}
               isCollapsed={isCollapsed}
               handleNavigate={handleNavigate}
             />
@@ -412,13 +642,13 @@ export function SidebarNav({
                 >
                   <LogOut className={cn(isCollapsed ? "h-5 w-5 flex-shrink-0" : "h-4 w-4 flex-shrink-0")} />
                   {!isCollapsed && (
-                    <span className="font-mono truncate">{t("navigation.logout")}</span>
+                    <span className="font-mono truncate">{t("common.logout")}</span>
                   )}
                 </button>
               </TooltipTrigger>
               {isCollapsed && (
                 <TooltipContent side="right" className="font-mono">
-                  {t("navigation.logout")}
+                  {t("common.logout")}
                 </TooltipContent>
               )}
             </Tooltip>
@@ -428,3 +658,22 @@ export function SidebarNav({
     </>
   );
 }
+```
+
+---
+
+### Task 3: Verification & Commit
+
+- [ ] **Step 1: Run ESLint on the modified layout files**
+
+```bash
+bun x eslint app/(main)/layout.tsx features/layout/components/Navbar.tsx features/layout/components/SidebarNav.tsx
+```
+Expected: PASS with 0 errors.
+
+- [ ] **Step 2: Commit all changes**
+
+```bash
+git add app/(main)/layout.tsx features/layout/components/Navbar.tsx features/layout/components/SidebarNav.tsx docs/superpowers/plans/2026-07-09-sidebar-header-logo-and-desktop-minimize.md
+git commit -m "feat(layout): add PyLearn logo badge to sidebar header, replace footer with logout button, and implement desktop minimize mini-sidebar"
+```

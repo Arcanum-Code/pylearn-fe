@@ -33,9 +33,11 @@ import { useTranslations, useLocale } from "@/lib/i18n/useTranslation";
 export function Navbar({
   title,
   onMenuClick,
+  onToggleCollapse,
 }: {
   title?: string;
   onMenuClick?: () => void;
+  onToggleCollapse?: () => void;
 }) {
   const { user, logout } = useAuth();
   const t = useTranslations();
@@ -54,14 +56,24 @@ export function Navbar({
 
   return (
     <header className="sticky top-0 z-30 flex h-16 w-full items-center justify-between border-b bg-background px-6">
-      {/* Left side: Menu button (mobile) + Page title */}
+      {/* Left side: Menu button (mobile & desktop) + Page title */}
       <div className="flex items-center gap-4">
-        {/* Hamburger menu button - only visible on mobile */}
+        {/* Hamburger menu button - mobile overlay toggle */}
         <Button
           variant="ghost"
           size="icon"
           className="lg:hidden"
           onClick={onMenuClick}
+        >
+          <Menu className="h-5 w-5" />
+        </Button>
+
+        {/* Hamburger menu button - desktop minimize toggle */}
+        <Button
+          variant="ghost"
+          size="icon"
+          className="hidden lg:flex"
+          onClick={onToggleCollapse}
         >
           <Menu className="h-5 w-5" />
         </Button>
