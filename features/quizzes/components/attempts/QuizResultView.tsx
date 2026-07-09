@@ -20,8 +20,15 @@ const stripHtmlTags = (htmlString: string) => {
 
 export function QuizResultView({ results, isLoading }: QuizResultViewProps) {
   useEffect(() => {
-    window.scrollTo({ top: 0, behavior: "smooth" });
-  }, []);
+    if (!isLoading && results) {
+      const mainEl = document.querySelector("main");
+      if (mainEl) {
+        mainEl.scrollTo({ top: 0, behavior: "smooth" });
+      } else {
+        window.scrollTo({ top: 0, behavior: "smooth" });
+      }
+    }
+  }, [isLoading, results]);
 
   if (isLoading) {
     return (

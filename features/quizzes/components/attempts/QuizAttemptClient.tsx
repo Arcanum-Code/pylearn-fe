@@ -179,7 +179,12 @@ export function QuizAttemptClient({
       // Then submit the attempt (which displays the single success toast)
       await submitAttempt.mutateAsync();
       setIsConfirmSubmitOpen(false);
-      window.scrollTo({ top: 0, behavior: "smooth" });
+      const mainEl = document.querySelector("main");
+      if (mainEl) {
+        mainEl.scrollTo({ top: 0, behavior: "smooth" });
+      } else {
+        window.scrollTo({ top: 0, behavior: "smooth" });
+      }
     } catch (error) {
       console.error("Failed to submit quiz:", error);
     }
