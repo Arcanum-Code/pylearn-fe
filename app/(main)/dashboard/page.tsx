@@ -35,7 +35,7 @@ export default function DashboardPage() {
   };
 
   return (
-    <div className="p-8">
+    <div className="p-0 sm:p-2 md:p-4">
       <div>
         {renderDashboard()}
       </div>

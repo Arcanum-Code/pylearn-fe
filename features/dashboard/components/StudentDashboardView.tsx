@@ -379,13 +379,13 @@ export function StudentDashboardView({ data, isLoading }: StudentDashboardViewPr
                       onClick={() => toggleGroup(group.groupId)}
                       className="overflow-hidden border border-gray-150/85 shadow-xs hover:shadow-sm cursor-pointer transition-all duration-200 bg-white"
                     >
-                      <CardHeader className={`bg-gray-50/40 pb-4 transition-all duration-300 ${isExpanded ? "border-b border-gray-150/60" : ""}`}>
-                        <div className="flex items-center justify-between gap-4">
-                          <div className="flex items-center gap-3 min-w-0">
-                            <div className="p-2 rounded-lg bg-[#6366F1]/10 text-[#6366F1] transition-all duration-300">
+                      <CardHeader className={`bg-gray-50/40 p-3.5 sm:p-6 pb-3.5 sm:pb-4 transition-all duration-300 ${isExpanded ? "border-b border-gray-150/60" : ""}`}>
+                        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 sm:gap-4">
+                          <div className="flex items-center gap-3 min-w-0 w-full sm:w-auto">
+                            <div className="p-2 rounded-lg bg-[#6366F1]/10 text-[#6366F1] transition-all duration-300 flex-shrink-0">
                               <GraduationCap className="h-5 w-5" />
                             </div>
-                            <div className="min-w-0">
+                            <div className="min-w-0 flex-1 sm:flex-initial">
                               <CardTitle className="text-sm md:text-base font-bold truncate">{group.groupName}</CardTitle>
                               <p className="text-xs text-muted-foreground mt-0.5">
                                 {group.materialsCompleted} dari {group.materialsTotal} materi selesai
@@ -393,10 +393,10 @@ export function StudentDashboardView({ data, isLoading }: StudentDashboardViewPr
                             </div>
                           </div>
 
-                          <div className="flex items-center gap-4 flex-shrink-0">
-                            <div className="hidden md:flex items-center gap-3">
+                          <div className="flex items-center justify-between sm:justify-end gap-3 sm:gap-4 w-full sm:w-auto pt-2 sm:pt-0 border-t sm:border-t-0 border-gray-150/60 sm:border-none">
+                            <div className="flex items-center gap-3">
                               <span className="text-xs font-semibold text-[#6366F1]">{percentage}% Selesai</span>
-                              <div className="w-24 bg-gray-100 dark:bg-gray-700 rounded-full h-1.5">
+                              <div className="w-20 sm:w-24 bg-gray-100 dark:bg-gray-700 rounded-full h-1.5">
                                 <div 
                                   className="bg-gradient-to-r from-[#6366F1] to-indigo-500 h-1.5 rounded-full transition-all duration-1000 ease-out" 
                                   style={{ width: mounted ? `${percentage}%` : "0%" }}
@@ -404,7 +404,7 @@ export function StudentDashboardView({ data, isLoading }: StudentDashboardViewPr
                               </div>
                             </div>
 
-                            <div className="flex items-center gap-1">
+                            <div className="flex items-center gap-1 flex-shrink-0">
                               <Button 
                                 variant="ghost" 
                                 size="sm" 
@@ -412,13 +412,13 @@ export function StudentDashboardView({ data, isLoading }: StudentDashboardViewPr
                                   e.stopPropagation();
                                   router.push(`/groups/${group.groupId}`);
                                 }}
-                                className="text-xs text-[#6366F1] hover:text-[#4F46E5] hover:bg-[#6366F1]/10 font-semibold h-8 py-0 px-2.5 rounded-lg flex items-center gap-1"
+                                className="text-xs text-[#6366F1] hover:text-[#4F46E5] hover:bg-[#6366F1]/10 font-semibold h-8 py-0 px-2.5 rounded-lg flex items-center gap-1 flex-shrink-0"
                               >
                                 Detail Kelas
                                 <ArrowRight className="h-3 w-3" />
                               </Button>
 
-                              <div className="p-1 rounded-lg text-gray-500 hover:bg-gray-100 transition-colors">
+                              <div className="p-1 rounded-lg text-gray-500 hover:bg-gray-100 transition-colors flex-shrink-0">
                                 <ChevronDown className={`h-4 w-4 transition-transform duration-200 ${isExpanded ? "rotate-180" : ""}`} />
                               </div>
                             </div>
@@ -427,7 +427,7 @@ export function StudentDashboardView({ data, isLoading }: StudentDashboardViewPr
                       </CardHeader>
                       
                       {isExpanded && (
-                        <CardContent className="pt-6 bg-white transition-all duration-300">
+                        <CardContent className="p-3.5 sm:p-6 pt-4 sm:pt-6 bg-white transition-all duration-300">
                           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
                             {group.materials.map((material) => {
                               let statusBadge = null;

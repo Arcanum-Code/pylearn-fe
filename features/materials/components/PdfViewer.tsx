@@ -28,8 +28,22 @@ export function PdfViewer({
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [scale, setScale] = useState(1.0);
+  const [containerWidth, setContainerWidth] = useState<number>(0);
   const containerRef = useRef<HTMLDivElement | null>(null);
   const hasJumpedRef = useRef(false);
+
+  useEffect(() => {
+    if (!containerRef.current) return;
+    const updateWidth = () => {
+      if (containerRef.current) {
+        setContainerWidth(containerRef.current.clientWidth);
+      }
+    };
+    updateWidth();
+    const observer = new ResizeObserver(updateWidth);
+    observer.observe(containerRef.current);
+    return () => observer.disconnect();
+  }, [loading]);
 
   // Reset jump tracker when URL changes
   useEffect(() => {
@@ -98,9 +112,9 @@ export function PdfViewer({
   const zoomOut = () => setScale((prev) => Math.max(prev - 0.2, 0.5));
 
   return (
-    <div className="flex flex-col items-center w-full bg-muted/30 rounded-lg p-4 gap-4">
+    <div className="flex flex-col items-center w-full bg-muted/30 rounded-lg p-1 sm:p-4 gap-3 sm:gap-4">
       {error ? (
-        <Alert variant="destructive">
+        <Alert variant="destructive" className="m-2">
           <AlertCircle className="h-4 w-4" />
           <AlertTitle>Error Loading PDF</AlertTitle>
           <AlertDescription>
@@ -109,7 +123,7 @@ export function PdfViewer({
         </Alert>
       ) : (
         <>
-          <div className="flex items-center justify-end w-full gap-2">
+          <div className="flex items-center justify-end w-full gap-2 px-2 sm:px-0">
             <Button
               variant="outline"
               size="icon"
@@ -145,7 +159,7 @@ export function PdfViewer({
               onLoadSuccess={onDocumentLoadSuccess}
               onLoadError={onDocumentLoadError}
               loading={<Skeleton className="h-[500px] w-full" />}
-              className="flex flex-col gap-4 py-4 min-w-max items-center"
+              className="flex flex-col gap-3 sm:gap-4 py-3 sm:py-4 min-w-max items-center"
             >
               {Array.from(new Array(numPages || 0), (_, index) => (
                 <Page
@@ -155,7 +169,15 @@ export function PdfViewer({
                   renderAnnotationLayer={false}
                   className="shadow-md shrink-0"
                   scale={scale}
-                  width={window.innerWidth > 800 ? 700 : window.innerWidth - 64}
+                  width={
+                    containerWidth > 0
+                      ? Math.min(containerWidth - (typeof window !== "undefined" && window.innerWidth < 640 ? 8 : 32), 850)
+                      : typeof window !== "undefined" && window.innerWidth > 800
+                      ? 700
+                      : typeof window !== "undefined"
+                      ? window.innerWidth - 32
+                      : 600
+                  }
                 />
               ))}
             </Document>

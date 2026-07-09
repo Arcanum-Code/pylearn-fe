@@ -243,7 +243,7 @@ export function StudentMaterialDetailView({
 
   return (
     <TooltipProvider>
-      <div className="p-8 max-w-7xl mx-auto space-y-6 bg-[#F7F8FA] min-h-screen font-sans text-[#1A1C1E]">
+      <div className="p-3 sm:p-6 md:p-8 max-w-7xl mx-auto space-y-6 bg-[#F7F8FA] min-h-screen font-sans text-[#1A1C1E]">
         {/* Breadcrumb Back Link */}
         <Link
           href={`/groups/${groupId}`}
@@ -316,11 +316,11 @@ export function StudentMaterialDetailView({
         </div>
 
         {/* Material Content Area */}
-        <Card className="border border-gray-150/60 shadow-xs">
-          <CardContent className="p-8 md:p-12">
+        <Card className="border border-gray-150/60 shadow-xs overflow-hidden">
+          <CardContent className={absolutePdfUrl ? "p-1 sm:p-6 md:p-8" : "p-4 sm:p-8 md:p-12"}>
             {absolutePdfUrl ? (
               <div className="space-y-4">
-                <div className="flex justify-end">
+                <div className="flex justify-end px-2 sm:px-0 pt-2 sm:pt-0">
                   <Button variant="outline" size="sm" asChild>
                     <a href={absolutePdfUrl} target="_blank" rel="noopener noreferrer">
                       <ExternalLink className="h-4 w-4 mr-2" />
