@@ -42,6 +42,7 @@ export default function MainLayout({
         <Navbar
           onMenuClick={() => setSidebarOpen(true)}
           onToggleCollapse={() => setIsCollapsed(!isCollapsed)}
+          isCollapsed={isCollapsed}
         />
         <main className="flex-1 overflow-y-auto bg-muted/30 p-3 sm:p-6 md:pb-6">
           {children}

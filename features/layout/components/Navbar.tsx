@@ -15,6 +15,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { LanguageSwitcher } from "./LanguageSwitcher";
 import { useTranslations, useLocale } from "@/lib/i18n/useTranslation";
+import { cn } from "@/lib/utils";
 
 /**
  * Navbar component for authenticated pages.
@@ -34,10 +35,12 @@ export function Navbar({
   title,
   onMenuClick,
   onToggleCollapse,
+  isCollapsed = false,
 }: {
   title?: string;
   onMenuClick?: () => void;
   onToggleCollapse?: () => void;
+  isCollapsed?: boolean;
 }) {
   const { user, logout } = useAuth();
   const t = useTranslations();
@@ -72,10 +75,29 @@ export function Navbar({
         <Button
           variant="ghost"
           size="icon"
-          className="hidden lg:flex"
+          className="hidden lg:flex items-center justify-center"
           onClick={onToggleCollapse}
         >
-          <Menu className="h-5 w-5" />
+          <div className="relative w-5 h-5 flex items-center justify-center">
+            <span
+              className={cn(
+                "absolute h-0.5 w-5 bg-foreground transform transition-all duration-300 ease-in-out",
+                !isCollapsed ? "rotate-45" : "-translate-y-1.5"
+              )}
+            />
+            <span
+              className={cn(
+                "absolute h-0.5 w-5 bg-foreground transform transition-all duration-300 ease-in-out",
+                !isCollapsed ? "opacity-0 scale-0" : ""
+              )}
+            />
+            <span
+              className={cn(
+                "absolute h-0.5 w-5 bg-foreground transform transition-all duration-300 ease-in-out",
+                !isCollapsed ? "-rotate-45" : "translate-y-1.5"
+              )}
+            />
+          </div>
         </Button>
 
         {/* Page Title */}
