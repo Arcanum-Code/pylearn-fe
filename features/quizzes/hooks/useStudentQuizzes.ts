@@ -189,7 +189,10 @@ export function useUpdateStudentQuizAnswer(attemptId: string) {
 }
 
 // 10. Submit Bulk Quiz Answers Mutation
-export function useSubmitBulkStudentQuizAnswers(attemptId: string) {
+export function useSubmitBulkStudentQuizAnswers(
+  attemptId: string,
+  options?: { silent?: boolean },
+) {
   const queryClient = useQueryClient();
 
   return useMutation({
@@ -201,9 +204,11 @@ export function useSubmitBulkStudentQuizAnswers(attemptId: string) {
       queryClient.invalidateQueries({
         queryKey: studentQuizKeys.answers(attemptId),
       });
-      toast.success(
-        response.message || "Progres jawaban Anda berhasil disimpan.",
-      );
+      if (!options?.silent) {
+        toast.success(
+          response.message || "Progres jawaban Anda berhasil disimpan.",
+        );
+      }
     },
     onError: (error: any) => {
       toast.error(

@@ -149,7 +149,10 @@ export function useSubmitStudentAnswer(attemptId: string) {
   });
 }
 
-export function useSubmitBulkStudentAnswers(attemptId: string) {
+export function useSubmitBulkStudentAnswers(
+  attemptId: string,
+  options?: { silent?: boolean },
+) {
   const queryClient = useQueryClient();
 
   return useMutation({
@@ -159,10 +162,12 @@ export function useSubmitBulkStudentAnswers(attemptId: string) {
         queryKey: attemptKeys.detail(attemptId),
       });
 
-      // 2. Berikan umpan balik visual yang nyaman bagi siswa
-      toast.success(
-        response.message || "Progres jawaban Anda berhasil disimpan.",
-      );
+      // Berikan umpan balik visual yang nyaman bagi siswa jika tidak dalam mode silent
+      if (!options?.silent) {
+        toast.success(
+          response.message || "Progres jawaban Anda berhasil disimpan.",
+        );
+      }
     },
     onError: (error: any) => {
       toast.error(

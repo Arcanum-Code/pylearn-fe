@@ -11,26 +11,30 @@ import {
 } from "@/features/quizzes";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardContent } from "@/components/ui/card";
 import { Textarea } from "@/components/ui/textarea";
 import {
   ArrowLeft,
   Loader2,
   CheckCircle,
   Clock,
-  Save,
   HelpCircle,
   Award,
-  PenTool,
+  AlertCircle,
 } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { QuizResultView } from "./QuizResultView";
+import { TooltipProvider } from "@/components/ui/tooltip";
 import {
-  Tooltip,
-  TooltipContent,
-  TooltipProvider,
-  TooltipTrigger,
-} from "@/components/ui/tooltip";
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from "@/components/ui/alert-dialog";
 
 interface QuizAttemptClientProps {
   groupId?: string;
@@ -97,8 +101,11 @@ export function QuizAttemptClient({
     Record<string, Record<string, string>>
   >({});
 
+  const [isConfirmSubmitOpen, setIsConfirmSubmitOpen] = useState(false);
   const submitAttempt = useSubmitStudentQuizAttempt(attemptId);
-  const submitBulkAnswers = useSubmitBulkStudentQuizAnswers(attemptId);
+  const submitBulkAnswers = useSubmitBulkStudentQuizAnswers(attemptId, {
+    silent: true,
+  });
 
   const getInputWidth = (correctAnswerLength: number): string => {
     const ch = Math.max(correctAnswerLength + 2, 4);
@@ -166,11 +173,11 @@ export function QuizAttemptClient({
 
   const handleSubmitQuiz = async () => {
     try {
-      // First save all progress
+      // First save all progress silently
       await handleSaveProgress();
-      // Then submit the attempt
+      // Then submit the attempt (which displays the single success toast)
       await submitAttempt.mutateAsync();
-      router.push(groupId ? `/groups/${groupId}` : "/materials");
+      setIsConfirmSubmitOpen(false);
     } catch (error) {
       console.error("Failed to submit quiz:", error);
     }
@@ -428,31 +435,59 @@ export function QuizAttemptClient({
         {!isSubmitted && questions && questions.length > 0 && (
           <div className="flex justify-end gap-3">
             <Button
-              variant="outline"
               size="lg"
-              onClick={handleSaveProgress}
-              disabled={submitBulkAnswers.isPending || submitAttempt.isPending}
-            >
-              {submitBulkAnswers.isPending ? (
-                <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-              ) : (
-                <Save className="mr-2 h-4 w-4" />
-              )}
-              Simpan Progres
-            </Button>
-
-            <Button
-              size="lg"
-              onClick={handleSubmitQuiz}
+              onClick={() => setIsConfirmSubmitOpen(true)}
               disabled={submitAttempt.isPending || submitBulkAnswers.isPending}
             >
-              {submitAttempt.isPending && (
+              {(submitAttempt.isPending || submitBulkAnswers.isPending) && (
                 <Loader2 className="mr-2 h-4 w-4 animate-spin" />
               )}
-              Kumpulkan Kuis
+              Kumpulkan Jawaban
             </Button>
           </div>
         )}
+
+        <AlertDialog
+          open={isConfirmSubmitOpen}
+          onOpenChange={setIsConfirmSubmitOpen}
+        >
+          <AlertDialogContent className="sm:max-w-[420px]">
+            <AlertDialogHeader>
+              <div className="flex items-center gap-3 mb-2">
+                <div className="flex h-10 w-10 items-center justify-center rounded-full bg-primary/10">
+                  <AlertCircle className="h-5 w-5 text-primary" />
+                </div>
+                <AlertDialogTitle className="text-xl">
+                  Konfirmasi Pengumpulan
+                </AlertDialogTitle>
+              </div>
+              <AlertDialogDescription className="text-sm text-muted-foreground">
+                Apakah Anda yakin ingin mengumpulkan jawaban kuis ini? Jawaban
+                yang sudah dikumpulkan tidak dapat diubah kembali.
+              </AlertDialogDescription>
+            </AlertDialogHeader>
+            <AlertDialogFooter className="mt-4">
+              <AlertDialogCancel
+                disabled={submitAttempt.isPending || submitBulkAnswers.isPending}
+              >
+                Batal
+              </AlertDialogCancel>
+              <AlertDialogAction
+                onClick={(e) => {
+                  e.preventDefault();
+                  handleSubmitQuiz();
+                }}
+                disabled={submitAttempt.isPending || submitBulkAnswers.isPending}
+                className="bg-primary hover:bg-primary/90"
+              >
+                {(submitAttempt.isPending || submitBulkAnswers.isPending) && (
+                  <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                )}
+                Ya, Kumpulkan
+              </AlertDialogAction>
+            </AlertDialogFooter>
+          </AlertDialogContent>
+        </AlertDialog>
       </div>
     </TooltipProvider>
   );
