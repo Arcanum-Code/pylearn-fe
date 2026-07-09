@@ -1,4 +1,5 @@
 "use client";
+/* eslint-disable react-hooks/set-state-in-effect */
 
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
@@ -49,8 +50,17 @@ function getDotColor(type: string): string {
 }
 
 function StudentRightPanel() {
-  const [currentDate, setCurrentDate] = useState(new Date(2026, 6, 7)); // Default to July 7, 2026
-  const [selectedDate, setSelectedDate] = useState<string>("2026-07-07");
+  const [currentDate, setCurrentDate] = useState(new Date(2026, 6, 9)); // Default to July 9, 2026
+  const [selectedDate, setSelectedDate] = useState<string>("2026-07-09");
+
+  useEffect(() => {
+    const today = new Date();
+    setCurrentDate(today);
+    const y = today.getFullYear();
+    const m = String(today.getMonth() + 1).padStart(2, "0");
+    const d = String(today.getDate()).padStart(2, "0");
+    setSelectedDate(`${y}-${m}-${d}`);
+  }, []);
 
   const year = currentDate.getFullYear();
   const month = currentDate.getMonth() + 1; // 1-indexed for the API

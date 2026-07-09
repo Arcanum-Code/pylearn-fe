@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import {
   ChevronLeft,
   ChevronRight,
@@ -31,12 +31,13 @@ function formatRelativeTime(isoString: string): string {
     if (diffHours < 24) return `${diffHours} jam yang lalu`;
     if (diffDays < 7) return `${diffDays} hari yang lalu`;
     
-    const d = String(date.getDate()).padStart(2, "0");
-    const m = String(date.getMonth() + 1).padStart(2, "0");
-    const y = date.getFullYear();
-    return `${d}/${m}/${y}`;
+    return date.toLocaleDateString("id-ID", {
+      day: "numeric",
+      month: "short",
+      year: "numeric",
+    });
   } catch {
-    return isoString;
+    return "";
   }
 }
 
@@ -54,8 +55,18 @@ function getDotColor(type: string): string {
 }
 
 export function LecturerRightPanel({ groupId }: LecturerRightPanelProps) {
-  const [currentDate, setCurrentDate] = useState(new Date(2026, 6, 6)); // Default to July 6, 2026
-  const [selectedDate, setSelectedDate] = useState<string>("2026-07-06");
+  const [currentDate, setCurrentDate] = useState(new Date(2026, 6, 9)); // Default to July 9, 2026
+  const [selectedDate, setSelectedDate] = useState<string>("2026-07-09");
+
+  useEffect(() => {
+    const today = new Date();
+    // eslint-disable-next-line react-hooks/set-state-in-effect
+    setCurrentDate(today);
+    const y = today.getFullYear();
+    const m = String(today.getMonth() + 1).padStart(2, "0");
+    const d = String(today.getDate()).padStart(2, "0");
+    setSelectedDate(`${y}-${m}-${d}`);
+  }, []);
 
   const year = currentDate.getFullYear();
   const month = currentDate.getMonth() + 1; // 1-indexed for the API
