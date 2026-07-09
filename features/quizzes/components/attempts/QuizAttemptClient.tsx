@@ -13,17 +13,34 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Textarea } from "@/components/ui/textarea";
-import { ArrowLeft, Loader2, CheckCircle, Clock, Save, HelpCircle, Award, PenTool } from "lucide-react";
+import {
+  ArrowLeft,
+  Loader2,
+  CheckCircle,
+  Clock,
+  Save,
+  HelpCircle,
+  Award,
+  PenTool,
+} from "lucide-react";
 import { useRouter } from "next/navigation";
 import { QuizResultView } from "./QuizResultView";
-import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
 
 interface QuizAttemptClientProps {
   groupId?: string;
   attemptId: string;
 }
 
-export function QuizAttemptClient({ groupId, attemptId }: QuizAttemptClientProps) {
+export function QuizAttemptClient({
+  groupId,
+  attemptId,
+}: QuizAttemptClientProps) {
   const router = useRouter();
   const { data: attempt, isLoading: isAttemptLoading } =
     useFetchStudentQuizAttemptDetail(attemptId);
@@ -33,7 +50,9 @@ export function QuizAttemptClient({ groupId, attemptId }: QuizAttemptClientProps
 
   // Only fetch questions if not submitted
   const { data: questions, isLoading: isQuestionsLoading } =
-    useFetchStudentQuizQuestionsForAttempt(!isSubmitted && quizId ? quizId : "");
+    useFetchStudentQuizQuestionsForAttempt(
+      !isSubmitted && quizId ? quizId : "",
+    );
 
   // Fetch existing answers if continuing an attempt
   const { data: existingAnswers } = useFetchStudentQuizAnswers(
@@ -71,9 +90,9 @@ export function QuizAttemptClient({ groupId, attemptId }: QuizAttemptClientProps
     return map;
   }, [existingAnswers]);
 
-  const [standardAnswers, setStandardAnswers] = useState<Record<string, string>>(
-    {},
-  );
+  const [standardAnswers, setStandardAnswers] = useState<
+    Record<string, string>
+  >({});
   const [blankAnswers, setBlankAnswers] = useState<
     Record<string, Record<string, string>>
   >({});
@@ -172,7 +191,12 @@ export function QuizAttemptClient({ groupId, attemptId }: QuizAttemptClientProps
     return (
       <div className="flex flex-col items-center justify-center gap-4 p-6">
         <p className="text-muted-foreground">Attempt not found</p>
-        <Button variant="outline" onClick={() => router.push(groupId ? `/groups/${groupId}` : "/materials")}>
+        <Button
+          variant="outline"
+          onClick={() =>
+            router.push(groupId ? `/groups/${groupId}` : "/materials")
+          }
+        >
           <ArrowLeft className="h-4 w-4 mr-2" />
           {groupId ? "Kembali ke Detail Kelas" : "Back to Materials"}
         </Button>
@@ -182,13 +206,16 @@ export function QuizAttemptClient({ groupId, attemptId }: QuizAttemptClientProps
 
   return (
     <TooltipProvider>
-      <div className="p-8 max-w-7xl mx-auto space-y-6 bg-[#F7F8FA] min-h-screen font-sans text-[#1A1C1E]">
+      <div className="sm:p-2 md:p-4 max-w-7xl mx-auto space-y-6 bg-[#F7F8FA] min-h-screen font-sans text-[#1A1C1E]">
         {/* Back Link */}
         <button
-          onClick={() => router.push(groupId ? `/groups/${groupId}` : "/materials")}
+          onClick={() =>
+            router.push(groupId ? `/groups/${groupId}` : "/materials")
+          }
           className="inline-flex items-center text-[#6366F1] font-mono text-sm hover:underline mb-2 transition-all"
         >
-          <ArrowLeft className="w-4 h-4 mr-2" /> {groupId ? "Kembali ke Detail Kelas" : "Kembali ke Hasil Kuis"}
+          <ArrowLeft className="w-4 h-4 mr-2" />{" "}
+          {groupId ? "Kembali ke Detail Kelas" : "Kembali ke Hasil Kuis"}
         </button>
 
         {/* Dark Hero Header */}
@@ -205,7 +232,9 @@ export function QuizAttemptClient({ groupId, attemptId }: QuizAttemptClientProps
                 {isSubmitted ? (
                   <span className="flex items-center gap-2">
                     <CheckCircle className="h-4 w-4 text-green-400" />
-                    <span className="text-green-400 font-semibold">Submitted</span>
+                    <span className="text-green-400 font-semibold">
+                      Submitted
+                    </span>
                   </span>
                 ) : (
                   <span className="flex items-center gap-2">
@@ -304,7 +333,11 @@ export function QuizAttemptClient({ groupId, attemptId }: QuizAttemptClientProps
                                         )
                                       }
                                       placeholder={`#${order}`}
-                                      style={{ width: getInputWidth(blank.correctAnswerLength) }}
+                                      style={{
+                                        width: getInputWidth(
+                                          blank.correctAnswerLength,
+                                        ),
+                                      }}
                                       className="h-8 px-2 py-1 text-sm font-sans font-semibold rounded border border-primary/40 bg-background text-foreground shadow-sm focus:border-primary focus:ring-2 focus:ring-primary/20 focus:outline-none transition-all text-center placeholder:font-normal placeholder:text-muted-foreground"
                                     />
                                   </span>
@@ -349,7 +382,11 @@ export function QuizAttemptClient({ groupId, attemptId }: QuizAttemptClientProps
                                       )
                                     }
                                     placeholder={`#${blank.blankOrder}`}
-                                    style={{ minWidth: getInputWidth(blank.correctAnswerLength) }}
+                                    style={{
+                                      minWidth: getInputWidth(
+                                        blank.correctAnswerLength,
+                                      ),
+                                    }}
                                     className="flex-1 h-8 px-2 text-sm rounded border-0 bg-transparent focus:outline-none focus:ring-0 font-medium text-foreground"
                                   />
                                 </div>
@@ -366,7 +403,10 @@ export function QuizAttemptClient({ groupId, attemptId }: QuizAttemptClientProps
                             : serverStandardAnswers[question.id] || ""
                         }
                         onChange={(e) =>
-                          handleStandardAnswerChange(question.id, e.target.value)
+                          handleStandardAnswerChange(
+                            question.id,
+                            e.target.value,
+                          )
                         }
                         disabled={isSubmitted}
                         className="min-h-[100px]"

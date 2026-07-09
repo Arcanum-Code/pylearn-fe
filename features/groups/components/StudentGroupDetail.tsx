@@ -9,20 +9,28 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
-import { 
-  ArrowLeft, 
-  BookOpen, 
-  GraduationCap, 
-  HelpCircle, 
-  Clock, 
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
+import {
+  ArrowLeft,
+  BookOpen,
+  GraduationCap,
+  HelpCircle,
+  Clock,
   Award,
   AlertCircle,
-  Lock
+  Lock,
 } from "lucide-react";
 import Link from "next/link";
 import { toast } from "sonner";
-import { getStudentQuizAttempts, createStudentQuizAttempt } from "@/features/quizzes";
+import {
+  getStudentQuizAttempts,
+  createStudentQuizAttempt,
+} from "@/features/quizzes";
 
 export function StudentGroupDetail({ id }: { id: string }) {
   const router = useRouter();
@@ -34,27 +42,29 @@ export function StudentGroupDetail({ id }: { id: string }) {
     try {
       // Fetch attempts for this quiz
       const attempts = await getStudentQuizAttempts({ quizId: item.id });
-      
+
       if (item.status === "completed") {
-        const completedAttempt = attempts.find(a => !!a.submittedAt);
+        const completedAttempt = attempts.find((a) => !!a.submittedAt);
         if (completedAttempt) {
           router.push(`/groups/${id}/quizzes/attempts/${completedAttempt.id}`);
           return;
         }
       } else if (item.status === "in_progress") {
-        const activeAttempt = attempts.find(a => !a.submittedAt);
+        const activeAttempt = attempts.find((a) => !a.submittedAt);
         if (activeAttempt) {
           router.push(`/groups/${id}/quizzes/attempts/${activeAttempt.id}`);
           return;
         }
       }
-      
+
       // If not started or no attempt found, start a new one directly using quizId
       const { attempt } = await createStudentQuizAttempt({ quizId: item.id });
       router.push(`/groups/${id}/quizzes/attempts/${attempt.id}`);
     } catch (error: any) {
       console.error("Quiz action error:", error);
-      toast.error(error?.response?.data?.message || "Gagal memproses pengerjaan kuis.");
+      toast.error(
+        error?.response?.data?.message || "Gagal memproses pengerjaan kuis.",
+      );
     } finally {
       setActionLoadingId(null);
     }
@@ -62,14 +72,16 @@ export function StudentGroupDetail({ id }: { id: string }) {
 
   const formatDeadline = (dateStr: string) => {
     try {
-      return new Intl.DateTimeFormat("id-ID", {
-        day: "2-digit",
-        month: "short",
-        year: "numeric",
-        hour: "2-digit",
-        minute: "2-digit",
-        hour12: false,
-      }).format(new Date(dateStr)) + " WIB";
+      return (
+        new Intl.DateTimeFormat("id-ID", {
+          day: "2-digit",
+          month: "short",
+          year: "numeric",
+          hour: "2-digit",
+          minute: "2-digit",
+          hour12: false,
+        }).format(new Date(dateStr)) + " WIB"
+      );
     } catch {
       return dateStr;
     }
@@ -105,12 +117,14 @@ export function StudentGroupDetail({ id }: { id: string }) {
   const quizzes = detail.items.filter((item) => item.type === "quiz");
   const allMaterialsCompleted =
     materials.length === 0 || materials.every((m) => m.status === "completed");
-  const completedMaterialsCount = materials.filter((m) => m.status === "completed").length;
+  const completedMaterialsCount = materials.filter(
+    (m) => m.status === "completed",
+  ).length;
   const totalMaterialsCount = materials.length;
 
   return (
     <TooltipProvider>
-      <div className="p-8 max-w-7xl mx-auto space-y-8 bg-[#F7F8FA] min-h-screen text-[#1A1C1E]">
+      <div className="sm:p-2 md:p-4 max-w-7xl mx-auto space-y-8 bg-[#F7F8FA] min-h-screen text-[#1A1C1E]">
         {/* Back Link */}
         <Link
           href="/dashboard"
@@ -130,7 +144,10 @@ export function StudentGroupDetail({ id }: { id: string }) {
                 {detail.groupName}
               </h1>
               <p className="text-gray-400 text-sm font-medium">
-                Dosen Pengampu: <span className="text-white font-semibold">{detail.lecturerName || "Instructor"}</span>
+                Dosen Pengampu:{" "}
+                <span className="text-white font-semibold">
+                  {detail.lecturerName || "Instructor"}
+                </span>
               </p>
               <p className="text-gray-300 max-w-3xl leading-relaxed text-sm">
                 {detail.description || "Tidak ada deskripsi untuk kelas ini."}
@@ -140,17 +157,22 @@ export function StudentGroupDetail({ id }: { id: string }) {
             {/* Progress Circle/Bar */}
             <div className="bg-white/5 border border-white/10 p-5 rounded-2xl shrink-0 w-full md:w-64 space-y-3">
               <div className="flex justify-between items-center text-xs">
-                <span className="text-gray-400 font-semibold">Progress Belajar</span>
-                <span className="text-[#10B981] font-bold">{detail.progress.percentage}%</span>
+                <span className="text-gray-400 font-semibold">
+                  Progress Belajar
+                </span>
+                <span className="text-[#10B981] font-bold">
+                  {detail.progress.percentage}%
+                </span>
               </div>
               <div className="w-full bg-white/10 rounded-full h-2">
-                <div 
+                <div
                   className="bg-gradient-to-r from-[#10B981] to-emerald-400 h-2 rounded-full transition-all duration-1000 ease-out"
                   style={{ width: `${detail.progress.percentage}%` }}
                 ></div>
               </div>
               <p className="text-[11px] text-gray-400 text-center">
-                {detail.progress.materialsCompleted} dari {detail.progress.materialsTotal} materi selesai dibaca
+                {detail.progress.materialsCompleted} dari{" "}
+                {detail.progress.materialsTotal} materi selesai dibaca
               </p>
             </div>
           </div>
@@ -166,11 +188,15 @@ export function StudentGroupDetail({ id }: { id: string }) {
                   <BookOpen className="w-6 h-6" />
                 </div>
                 <div>
-                  <h2 className="text-xl font-bold text-[#1A1C1E]">Materi Pembelajaran</h2>
-                  <p className="text-xs text-gray-500 mt-0.5">Selesaikan semua materi sebelum mengerjakan kuis kelas.</p>
+                  <h2 className="text-xl font-bold text-[#1A1C1E]">
+                    Materi Pembelajaran
+                  </h2>
+                  <p className="text-xs text-gray-500 mt-0.5">
+                    Selesaikan semua materi sebelum mengerjakan kuis kelas.
+                  </p>
                 </div>
               </div>
-              
+
               <div className="space-y-4">
                 {materials.length === 0 ? (
                   <p className="text-gray-400 font-mono text-sm py-4">
@@ -184,7 +210,8 @@ export function StudentGroupDetail({ id }: { id: string }) {
                     let actionButton = null;
 
                     if (item.status === "completed") {
-                      cardClass = "bg-white border-green-100 hover:border-green-200";
+                      cardClass =
+                        "bg-white border-green-100 hover:border-green-200";
                       iconBgClass = "bg-green-50 text-green-500";
                       statusBadge = (
                         <Badge className="bg-green-50 hover:bg-green-50 text-green-700 border border-green-200 font-medium">
@@ -192,12 +219,20 @@ export function StudentGroupDetail({ id }: { id: string }) {
                         </Badge>
                       );
                       actionButton = (
-                        <Button size="sm" variant="outline" className="border-gray-200 text-gray-700 font-semibold hover:bg-gray-50 cursor-pointer" asChild>
-                          <Link href={`/groups/${id}/materials/${item.id}`}>Baca Ulang</Link>
+                        <Button
+                          size="sm"
+                          variant="outline"
+                          className="border-gray-200 text-gray-700 font-semibold hover:bg-gray-50 cursor-pointer"
+                          asChild
+                        >
+                          <Link href={`/groups/${id}/materials/${item.id}`}>
+                            Baca Ulang
+                          </Link>
                         </Button>
                       );
                     } else if (item.status === "in_progress") {
-                      cardClass = "bg-white border-orange-100 hover:border-orange-200";
+                      cardClass =
+                        "bg-white border-orange-100 hover:border-orange-200";
                       iconBgClass = "bg-orange-50 text-orange-500";
                       statusBadge = (
                         <Badge className="bg-orange-50 hover:bg-orange-50 text-orange-700 border border-orange-200 font-medium">
@@ -205,31 +240,51 @@ export function StudentGroupDetail({ id }: { id: string }) {
                         </Badge>
                       );
                       actionButton = (
-                        <Button size="sm" className="bg-[#6366F1] hover:bg-[#4F46E5] text-white font-semibold shadow-xs cursor-pointer" asChild>
-                          <Link href={`/groups/${id}/materials/${item.id}`}>Lanjutkan</Link>
+                        <Button
+                          size="sm"
+                          className="bg-[#6366F1] hover:bg-[#4F46E5] text-white font-semibold shadow-xs cursor-pointer"
+                          asChild
+                        >
+                          <Link href={`/groups/${id}/materials/${item.id}`}>
+                            Lanjutkan
+                          </Link>
                         </Button>
                       );
                     } else {
                       statusBadge = (
-                        <Badge variant="outline" className="text-gray-400 border-gray-200 bg-white">
+                        <Badge
+                          variant="outline"
+                          className="text-gray-400 border-gray-200 bg-white"
+                        >
                           Belum Mulai
                         </Badge>
                       );
                       actionButton = (
-                        <Button size="sm" className="bg-[#6366F1] hover:bg-[#4F46E5] text-white font-semibold shadow-xs cursor-pointer" asChild>
-                          <Link href={`/groups/${id}/materials/${item.id}`}>Mulai Belajar</Link>
+                        <Button
+                          size="sm"
+                          className="bg-[#6366F1] hover:bg-[#4F46E5] text-white font-semibold shadow-xs cursor-pointer"
+                          asChild
+                        >
+                          <Link href={`/groups/${id}/materials/${item.id}`}>
+                            Mulai Belajar
+                          </Link>
                         </Button>
                       );
                     }
 
                     return (
-                      <Card key={item.id} className={`border shadow-xs hover:shadow-sm transition-all duration-200 overflow-hidden ${cardClass}`}>
+                      <Card
+                        key={item.id}
+                        className={`border shadow-xs hover:shadow-sm transition-all duration-200 overflow-hidden ${cardClass}`}
+                      >
                         <div className="p-4 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
                           <div className="flex items-start gap-3 min-w-0">
-                            <div className={`p-2.5 rounded-xl flex-shrink-0 ${iconBgClass}`}>
+                            <div
+                              className={`p-2.5 rounded-xl flex-shrink-0 ${iconBgClass}`}
+                            >
                               <BookOpen className="h-5 w-5" />
                             </div>
-                            
+
                             <div className="space-y-1 min-w-0">
                               <div className="flex flex-wrap items-center gap-2">
                                 <span className="text-[10px] uppercase font-mono tracking-wider font-semibold text-gray-400">
@@ -237,10 +292,13 @@ export function StudentGroupDetail({ id }: { id: string }) {
                                 </span>
                                 {statusBadge}
                               </div>
-                              
-                              <h3 className="font-bold text-sm truncate text-gray-800">{item.title}</h3>
+
+                              <h3 className="font-bold text-sm truncate text-gray-800">
+                                {item.title}
+                              </h3>
                               <p className="text-xs text-muted-foreground line-clamp-1 max-w-xl">
-                                {item.description || "Tidak ada deskripsi tambahan."}
+                                {item.description ||
+                                  "Tidak ada deskripsi tambahan."}
                               </p>
                             </div>
                           </div>
@@ -265,8 +323,12 @@ export function StudentGroupDetail({ id }: { id: string }) {
                   <HelpCircle className="w-6 h-6" />
                 </div>
                 <div>
-                  <h2 className="text-xl font-bold text-[#1A1C1E]">Kuis Kelas</h2>
-                  <p className="text-xs text-gray-500 mt-0.5">Uji pemahaman Anda melalui kuis kelas.</p>
+                  <h2 className="text-xl font-bold text-[#1A1C1E]">
+                    Kuis Kelas
+                  </h2>
+                  <p className="text-xs text-gray-500 mt-0.5">
+                    Uji pemahaman Anda melalui kuis kelas.
+                  </p>
                 </div>
               </div>
 
@@ -277,23 +339,31 @@ export function StudentGroupDetail({ id }: { id: string }) {
                       <Lock className="w-4.5 h-4.5" />
                     </div>
                     <div className="space-y-1">
-                      <h4 className="text-sm font-semibold text-amber-900">Kuis Masih Terkunci</h4>
+                      <h4 className="text-sm font-semibold text-amber-900">
+                        Kuis Masih Terkunci
+                      </h4>
                       <p className="text-xs text-amber-700 leading-relaxed">
-                        Selesaikan membaca seluruh materi kelas untuk membuka akses pengerjaan kuis.
+                        Selesaikan membaca seluruh materi kelas untuk membuka
+                        akses pengerjaan kuis.
                       </p>
                     </div>
                   </div>
-                  
+
                   {/* Progress Tracker */}
                   <div className="space-y-1.5 mt-1">
                     <div className="flex justify-between items-center text-xs font-medium text-amber-800">
                       <span>Progres Membaca Materi</span>
-                      <span>{completedMaterialsCount} dari {totalMaterialsCount} Selesai</span>
+                      <span>
+                        {completedMaterialsCount} dari {totalMaterialsCount}{" "}
+                        Selesai
+                      </span>
                     </div>
                     <div className="w-full bg-amber-250/30 rounded-full h-2 overflow-hidden">
-                      <div 
-                        className="bg-amber-500 h-full rounded-full transition-all duration-500 ease-out" 
-                        style={{ width: `${(completedMaterialsCount / totalMaterialsCount) * 100}%` }}
+                      <div
+                        className="bg-amber-500 h-full rounded-full transition-all duration-500 ease-out"
+                        style={{
+                          width: `${(completedMaterialsCount / totalMaterialsCount) * 100}%`,
+                        }}
                       />
                     </div>
                   </div>
@@ -312,31 +382,47 @@ export function StudentGroupDetail({ id }: { id: string }) {
                     let statusBadge = null;
                     let actionButton = null;
                     const isLocked = !allMaterialsCompleted;
-                    const sortedQuizzes = [...quizzes].sort((a, b) => a.order - b.order);
-                    const currentIndex = sortedQuizzes.findIndex(q => q.id === item.id);
-                    const previousIncomplete = sortedQuizzes.slice(0, currentIndex).find(q => q.status !== "completed");
+                    const sortedQuizzes = [...quizzes].sort(
+                      (a, b) => a.order - b.order,
+                    );
+                    const currentIndex = sortedQuizzes.findIndex(
+                      (q) => q.id === item.id,
+                    );
+                    const previousIncomplete = sortedQuizzes
+                      .slice(0, currentIndex)
+                      .find((q) => q.status !== "completed");
                     const isLockedByLevel = !!previousIncomplete && !isLocked;
-                    const lockedByQuiz = isLockedByLevel ? previousIncomplete! : null;
+                    const lockedByQuiz = isLockedByLevel
+                      ? previousIncomplete!
+                      : null;
 
                     if (item.status === "completed") {
-                      cardClass = "bg-white border-green-100 hover:border-green-200";
+                      cardClass =
+                        "bg-white border-green-100 hover:border-green-200";
                       iconBgClass = "bg-green-50 text-green-500";
                       statusBadge = (
                         <Badge className="bg-green-50 hover:bg-green-50 text-green-700 border border-green-200 font-medium flex items-center gap-1">
                           <Award className="h-3 w-3" />
-                          Selesai {item.bestScore !== null ? `(Skor Terbaik: ${item.bestScore})` : ""}
+                          Selesai{" "}
+                          {item.bestScore !== null
+                            ? `(Skor Terbaik: ${item.bestScore})`
+                            : ""}
                         </Badge>
                       );
-                      
+
                       actionButton = (
-                        <Button 
-                          size="sm" 
-                          variant="outline" 
+                        <Button
+                          size="sm"
+                          variant="outline"
                           disabled={actionLoadingId === item.id}
                           onClick={() => handleQuizAction(item)}
                           className="border-green-250 text-green-700 hover:bg-green-50 font-semibold cursor-pointer"
                         >
-                          {actionLoadingId === item.id ? <Spinner className="h-4 w-4 text-green-700" /> : "Lihat Hasil"}
+                          {actionLoadingId === item.id ? (
+                            <Spinner className="h-4 w-4 text-green-700" />
+                          ) : (
+                            "Lihat Hasil"
+                          )}
                         </Button>
                       );
                     } else {
@@ -344,17 +430,20 @@ export function StudentGroupDetail({ id }: { id: string }) {
                         cardClass = "bg-gray-50 border-gray-200 opacity-75";
                         iconBgClass = "bg-gray-100 text-gray-400";
                         statusBadge = (
-                          <Badge variant="outline" className="text-gray-400 border-gray-200 bg-white flex items-center gap-1">
+                          <Badge
+                            variant="outline"
+                            className="text-gray-400 border-gray-200 bg-white flex items-center gap-1"
+                          >
                             <Lock className="h-3 w-3" /> Terkunci
                           </Badge>
                         );
-                        
+
                         actionButton = (
                           <Tooltip>
                             <TooltipTrigger asChild>
                               <span>
-                                <Button 
-                                  size="sm" 
+                                <Button
+                                  size="sm"
                                   disabled={true}
                                   className="bg-gray-200 text-gray-400 font-semibold cursor-not-allowed"
                                 >
@@ -370,7 +459,8 @@ export function StudentGroupDetail({ id }: { id: string }) {
                           </Tooltip>
                         );
                       } else if (item.status === "in_progress") {
-                        cardClass = "bg-white border-orange-100 hover:border-orange-200";
+                        cardClass =
+                          "bg-white border-orange-100 hover:border-orange-200";
                         iconBgClass = "bg-orange-50 text-orange-500";
                         statusBadge = (
                           <Badge className="bg-orange-50 hover:bg-orange-50 text-orange-700 border border-orange-250 font-medium">
@@ -378,13 +468,17 @@ export function StudentGroupDetail({ id }: { id: string }) {
                           </Badge>
                         );
                         actionButton = (
-                          <Button 
-                            size="sm" 
+                          <Button
+                            size="sm"
                             disabled={actionLoadingId === item.id}
                             onClick={() => handleQuizAction(item)}
                             className="bg-orange-500 hover:bg-orange-600 text-white font-semibold cursor-pointer"
                           >
-                            {actionLoadingId === item.id ? <Spinner className="h-4 w-4 text-white" /> : "Lanjutkan Kuis"}
+                            {actionLoadingId === item.id ? (
+                              <Spinner className="h-4 w-4 text-white" />
+                            ) : (
+                              "Lanjutkan Kuis"
+                            )}
                           </Button>
                         );
                       } else {
@@ -394,32 +488,41 @@ export function StudentGroupDetail({ id }: { id: string }) {
                           </Badge>
                         );
                         actionButton = (
-                          <Button 
-                            size="sm" 
+                          <Button
+                            size="sm"
                             disabled={actionLoadingId === item.id}
                             onClick={() => handleQuizAction(item)}
                             className="bg-purple-600 hover:bg-purple-700 text-white font-semibold cursor-pointer"
                           >
-                            {actionLoadingId === item.id ? <Spinner className="h-4 w-4 text-white" /> : "Kerjakan Kuis"}
+                            {actionLoadingId === item.id ? (
+                              <Spinner className="h-4 w-4 text-white" />
+                            ) : (
+                              "Kerjakan Kuis"
+                            )}
                           </Button>
                         );
                       }
                     }
 
                     return (
-                      <Card key={item.id} className={`border shadow-xs hover:shadow-sm transition-all duration-200 overflow-hidden ${cardClass}`}>
+                      <Card
+                        key={item.id}
+                        className={`border shadow-xs hover:shadow-sm transition-all duration-200 overflow-hidden ${cardClass}`}
+                      >
                         <div className="p-4 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
                           <div className="flex items-start gap-3 min-w-0">
-                            <div className={`p-2.5 rounded-xl flex-shrink-0 ${iconBgClass}`}>
+                            <div
+                              className={`p-2.5 rounded-xl flex-shrink-0 ${iconBgClass}`}
+                            >
                               {item.status === "completed" ? (
                                 <Award className="h-5 w-5" />
-                              ) : (isLocked || isLockedByLevel) ? (
+                              ) : isLocked || isLockedByLevel ? (
                                 <Lock className="h-5 w-5" />
                               ) : (
                                 <HelpCircle className="h-5 w-5" />
                               )}
                             </div>
-                            
+
                             <div className="space-y-1 min-w-0">
                               <div className="flex flex-wrap items-center gap-2">
                                 <span className="text-[10px] uppercase font-mono tracking-wider font-semibold text-gray-400">
@@ -427,16 +530,21 @@ export function StudentGroupDetail({ id }: { id: string }) {
                                 </span>
                                 {statusBadge}
                               </div>
-                              
-                              <h3 className="font-bold text-sm truncate text-gray-800">{item.title}</h3>
+
+                              <h3 className="font-bold text-sm truncate text-gray-800">
+                                {item.title}
+                              </h3>
                               <p className="text-xs text-muted-foreground line-clamp-1 max-w-xl">
-                                {item.description || "Tidak ada deskripsi tambahan."}
+                                {item.description ||
+                                  "Tidak ada deskripsi tambahan."}
                               </p>
-                              
+
                               {item.deadline && (
                                 <div className="flex items-center gap-1.5 text-[10px] text-red-500 font-medium">
                                   <Clock className="h-3 w-3" />
-                                  <span>Batas Waktu: {formatDeadline(item.deadline)}</span>
+                                  <span>
+                                    Batas Waktu: {formatDeadline(item.deadline)}
+                                  </span>
                                 </div>
                               )}
                             </div>

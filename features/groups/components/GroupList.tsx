@@ -82,7 +82,7 @@ export function GroupList() {
   }
 
   return (
-    <div className="p-8 max-w-7xl mx-auto space-y-8 bg-[#F7F8FA] min-h-screen font-sans text-[#1A1C1E]">
+    <div className="sm:p-2 md:p-4 max-w-7xl mx-auto space-y-8 bg-[#F7F8FA] min-h-screen font-sans text-[#1A1C1E]">
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 bg-white p-6 rounded-2xl shadow-xs border border-gray-150/60">
         <div className="flex items-center gap-3">
           <div className="p-3 bg-[#6366F1]/10 text-[#6366F1] rounded-xl">
@@ -225,4 +225,3 @@ export function GroupList() {
     </div>
   );
 }
-

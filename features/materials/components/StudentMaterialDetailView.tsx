@@ -3,14 +3,22 @@
 import { useState, useEffect, useRef } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { useFetchStudentMaterialById, useUpdateMaterialProgress } from "@/features/materials/hooks/useMaterials";
+import {
+  useFetchStudentMaterialById,
+  useUpdateMaterialProgress,
+} from "@/features/materials/hooks/useMaterials";
 import { useStudentGroup } from "@/features/groups/hooks/useGroups";
 
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Skeleton } from "@/components/ui/skeleton";
-import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
 import { Spinner } from "@/components/ui/spinner";
 import {
   ArrowLeft,
@@ -74,9 +82,7 @@ export function StudentMaterialDetailView({
       : (material as any).scroll_percentage
     : 0;
 
-  const currentStatus = material
-    ? material.status
-    : "not_started";
+  const currentStatus = material ? material.status : "not_started";
 
   const prevMaterialId = material?.navigation
     ? material.navigation.prevMaterialId !== undefined
@@ -99,14 +105,21 @@ export function StudentMaterialDetailView({
   }, [scrollPercentage]);
 
   // Debounced scroll progress update
-  const triggerProgressUpdate = (status: "in_progress" | "completed", pct: number) => {
+  const triggerProgressUpdate = (
+    status: "in_progress" | "completed",
+    pct: number,
+  ) => {
     console.log("triggerProgressUpdate called:", { status, pct });
     if (updateTimeoutRef.current) {
       clearTimeout(updateTimeoutRef.current);
     }
 
     updateTimeoutRef.current = setTimeout(() => {
-      console.log("Debounce timeout finished, executing progress mutation:", { materialId, status, scrollPercentage: pct });
+      console.log("Debounce timeout finished, executing progress mutation:", {
+        materialId,
+        status,
+        scrollPercentage: pct,
+      });
       updateProgressMutation.mutate({
         materialId,
         status,
@@ -117,7 +130,12 @@ export function StudentMaterialDetailView({
 
   // Scroll event listener for HTML materials
   useEffect(() => {
-    if (!material || currentStatus === "completed" || material.materialType === "file") return;
+    if (
+      !material ||
+      currentStatus === "completed" ||
+      material.materialType === "file"
+    )
+      return;
 
     const handleScroll = () => {
       const scrollTop = window.scrollY || document.documentElement.scrollTop;
@@ -129,7 +147,7 @@ export function StudentMaterialDetailView({
 
       const percentage = Math.min(
         100,
-        Math.max(0, Math.round((scrollTop / totalScrollableHeight) * 100))
+        Math.max(0, Math.round((scrollTop / totalScrollableHeight) * 100)),
       );
 
       if (percentage > maxProgressRef.current) {
@@ -162,7 +180,14 @@ export function StudentMaterialDetailView({
 
   // Handle scroll events inside PDF Viewer
   const handlePdfScroll = (percentage: number) => {
-    console.log("handlePdfScroll received percentage:", percentage, "currentStatus:", currentStatus, "maxProgressRef:", maxProgressRef.current);
+    console.log(
+      "handlePdfScroll received percentage:",
+      percentage,
+      "currentStatus:",
+      currentStatus,
+      "maxProgressRef:",
+      maxProgressRef.current,
+    );
     if (currentStatus === "completed") return;
     if (percentage > maxProgressRef.current) {
       maxProgressRef.current = percentage;
@@ -184,7 +209,7 @@ export function StudentMaterialDetailView({
     if (updateTimeoutRef.current) {
       clearTimeout(updateTimeoutRef.current);
     }
-    
+
     updateProgressMutation.mutate(
       {
         materialId,
@@ -195,7 +220,7 @@ export function StudentMaterialDetailView({
         onSuccess: () => {
           toast.success("Materi berhasil diselesaikan!");
         },
-      }
+      },
     );
   };
 
@@ -230,7 +255,9 @@ export function StudentMaterialDetailView({
   if (!material) {
     return (
       <div className="flex flex-col items-center justify-center gap-4 p-8 min-h-screen text-center bg-[#F7F8FA]">
-        <p className="text-muted-foreground font-semibold">Materi tidak ditemukan</p>
+        <p className="text-muted-foreground font-semibold">
+          Materi tidak ditemukan
+        </p>
         <Button variant="outline" asChild>
           <Link href={`/groups/${groupId}`}>
             <ArrowLeft className="h-4 w-4 mr-2" />
@@ -243,7 +270,7 @@ export function StudentMaterialDetailView({
 
   return (
     <TooltipProvider>
-      <div className="p-3 sm:p-6 md:p-8 max-w-7xl mx-auto space-y-6 bg-[#F7F8FA] min-h-screen font-sans text-[#1A1C1E]">
+      <div className="sm:p-2 md:p-4 max-w-7xl mx-auto space-y-6 bg-[#F7F8FA] min-h-screen font-sans text-[#1A1C1E]">
         {/* Breadcrumb Back Link */}
         <Link
           href={`/groups/${groupId}`}
@@ -257,7 +284,7 @@ export function StudentMaterialDetailView({
           <div className="absolute right-8 top-8 opacity-5 text-gray-400">
             <BookOpen className="w-36 h-36" />
           </div>
-          
+
           <div className="relative z-10 flex flex-col md:flex-row justify-between items-start md:items-center gap-6">
             <div className="space-y-3 flex-1">
               {group?.groupName && (
@@ -268,7 +295,7 @@ export function StudentMaterialDetailView({
               <h1 className="text-3xl md:text-4xl font-extrabold tracking-tight text-white leading-tight">
                 {material.title}
               </h1>
-              
+
               <div className="flex flex-wrap items-center gap-4 text-xs text-gray-400 mt-2">
                 <div className="flex items-center gap-1.5">
                   <User className="h-3.5 w-3.5" />
@@ -276,13 +303,18 @@ export function StudentMaterialDetailView({
                 </div>
                 <div className="flex items-center gap-1.5">
                   <Calendar className="h-3.5 w-3.5" />
-                  <span>{new Date(material.createdAt).toLocaleDateString("id-ID", {
-                    day: "numeric",
-                    month: "long",
-                    year: "numeric"
-                  })}</span>
+                  <span>
+                    {new Date(material.createdAt).toLocaleDateString("id-ID", {
+                      day: "numeric",
+                      month: "long",
+                      year: "numeric",
+                    })}
+                  </span>
                 </div>
-                <Badge variant="secondary" className="bg-white/10 hover:bg-white/20 text-white border-none uppercase text-[10px] tracking-wider">
+                <Badge
+                  variant="secondary"
+                  className="bg-white/10 hover:bg-white/20 text-white border-none uppercase text-[10px] tracking-wider"
+                >
                   {material.materialType}
                 </Badge>
               </div>
@@ -291,15 +323,22 @@ export function StudentMaterialDetailView({
             {/* Reading progress metrics */}
             <div className="bg-white/5 border border-white/10 p-5 rounded-2xl shrink-0 w-full md:w-64 space-y-3">
               <div className="flex justify-between items-center text-xs">
-                <span className="text-gray-400 font-semibold">Progress Membaca</span>
+                <span className="text-gray-400 font-semibold">
+                  Progress Membaca
+                </span>
                 <span className="text-[#10B981] font-bold">
-                  {currentStatus === "completed" ? 100 : Math.round(maxProgress)}%
+                  {currentStatus === "completed"
+                    ? 100
+                    : Math.round(maxProgress)}
+                  %
                 </span>
               </div>
               <div className="w-full bg-white/10 rounded-full h-2">
                 <div
                   className="bg-gradient-to-r from-[#10B981] to-emerald-400 h-2 rounded-full transition-all duration-300 ease-out"
-                  style={{ width: `${currentStatus === "completed" ? 100 : maxProgress}%` }}
+                  style={{
+                    width: `${currentStatus === "completed" ? 100 : maxProgress}%`,
+                  }}
                 ></div>
               </div>
               <p className="text-[11px] text-gray-400 text-center">
@@ -317,20 +356,28 @@ export function StudentMaterialDetailView({
 
         {/* Material Content Area */}
         <Card className="border border-gray-150/60 shadow-xs overflow-hidden">
-          <CardContent className={absolutePdfUrl ? "p-1 sm:p-6 md:p-8" : "p-4 sm:p-8 md:p-12"}>
+          <CardContent
+            className={
+              absolutePdfUrl ? "p-1 sm:p-6 md:p-8" : "p-4 sm:p-8 md:p-12"
+            }
+          >
             {absolutePdfUrl ? (
               <div className="space-y-4">
                 <div className="flex justify-end px-2 sm:px-0 pt-2 sm:pt-0">
                   <Button variant="outline" size="sm" asChild>
-                    <a href={absolutePdfUrl} target="_blank" rel="noopener noreferrer">
+                    <a
+                      href={absolutePdfUrl}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    >
                       <ExternalLink className="h-4 w-4 mr-2" />
                       Buka PDF di Tab Baru
                     </a>
                   </Button>
                 </div>
-                <PdfViewer 
-                  url={absolutePdfUrl} 
-                  onScroll={handlePdfScroll} 
+                <PdfViewer
+                  url={absolutePdfUrl}
+                  onScroll={handlePdfScroll}
                   initialScrollPercentage={scrollPercentage}
                   currentStatus={currentStatus}
                 />
@@ -338,7 +385,9 @@ export function StudentMaterialDetailView({
             ) : material.content ? (
               <HtmlRenderer content={material.content} />
             ) : (
-              <p className="text-muted-foreground italic text-center py-12">Konten materi kosong.</p>
+              <p className="text-muted-foreground italic text-center py-12">
+                Konten materi kosong.
+              </p>
             )}
           </CardContent>
         </Card>
@@ -348,7 +397,11 @@ export function StudentMaterialDetailView({
           {/* Previous Material Button */}
           <div className="w-full sm:w-auto">
             {prevMaterialId ? (
-              <Button variant="outline" className="w-full sm:w-auto border-gray-200 text-gray-700 font-semibold" asChild>
+              <Button
+                variant="outline"
+                className="w-full sm:w-auto border-gray-200 text-gray-700 font-semibold"
+                asChild
+              >
                 <Link href={`/groups/${groupId}/materials/${prevMaterialId}`}>
                   <ChevronLeft className="h-4 w-4 mr-1.5" />
                   Materi Sebelumnya
@@ -388,14 +441,22 @@ export function StudentMaterialDetailView({
           {/* Next Material Button */}
           <div className="w-full sm:w-auto text-right">
             {nextMaterialId ? (
-              <Button variant="outline" className="w-full sm:w-auto border-gray-200 text-gray-700 font-semibold" asChild>
+              <Button
+                variant="outline"
+                className="w-full sm:w-auto border-gray-200 text-gray-700 font-semibold"
+                asChild
+              >
                 <Link href={`/groups/${groupId}/materials/${nextMaterialId}`}>
                   Materi Selanjutnya
                   <ChevronRight className="h-4 w-4 ml-1.5" />
                 </Link>
               </Button>
             ) : (
-              <Button variant="outline" className="w-full sm:w-auto border-gray-200 text-[#6366F1] font-semibold" asChild>
+              <Button
+                variant="outline"
+                className="w-full sm:w-auto border-gray-200 text-[#6366F1] font-semibold"
+                asChild
+              >
                 <Link href={`/groups/${groupId}`}>
                   Kembali ke Kelas
                   <ArrowRight className="h-4 w-4 ml-1.5" />
