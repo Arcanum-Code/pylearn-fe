@@ -14,6 +14,7 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Eye, User, Mail, Calendar } from "lucide-react";
 import Link from "next/link";
+import { formatScoreOrPoints } from "@/features/groups/utils/format";
 
 interface QuizResultsTableProps {
   data: StudentQuizOverviewResult[];
@@ -74,7 +75,7 @@ export function QuizResultsTable({ data, isLoading }: QuizResultsTableProps) {
                   variant={result.score >= 70 ? "default" : "destructive"} 
                   className="font-bold text-sm px-2.5 py-0.5"
                 >
-                  {result.score}
+                  {formatScoreOrPoints(result.score)}
                 </Badge>
                 <span className="text-[10px] text-muted-foreground">
                   {result.totalQuestions} Soal

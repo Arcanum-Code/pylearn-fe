@@ -1,10 +1,12 @@
 "use client";
 
+import { useEffect } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { CheckCircle2, XCircle, Trophy } from "lucide-react";
 import { QuizAttemptResultData, StudentQuizAttemptResultData } from "../../types";
 import { Skeleton } from "@/components/ui/skeleton";
+import { formatScoreOrPoints } from "@/features/groups/utils/format";
 
 interface QuizResultViewProps {
   results: QuizAttemptResultData | StudentQuizAttemptResultData | undefined;
@@ -17,6 +19,10 @@ const stripHtmlTags = (htmlString: string) => {
 };
 
 export function QuizResultView({ results, isLoading }: QuizResultViewProps) {
+  useEffect(() => {
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  }, []);
+
   if (isLoading) {
     return (
       <div className="space-y-6">
@@ -75,7 +81,7 @@ export function QuizResultView({ results, isLoading }: QuizResultViewProps) {
                 Skor Akhir
               </span>
               <span className="text-4xl font-bold text-primary">
-                {results.score}
+                {formatScoreOrPoints(results.score)}
               </span>
               <span className="text-xs text-muted-foreground">/ 100</span>
             </div>
@@ -113,7 +119,7 @@ export function QuizResultView({ results, isLoading }: QuizResultViewProps) {
                     />
                     <div className="mt-2 flex justify-end">
                       <Badge variant="outline" className="text-xs">
-                        Max Score: {detail.maxScore}
+                        Max Score: {formatScoreOrPoints(detail.maxScore)}
                       </Badge>
                     </div>
                   </div>

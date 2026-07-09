@@ -25,6 +25,7 @@ import {
 import { useRouter } from "next/navigation";
 import { QuizResultView } from "./QuizResultView";
 import { TooltipProvider } from "@/components/ui/tooltip";
+import { formatScoreOrPoints } from "@/features/groups/utils/format";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -178,6 +179,7 @@ export function QuizAttemptClient({
       // Then submit the attempt (which displays the single success toast)
       await submitAttempt.mutateAsync();
       setIsConfirmSubmitOpen(false);
+      window.scrollTo({ top: 0, behavior: "smooth" });
     } catch (error) {
       console.error("Failed to submit quiz:", error);
     }
@@ -422,7 +424,7 @@ export function QuizAttemptClient({
 
                     <div className="flex items-center justify-between">
                       <span className="text-sm text-muted-foreground">
-                        Max Score: {question.maxScore}
+                        Max Score: {formatScoreOrPoints(question.maxScore)}
                       </span>
                     </div>
                   </div>
