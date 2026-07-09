@@ -244,7 +244,7 @@ export function StudentGroupDetail({ id }: { id: string }) {
                         <Button
                           size="sm"
                           variant="outline"
-                          className="border-gray-200 text-gray-700 font-semibold hover:bg-gray-50 cursor-pointer"
+                          className="w-full lg:w-auto border-gray-200 text-gray-700 font-semibold hover:bg-gray-50 cursor-pointer"
                           asChild
                         >
                           <Link href={`/groups/${id}/materials/${item.id}`}>
@@ -264,7 +264,7 @@ export function StudentGroupDetail({ id }: { id: string }) {
                       actionButton = (
                         <Button
                           size="sm"
-                          className="bg-[#6366F1] hover:bg-[#4F46E5] text-white font-semibold shadow-xs cursor-pointer"
+                          className="w-full lg:w-auto bg-[#6366F1] hover:bg-[#4F46E5] text-white font-semibold shadow-xs cursor-pointer"
                           asChild
                         >
                           <Link href={`/groups/${id}/materials/${item.id}`}>
@@ -284,7 +284,7 @@ export function StudentGroupDetail({ id }: { id: string }) {
                       actionButton = (
                         <Button
                           size="sm"
-                          className="bg-[#6366F1] hover:bg-[#4F46E5] text-white font-semibold shadow-xs cursor-pointer"
+                          className="w-full lg:w-auto bg-[#6366F1] hover:bg-[#4F46E5] text-white font-semibold shadow-xs cursor-pointer"
                           asChild
                         >
                           <Link href={`/groups/${id}/materials/${item.id}`}>
@@ -299,7 +299,7 @@ export function StudentGroupDetail({ id }: { id: string }) {
                         key={item.id}
                         className={`border shadow-xs hover:shadow-sm transition-all duration-200 overflow-hidden ${cardClass}`}
                       >
-                        <div className="p-4 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+                        <div className="p-4 flex flex-col lg:flex-row items-start lg:items-center justify-between gap-4">
                           <div className="flex items-start gap-3 min-w-0">
                             <div
                               className={`p-2.5 rounded-xl flex-shrink-0 ${iconBgClass}`}
@@ -325,7 +325,7 @@ export function StudentGroupDetail({ id }: { id: string }) {
                             </div>
                           </div>
 
-                          <div className="w-full sm:w-auto shrink-0 flex justify-end">
+                          <div className="w-full lg:w-auto shrink-0 flex justify-end mt-2 lg:mt-0">
                             {actionButton}
                           </div>
                         </div>
@@ -431,13 +431,13 @@ export function StudentGroupDetail({ id }: { id: string }) {
                         );
 
                         actionButton = (
-                          <div className="flex items-center gap-2">
+                          <div className="flex items-center gap-2 w-full lg:w-auto">
                             <Button
                               size="sm"
                               variant="outline"
                               disabled={actionLoadingId === item.id || actionLoadingId === `${item.id}_retake`}
                               onClick={() => handleQuizAction(item)}
-                              className="border-gray-250 text-gray-700 hover:bg-gray-50 font-semibold cursor-pointer"
+                              className="flex-1 lg:flex-initial border-gray-250 text-gray-700 hover:bg-gray-50 font-semibold cursor-pointer"
                             >
                               {actionLoadingId === item.id ? (
                                 <Spinner className="h-4 w-4 text-gray-700" />
@@ -449,7 +449,7 @@ export function StudentGroupDetail({ id }: { id: string }) {
                               size="sm"
                               disabled={actionLoadingId === item.id || actionLoadingId === `${item.id}_retake`}
                               onClick={() => handleRetakeQuiz(item)}
-                              className="bg-red-600 hover:bg-red-700 text-white font-semibold cursor-pointer"
+                              className="flex-1 lg:flex-initial bg-red-600 hover:bg-red-700 text-white font-semibold cursor-pointer"
                             >
                               {actionLoadingId === `${item.id}_retake` ? (
                                 <Spinner className="h-4 w-4 text-white" />
@@ -479,7 +479,7 @@ export function StudentGroupDetail({ id }: { id: string }) {
                             variant="outline"
                             disabled={actionLoadingId === item.id}
                             onClick={() => handleQuizAction(item)}
-                            className="border-green-250 text-green-700 hover:bg-green-50 font-semibold cursor-pointer"
+                            className="w-full lg:w-auto border-green-250 text-green-700 hover:bg-green-50 font-semibold cursor-pointer"
                           >
                             {actionLoadingId === item.id ? (
                               <Spinner className="h-4 w-4 text-green-700" />
@@ -505,11 +505,11 @@ export function StudentGroupDetail({ id }: { id: string }) {
                         actionButton = (
                           <Tooltip>
                             <TooltipTrigger asChild>
-                              <span>
+                              <span className="w-full lg:w-auto">
                                 <Button
                                   size="sm"
                                   disabled={true}
-                                  className="bg-gray-200 text-gray-400 font-semibold cursor-not-allowed"
+                                  className="w-full lg:w-auto bg-gray-200 text-gray-400 font-semibold cursor-not-allowed"
                                 >
                                   Kerjakan Kuis
                                 </Button>
@@ -538,7 +538,7 @@ export function StudentGroupDetail({ id }: { id: string }) {
                             size="sm"
                             disabled={actionLoadingId === item.id}
                             onClick={() => handleQuizAction(item)}
-                            className="bg-orange-500 hover:bg-orange-600 text-white font-semibold cursor-pointer"
+                            className="w-full lg:w-auto bg-orange-500 hover:bg-orange-600 text-white font-semibold cursor-pointer"
                           >
                             {actionLoadingId === item.id ? (
                               <Spinner className="h-4 w-4 text-white" />
@@ -558,7 +558,7 @@ export function StudentGroupDetail({ id }: { id: string }) {
                             size="sm"
                             disabled={actionLoadingId === item.id}
                             onClick={() => handleQuizAction(item)}
-                            className="bg-purple-600 hover:bg-purple-700 text-white font-semibold cursor-pointer"
+                            className="w-full lg:w-auto bg-purple-600 hover:bg-purple-700 text-white font-semibold cursor-pointer"
                           >
                             {actionLoadingId === item.id ? (
                               <Spinner className="h-4 w-4 text-white" />
@@ -575,7 +575,7 @@ export function StudentGroupDetail({ id }: { id: string }) {
                         key={item.id}
                         className={`border shadow-xs hover:shadow-sm transition-all duration-200 overflow-hidden ${cardClass}`}
                       >
-                        <div className="p-4 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+                        <div className="p-4 flex flex-col lg:flex-row items-start lg:items-center justify-between gap-4">
                           <div className="flex items-start gap-3 min-w-0">
                             <div
                               className={`p-2.5 rounded-xl flex-shrink-0 ${iconBgClass}`}
@@ -616,7 +616,7 @@ export function StudentGroupDetail({ id }: { id: string }) {
                             </div>
                           </div>
 
-                          <div className="w-full sm:w-auto shrink-0 flex justify-end">
+                          <div className="w-full lg:w-auto shrink-0 flex justify-end mt-2 lg:mt-0">
                             {actionButton}
                           </div>
                         </div>
