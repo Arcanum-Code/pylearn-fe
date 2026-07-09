@@ -191,6 +191,8 @@ Retrieve a unified chronological timeline (`items`) of both materials and quizze
         "status": "not_started",
         "deadline": "2026-07-20T23:59:59.000Z",
         "bestScore": null,
+        "passThreshold": 70,
+        "isPassed": null,
         "order": 3
       }
     ]

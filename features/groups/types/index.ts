@@ -53,6 +53,8 @@ export interface TimelineItem {
   scrollPercentage?: number | null;
   deadline?: string | null;
   bestScore?: number | null;
+  passThreshold?: number | null;
+  isPassed?: boolean | null;
   order: number;
   levelNumber?: number;
 }

@@ -31,6 +31,7 @@ import {
   getStudentQuizAttempts,
   createStudentQuizAttempt,
 } from "@/features/quizzes";
+import { formatScoreOrPoints } from "../utils/format";
 
 export function StudentGroupDetail({ id }: { id: string }) {
   const router = useRouter();
@@ -64,6 +65,27 @@ export function StudentGroupDetail({ id }: { id: string }) {
       console.error("Quiz action error:", error);
       toast.error(
         error?.response?.data?.message || "Gagal memproses pengerjaan kuis.",
+      );
+    } finally {
+      setActionLoadingId(null);
+    }
+  };
+
+  const handleRetakeQuiz = async (item: TimelineItem) => {
+    setActionLoadingId(`${item.id}_retake`);
+    try {
+      const attempts = await getStudentQuizAttempts({ quizId: item.id });
+      const activeAttempt = attempts.find((a) => !a.submittedAt);
+      if (activeAttempt) {
+        router.push(`/groups/${id}/quizzes/attempts/${activeAttempt.id}`);
+        return;
+      }
+      const { attempt } = await createStudentQuizAttempt({ quizId: item.id });
+      router.push(`/groups/${id}/quizzes/attempts/${attempt.id}`);
+    } catch (error: any) {
+      console.error("Retake quiz error:", error);
+      toast.error(
+        error?.response?.data?.message || "Gagal memulai ulang kuis.",
       );
     } finally {
       setActionLoadingId(null);
@@ -390,41 +412,83 @@ export function StudentGroupDetail({ id }: { id: string }) {
                     );
                     const previousIncomplete = sortedQuizzes
                       .slice(0, currentIndex)
-                      .find((q) => q.status !== "completed");
+                      .find((q) => q.status !== "completed" || q.isPassed === false);
                     const isLockedByLevel = !!previousIncomplete && !isLocked;
                     const lockedByQuiz = isLockedByLevel
                       ? previousIncomplete!
                       : null;
 
                     if (item.status === "completed") {
-                      cardClass =
-                        "bg-white border-green-100 hover:border-green-200";
-                      iconBgClass = "bg-green-50 text-green-500";
-                      statusBadge = (
-                        <Badge className="bg-green-50 hover:bg-green-50 text-green-700 border border-green-200 font-medium flex items-center gap-1">
-                          <Award className="h-3 w-3" />
-                          Selesai{" "}
-                          {item.bestScore !== null
-                            ? `(Skor Terbaik: ${item.bestScore})`
-                            : ""}
-                        </Badge>
-                      );
+                      if (item.isPassed === false) {
+                        cardClass =
+                          "bg-white border-red-100 hover:border-red-200";
+                        iconBgClass = "bg-red-50 text-red-500";
+                        statusBadge = (
+                          <Badge className="bg-red-50 hover:bg-red-50 text-red-700 border border-red-200 font-medium flex items-center gap-1">
+                            <AlertCircle className="h-3 w-3" />
+                            Belum Lulus (Skor: {formatScoreOrPoints(item.bestScore)} / Min: {item.passThreshold ?? 70})
+                          </Badge>
+                        );
 
-                      actionButton = (
-                        <Button
-                          size="sm"
-                          variant="outline"
-                          disabled={actionLoadingId === item.id}
-                          onClick={() => handleQuizAction(item)}
-                          className="border-green-250 text-green-700 hover:bg-green-50 font-semibold cursor-pointer"
-                        >
-                          {actionLoadingId === item.id ? (
-                            <Spinner className="h-4 w-4 text-green-700" />
-                          ) : (
-                            "Lihat Hasil"
-                          )}
-                        </Button>
-                      );
+                        actionButton = (
+                          <div className="flex items-center gap-2">
+                            <Button
+                              size="sm"
+                              variant="outline"
+                              disabled={actionLoadingId === item.id || actionLoadingId === `${item.id}_retake`}
+                              onClick={() => handleQuizAction(item)}
+                              className="border-gray-250 text-gray-700 hover:bg-gray-50 font-semibold cursor-pointer"
+                            >
+                              {actionLoadingId === item.id ? (
+                                <Spinner className="h-4 w-4 text-gray-700" />
+                              ) : (
+                                "Lihat Hasil"
+                              )}
+                            </Button>
+                            <Button
+                              size="sm"
+                              disabled={actionLoadingId === item.id || actionLoadingId === `${item.id}_retake`}
+                              onClick={() => handleRetakeQuiz(item)}
+                              className="bg-red-600 hover:bg-red-700 text-white font-semibold cursor-pointer"
+                            >
+                              {actionLoadingId === `${item.id}_retake` ? (
+                                <Spinner className="h-4 w-4 text-white" />
+                              ) : (
+                                "Ulangi Kuis"
+                              )}
+                            </Button>
+                          </div>
+                        );
+                      } else {
+                        cardClass =
+                          "bg-white border-green-100 hover:border-green-200";
+                        iconBgClass = "bg-green-50 text-green-500";
+                        statusBadge = (
+                          <Badge className="bg-green-50 hover:bg-green-50 text-green-700 border border-green-200 font-medium flex items-center gap-1">
+                            <Award className="h-3 w-3" />
+                            Selesai{" "}
+                            {item.bestScore !== null && item.bestScore !== undefined
+                              ? `(Skor Terbaik: ${formatScoreOrPoints(item.bestScore)})`
+                              : ""}
+                          </Badge>
+                        );
+
+                        actionButton = (
+                          <Button
+                            size="sm"
+                            variant="outline"
+                            disabled={actionLoadingId === item.id}
+                            onClick={() => handleQuizAction(item)}
+                            className="border-green-250 text-green-700 hover:bg-green-50 font-semibold cursor-pointer"
+                          >
+                            {actionLoadingId === item.id ? (
+                              <Spinner className="h-4 w-4 text-green-700" />
+                            ) : (
+                              "Lihat Hasil"
+                            )}
+                          </Button>
+                        );
+                      }
                     } else {
                       if (isLocked || isLockedByLevel) {
                         cardClass = "bg-gray-50 border-gray-200 opacity-75";
@@ -453,7 +517,9 @@ export function StudentGroupDetail({ id }: { id: string }) {
                             </TooltipTrigger>
                             <TooltipContent>
                               {isLockedByLevel
-                                ? `Selesaikan kuis "${lockedByQuiz?.title}" terlebih dahulu`
+                                ? lockedByQuiz?.isPassed === false
+                                  ? `Anda harus lulus kuis "${lockedByQuiz?.title}" terlebih dahulu`
+                                  : `Selesaikan kuis "${lockedByQuiz?.title}" terlebih dahulu`
                                 : "Selesaikan semua materi terlebih dahulu"}
                             </TooltipContent>
                           </Tooltip>
