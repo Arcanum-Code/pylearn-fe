@@ -5,9 +5,8 @@ import { useFetchLecturerDashboard } from "../hooks/useDashboard";
 import { LecturerDashboardView } from "./LecturerDashboardView";
 import { LecturerRightPanel } from "./LecturerRightPanel";
 
-import Link from "next/link";
 import { Button } from "@/components/ui/button";
-import { Users, Plus } from "lucide-react";
+import { Plus } from "lucide-react";
 import { GroupFormDialog } from "@/features/groups/components/GroupFormDialog";
 
 export function LecturerDashboardContainer() {
@@ -16,7 +15,6 @@ export function LecturerDashboardContainer() {
 
   return (
     <div className="space-y-6">
-
       <div className="grid grid-cols-1 lg:grid-cols-3 xl:grid-cols-4 gap-8 items-start">
         {/* Column 2: Main Content Area (3 cols wide on xl, 2 cols on lg) */}
         <div className="lg:col-span-2 xl:col-span-3 space-y-6">
@@ -58,4 +56,3 @@ export function LecturerDashboardContainer() {
     </div>
   );
 }
-
